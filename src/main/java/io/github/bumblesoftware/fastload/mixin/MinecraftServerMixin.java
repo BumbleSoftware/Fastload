@@ -16,6 +16,6 @@ import net.minecraft.server.MinecraftServer;
 public class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     public int onPrepareRedirectChunksLoaded(int value) {
-        return 25;
+        return 49;
     }
 }
