@@ -1,10 +1,20 @@
 # Fastload
 
-The '441 Loading Engine' is simply a pregenerator for a 10 chunk render distance. Why not 10 Squared? No, remember that there are two sides. 20? Still no, because you have to account for the chunk you spawn in. Which makes it 21 Squared.
+Fastload, is a simple mod that reduces world loading time. This serves as an alternative to ksyxis, which uses an unsafe method of cutting down time.
 
-This system is not efficient though, and consumes a lot of time. Ksyxis, which was used to mitigate this uses an unsafe way of cancelling it. Pregeneration is still important however, so we made it 2 render distance. Enough to account for local spawn.
+Ideas were inspired off of:
+- Ksyxis by VidTY
+- Forcecloseloadingscreen by kennytv
+- ...Respect to them for the ideas!
 
-We also added a tiny mixin which permits render ticking so that your game will be better prepared for an early entry into your world.
+How is it done?
+The 441 loading engine is a chunk pre-generator for your worlds. This is very inefficient and wastes a lot of time.
+
+Here are its features:
+- Reducing 21^2 chunks to 5^2
+- Permitting the rendering engine to run in the background whilst the world is still loading
+- Cancels 'Loading Terrain' for even quicker loading times.
+- Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
 
 Modrinth: https://modrinth.com/mod/fastload
 
