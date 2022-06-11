@@ -6,7 +6,6 @@
   "mixins": [
     "DownloadingTerrainScreenMixin",
     "MinecraftClientMixin",
-    "MinecraftClientMixin2",
     "MinecraftServerMixin",
     "WorldGenerationProcessLoggerMixin",
     "WorldGenerationProgressTrackerMixin"
