@@ -17,8 +17,7 @@ public class DownloadingTerrainScreenMixin {
     @Shadow private boolean closeOnNextTick;
 
     @Inject(at = @At("HEAD"), method = "setReady")
-    public void tick(final CallbackInfo ci) throws InterruptedException {
-        Thread.sleep(100);
+    public void tick(final CallbackInfo ci) {
         this.closeOnNextTick = true;
     }
 }
