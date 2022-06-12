@@ -13,16 +13,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
+    //Original code is from 'kennytv, forceloadingscreen'. Code is modified to our needs.
     @Shadow public void setScreen(@Nullable Screen screen) {}
-    @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
+    @Shadow private void render(boolean tick) {}
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
         if (screen instanceof DownloadingTerrainScreen) {
+            render(true);
             ci.cancel();
             setScreen(null);
         }
     }
-    @Inject(method = "setScreen", at = @At("HEAD"))
-    private void injectRenderCall(CallbackInfo ci) {} 
-    /* I don't know what to do here?
-    You have to somehow call startIntegratedServer() */
 }
