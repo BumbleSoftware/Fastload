@@ -9,23 +9,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
-    @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V"), argsOnly = true)
-    public final boolean render(boolean tick) {return true;}
-
-    @Shadow
-    public void setScreen(@Nullable Screen screen) {}
-
+    @Shadow public void setScreen(@Nullable Screen screen) {}
     @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
-    public void setScreen(final Screen screen, final CallbackInfo ci) throws InterruptedException {
+    private void setScreen(final Screen screen, final CallbackInfo ci) {
         if (screen instanceof DownloadingTerrainScreen) {
-            Thread.sleep(400);
             ci.cancel();
             setScreen(null);
         }
     }
+    @Inject(method = "setScreen", at = @At("HEAD"))
+    private void injectRenderCall(CallbackInfo ci) {} 
+    /* I don't know what to do here?
+    You have to somehow call startIntegratedServer() */
 }
