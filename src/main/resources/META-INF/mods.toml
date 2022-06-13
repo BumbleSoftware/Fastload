@@ -1,0 +1,32 @@
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "All rights reserved"
+
+#issueTrackerURL="https://github.com/invalid/pleasechangeme/issues"
+
+[[mods]]
+modId = "fastload"
+version = "${version}"
+displayName = "Fastload"
+#updateJSONURL="https://changeme.dev/updates.json"
+#displayURL="https://changeme.dev/"
+logoFile="icon.png"
+credits="overloadedwithmods"
+authors="AbdElAziz333"
+description = '''
+Fastload is a simple performance mod that reduces world loading time.
+'''
+
+[[dependencies.fastload]]
+modId = "forge"
+mandatory = true
+versionRange = "[40,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fastload]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18.2,)"
+ordering = "NONE"
+side = "BOTH"
