@@ -27,7 +27,11 @@ public abstract class MinecraftClientMixin {
 
     @Shadow
     private void render(boolean tick) {}
-
+    @Inject(method = "startIntegratedServer", at = @At("HEAD"))
+    private void renderOnStartServer(CallbackInfo ci) {
+        render(true);
+    }
+    
     @Shadow
     public boolean skipGameRender;
 
