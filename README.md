@@ -3,7 +3,7 @@
 Fastload, is a simple mod that reduces world loading time. This serves as an alternative to ksyxis, which uses an unsafe method of cutting down time.
 
 Credits for mods that are integrated:
-- Ksyxis by VidTu (Technically Compatible)
+- Ksyxis by VidTu (Incompatible)
 - Forcecloseloadingscreen by kennytv (Incompatible)
 - ...Respect to them for the ideas!
 
