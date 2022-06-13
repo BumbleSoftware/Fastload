@@ -41,8 +41,8 @@ Ksyxis cancels 441 world loading by essentially telling the game "Hey, we're don
 
 We do this in a better, safer way by simply dialing down the number of chunks required to load before 441 initialises. This is fairly self-explanatory! To make world loading faster, we integrated yet another 'unstable' mod, Forcecloseloadingscreen. Like ksyxis, it also issues a firm warning of instability. How did we improve this? Just by initialising the pre-renderer earlier in the world initiation phase as well as preventing the 'Pause Menu' activating when not focused on the window until the real renderer initialised. Thus, fixing the bugs that mods brings in too! There's your technical explanation
 
-# Modrinth: https://modrinth.com/mod/fastload
+Modrinth: https://modrinth.com/mod/fastload
 
-# Curseforge: https://www.curseforge.com/minecraft/mc-mods/fastload
+Curseforge: https://www.curseforge.com/minecraft/mc-mods/fastload
 
-# Discord: https://discord.gg/fMSnenNSXM
+Discord: https://discord.gg/fMSnenNSXM
