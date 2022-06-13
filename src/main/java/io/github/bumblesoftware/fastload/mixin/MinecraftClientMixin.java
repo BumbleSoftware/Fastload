@@ -4,9 +4,6 @@ import net.minecraft.client.MinecraftClient;
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.resource.ResourcePackManager;
-import net.minecraft.server.SaveLoader;
-import net.minecraft.world.level.storage.LevelStorage;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,8 +27,8 @@ public abstract class MinecraftClientMixin {
     }
     @Shadow
     private void render(boolean tick) {}
-    @Inject(method = "startIntegratedServer", at = @At("HEAD"))
-    private void renderOnStartServer(String levelName, LevelStorage.Session session, ResourcePackManager dataPackManager, SaveLoader saveLoader, CallbackInfo ci) {
+    @Inject(method = "startIntegratedServer*", at = @At("HEAD"))
+    private void renderOnStartServer() {
         render(true);
     }
     @Shadow
