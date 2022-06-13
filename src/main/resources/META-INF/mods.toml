@@ -2,7 +2,7 @@ modLoader = "javafml"
 loaderVersion = "[40,)"
 license = "All rights reserved"
 
-#issueTrackerURL="https://github.com/invalid/pleasechangeme/issues"
+#issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
 
 [[mods]]
 modId = "fastload"
@@ -12,7 +12,7 @@ displayName = "Fastload"
 #displayURL="https://changeme.dev/"
 logoFile="icon.png"
 credits="overloadedwithmods"
-authors="AbdElAziz333"
+authors="AbdElAziz333, FluffyBumblebees, JoostMSoftware, VidTu, kennytv"
 description = '''
 Fastload is a simple performance mod that reduces world loading time.
 '''
