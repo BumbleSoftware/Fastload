@@ -31,7 +31,7 @@ public abstract class MinecraftClientMixin {
     @Shadow
     private void render(boolean tick) {}
     @Inject(method = "startIntegratedServer", at = @At("HEAD"))
-    private void renderOnStartServer(String levelName, LevelStorage.Session session, ResourcePackManager dataPackManager, SaveLoader saveLoader, CallbackInfo ci) {
+    private void renderOnStartServer() {
         render(true);
     }
     @Shadow
