@@ -16,6 +16,17 @@ Here are its features:
 - Cancels 'Loading Terrain' for even quicker loading times.
 - Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
 
+Speed times:
+All other elements are controlled!
+Vanilla: [
+Create New world: ~32 sec
+Load World: ~5 sec
+]
+Fastload: [
+Create New World: ~23 sec
+Load World: ~3 sec
+]
+
 Modrinth: https://modrinth.com/mod/fastload
 
 Curseforge:https://www.curseforge.com/minecraft/mc-mods/fastload
