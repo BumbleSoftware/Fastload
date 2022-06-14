@@ -4,21 +4,15 @@
 # Short explanation:
 Fastload is a simple mod that reduces world loading time. This serves as an alternative to ksyxis and Forcecloseloadingscreen.
 
-
 # Required by:
 - Client
 - Server
 - ...& Will work on one but not the other but some features will be disabled. So use both if you want all the features!
 
- 
-
 # Credits for mods that are integrated:
 - Ksyxis by VidTu (Inompatible)
 - Forcecloseloadingscreen by kennytv (Incompatible)
 - Gotta Go fast by PixelAgent007 (Incompatible)
-...Respect to them for the ideas!
-
- 
 
 # Here are its features:
 - Reducing 21^2 chunks to 5^2
@@ -26,7 +20,6 @@ Fastload is a simple mod that reduces world loading time. This serves as an alte
 - Cancels 'Loading Terrain' for even quicker loading times.
 - Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
 - Stops "Player moved to fast' so it doesn't interfere with spawns.
-
 
 # Speed times: [All other elements are controlled!]
 - Vanilla: [
