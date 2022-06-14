@@ -4,12 +4,15 @@
   "package": "com.abdelaziz333.fastload.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "DownloadingTerrainScreenMixin",
-    "MinecraftClientMixin",
-    "MinecraftServerMixin",
-    "WorldGenerationProcessLoggerMixin",
-    "WorldGenerationProgressTrackerMixin"
-  ],
+      "ClientPlayerEntityMixin",
+      "ClientPlayNetworkHandlerMixin",
+      "DownloadingTerrainScreenMixin",
+      "MinecraftClientMixin",
+      "MinecraftServerMixin",
+      "ServerPlayNetworkHandlerPlayerSpeedLimitsMixin",
+      "WorldGenerationProcessLoggerMixin",
+      "WorldGenerationProgressTrackerMixin"
+    ],
   "client": [
   ],
   "injectors": {

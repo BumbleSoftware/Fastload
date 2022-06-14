@@ -44,10 +44,6 @@ tasks.withType(JavaCompile) {
     options.release = 17
 }
 
-java {
-    withSourcesJar()
-}
-
 jar {
     manifest {
         attributes([
@@ -67,9 +63,6 @@ publishing {
         mavenJava(MavenPublication) {
             artifact(remapJar) {
                 builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
             }
         }
     }
