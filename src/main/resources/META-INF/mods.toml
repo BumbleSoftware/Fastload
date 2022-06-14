@@ -1,20 +1,20 @@
 modLoader = "javafml"
 loaderVersion = "[40,)"
-license = "All rights reserved"
+license = "LGPL-2.1"
 
-#issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
+issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
 
 [[mods]]
 modId = "fastload"
 version = "${version}"
 displayName = "Fastload"
 #updateJSONURL="https://changeme.dev/updates.json"
-#displayURL="https://changeme.dev/"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/fastload"
 logoFile="icon.png"
-credits=""
-authors="AbdElAziz333, FluffyBumblebees, JoostMSoftware, VidTu, kennytv"
+credits="overloadedwithmods"
+authors="AbdElAziz333"
 description = '''
-Fastload is a simple performance mod that reduces world loading time.
+Load your world at lightning speed!
 '''
 
 [[dependencies.fastload]]
