@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "fastload",
+  "version": "${version}",
+
+  "name": "Fast Load",
+  "description": "Load your world at lightning speed!",
+  "authors": [
+    "FluffyBumblebees, JoostMSoftware, VidTu, kennytv, PixelAgent007"
+  ],
+  "contact": {
+    "sources": "https://github.com/BumbleSoftware/Fastload",
+    "issues": "https://github.com/BumbleSoftware/Fastload/issues"
+  },
+
+  "license": "LGPL-2.1",
+  "icon": "assets/fastload/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.bumblesoftware.fastload.FastLoad"
+    ]
+  },
+  "mixins": [
+    "fastload.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "minecraft": "=1.18.2",
+    "java": ">=17"
+  }
+}
