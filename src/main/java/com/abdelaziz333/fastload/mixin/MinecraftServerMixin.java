@@ -1,7 +1,5 @@
 package com.abdelaziz333.fastload.mixin;
 
-package com.abdelaziz333.fastload.mixin;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
