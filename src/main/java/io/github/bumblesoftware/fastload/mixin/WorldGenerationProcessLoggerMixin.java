@@ -9,6 +9,6 @@ import net.minecraft.server.WorldGenerationProgressLogger;
 public class WorldGenerationProcessLoggerMixin {
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int injected(int radius){
-        return 3;
+        return 4;
     }
 }
