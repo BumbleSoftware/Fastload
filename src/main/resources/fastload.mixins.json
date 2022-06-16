@@ -9,7 +9,6 @@
     "DownloadingTerrainScreenMixin",
     "MinecraftClientMixin",
     "MinecraftServerMixin",
-    "ServerPlayNetworkHandlerPlayerSpeedLimitsMixin",
     "WorldGenerationProcessLoggerMixin",
     "WorldGenerationProgressTrackerMixin"
   ],
