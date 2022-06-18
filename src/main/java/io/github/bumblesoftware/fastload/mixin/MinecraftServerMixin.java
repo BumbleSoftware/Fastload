@@ -19,18 +19,13 @@ import net.minecraft.server.MinecraftServer;
 public class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        setChunkRadius();
         return 49;
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        setChunkRadius();
         return 4;
     }
-    @Shadow @Mutable @Final public static int START_TICKET_CHUNK_RADIUS = 11;
-    @Shadow @Mutable @Final private static int START_TICKET_CHUNKS = 441;
-    private void setChunkRadius() {
-        START_TICKET_CHUNK_RADIUS = 4;
-        START_TICKET_CHUNKS = 49;
-    }
+    @Shadow @Mutable @Final public static int START_TICKET_CHUNK_RADIUS = 4;
+    @Shadow @Mutable @Final private static int START_TICKET_CHUNKS = 49;
+
 }
