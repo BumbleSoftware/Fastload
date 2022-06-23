@@ -12,7 +12,6 @@ Fastload is a simple mod that reduces world loading time. This serves as an alte
 # Credits for mods that are integrated:
 - Ksyxis by VidTu (Inompatible)
 - Forcecloseloadingscreen by kennytv (Incompatible)
-- Gotta Go fast by PixelAgent007 (Incompatible)
 
 # Here are its features:
 - Reducing 21^2 chunks to 5^2
