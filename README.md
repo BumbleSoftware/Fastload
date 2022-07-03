@@ -18,7 +18,6 @@ Fastload is a simple mod that reduces world loading time. This serves as an alte
 - Permitting the rendering engine to run in the background whilst the world is still loading
 - Cancels 'Loading Terrain' for even quicker loading times.
 - Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
-- Stops "Player moved to fast' so it doesn't interfere with spawns.
 
 # Speed times: [All other elements are controlled!]
 - Vanilla: [
