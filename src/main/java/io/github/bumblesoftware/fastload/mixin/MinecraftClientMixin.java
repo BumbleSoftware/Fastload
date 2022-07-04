@@ -19,7 +19,7 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     public void setScreen(@Nullable Screen screen) {}
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
+        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
             render(true);
             ci.cancel();
             setScreen(null);
