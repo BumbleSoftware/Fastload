@@ -4,15 +4,15 @@
   "package": "io.github.bumblesoftware.fastload.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientPlayerEntityMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "DownloadingTerrainScreenMixin",
-    "MinecraftClientMixin",
     "MinecraftServerMixin",
     "WorldGenerationProcessLoggerMixin",
     "WorldGenerationProgressTrackerMixin"
   ],
   "client": [
+    "ClientPlayerEntityMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "DownloadingTerrainScreenMixin",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
