@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin;
 
+import io.github.bumblesoftware.fastload.FLMath;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -9,10 +10,11 @@ import net.minecraft.server.WorldGenerationProgressLogger;
 
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
-    @Shadow @Final @Mutable private int totalCount = 81;
+    int anInt = FLMath.getSpawnChunkArea(1);
+    @Shadow @Final @Mutable private int totalCount = anInt;
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int setRadius(int radius) {
-        return 4;
+        return FLMath.getSetSpawnChunkRadius();
     }
     @Shadow private int generatedCount;
     /**
