@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.mixin;
 
 import io.github.bumblesoftware.fastload.MinecraftClientMixinInterface;
+import io.github.bumblesoftware.fastload.config.FLConfig;
 import net.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     private boolean playerJoined = false;
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
+        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running && FLConfig.CLOSE_LOADING_SCREEN_UNSAFELY) {
             ci.cancel();
             setScreen(null);
             justLoaded = true;
