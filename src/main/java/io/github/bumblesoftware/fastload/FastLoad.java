@@ -1,20 +1,19 @@
 package io.github.bumblesoftware.fastload;
 
+import io.github.bumblesoftware.fastload.config.FLConfig;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FastLoad implements ModInitializer {
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger("Fastload");
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+		FLConfig.loadClass();
 		LOGGER.warn("Fastload may cause issues, report them to us instead of other mod authors");
+		LOGGER.info("SPAWN_CHUNK_RADIUS: " + FLMath.spawnChunkRadius());
+		LOGGER.info("SPAWN CHUNK AREA: " + FLMath.getSpawnChunkArea(0));
+		LOGGER.info("CANCEL_LOADING_SCREEN: " + FLConfig.CLOSE_LOADING_SCREEN_UNSAFELY);
 	}
 }
