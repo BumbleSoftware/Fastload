@@ -1,9 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin;
 
-import org.spongepowered.asm.mixin.Final;
+import io.github.bumblesoftware.fastload.FLMath;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
@@ -19,13 +17,10 @@ import net.minecraft.server.MinecraftServer;
 public class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        return 49;
+        return FLMath.getSpawnChunkArea(0);
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        return 4;
+        return FLMath.getSetSpawnChunkRadius();
     }
-    @Shadow @Mutable @Final public static int START_TICKET_CHUNK_RADIUS = 4;
-    @Shadow @Mutable @Final private static int START_TICKET_CHUNKS = 49;
-
 }
