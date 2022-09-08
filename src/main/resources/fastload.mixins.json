@@ -12,6 +12,7 @@
     "ClientPlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
     "DownloadingTerrainScreenMixin",
+    "LevelLoadingScreenMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {
