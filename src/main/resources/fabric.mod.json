@@ -6,7 +6,7 @@
   "name": "Fast Load",
   "description": "Load your world at lightning speed!",
   "authors": [
-    "FluffyBumblebees, JoostMSoftware, VidTu, kennytv"
+    "FluffyBumblebees, JoostMSoftware, VidTu, kennytv, AbdElAziz"
   ],
   "contact": {
     "sources": "https://github.com/BumbleSoftware/Fastload",
@@ -27,7 +27,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
+    "fabricloader": ">=0.14.9",
     "minecraft": ">=1.19",
     "java": ">=17"
   }
