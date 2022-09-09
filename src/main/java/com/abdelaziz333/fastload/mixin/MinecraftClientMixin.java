@@ -1,7 +1,9 @@
 package com.abdelaziz333.fastload.mixin;
 
-import com.abdelaziz333.fastload.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.config.FLConfig;
 import net.minecraft.client.MinecraftClient;
+
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.Nullable;
@@ -18,18 +20,19 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     public void setScreen(@Nullable Screen screen) {}
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
+        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running && FLConfig.CLOSE_LOADING_SCREEN_UNSAFELY) {
             render(true);
             ci.cancel();
             setScreen(null);
             justLoaded = true;
             shouldLoad = false;
-            playerJoined  = false;
+            playerJoined = false;
         }
     }
     @Shadow
     private void render(boolean tick) {}
-    @Inject(method = "startIntegratedServer", at = @At("HEAD"))
+
+    @Inject(method = "startIntegratedServer*", at = @At("HEAD"))
     private void renderOnStartServer(CallbackInfo ci) {
         render(true);
     }

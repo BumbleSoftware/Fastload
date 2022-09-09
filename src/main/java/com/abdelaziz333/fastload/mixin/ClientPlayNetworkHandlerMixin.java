@@ -1,6 +1,6 @@
 package com.abdelaziz333.fastload.mixin;
 
-import com.abdelaziz333.fastload.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;

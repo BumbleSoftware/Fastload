@@ -1,5 +1,6 @@
 package com.abdelaziz333.fastload.mixin;
 
+import com.abdelaziz.fastload.FLMath;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -20,12 +21,12 @@ public class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
         setChunkRadius();
-        return 49;
+        return FLMath.getSpawnChunkArea(0);
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
         setChunkRadius();
-        return 4;
+        return FLMath.getSetSpawnChunkRadius();
     }
     @Shadow @Mutable @Final public static int START_TICKET_CHUNK_RADIUS = 11;
     @Shadow @Mutable @Final private static int START_TICKET_CHUNKS = 441;
