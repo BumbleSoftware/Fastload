@@ -1,6 +1,7 @@
 package com.abdelaziz.fastload.mixin;
 
 import com.abdelaziz.fastload.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.config.FLConfig;
 import net.minecraft.client.MinecraftClient;
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -19,13 +20,13 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     public void setScreen(@Nullable Screen screen) {}
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
+        if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running && FLConfig.CLOSE_LOADING_SCREEN_UNSAFELY) {
             render(true);
             ci.cancel();
             setScreen(null);
             justLoaded = true;
             shouldLoad = false;
-            playerJoined  = false;
+            playerJoined = false;
         }
     }
     @Shadow
