@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.abdelaziz333.fastload.mixin",
+  "package": "com.abdelaziz.fastload.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MinecraftServerMixin",
