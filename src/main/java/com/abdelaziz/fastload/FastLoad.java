@@ -1,4 +1,4 @@
-package com.abdelaziz333.fastload;
+package com.abdelaziz.fastload;
 
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;

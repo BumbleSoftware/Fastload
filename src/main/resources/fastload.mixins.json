@@ -4,16 +4,16 @@
   "package": "com.abdelaziz333.fastload.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-      "MinecraftServerMixin",
-      "ServerPlayNetworkHandlerPlayerSpeedLimitsMixin",
-      "WorldGenerationProcessLoggerMixin",
-      "WorldGenerationProgressTrackerMixin"
-    ],
+    "com.abdelaziz.fastload.mixin.MinecraftServerMixin",
+    "com.abdelaziz.fastload.mixin.ServerPlayNetworkHandlerPlayerSpeedLimitsMixin",
+    "com.abdelaziz.fastload.mixin.WorldGenerationProcessLoggerMixin",
+    "com.abdelaziz.fastload.mixin.WorldGenerationProgressTrackerMixin"
+  ],
   "client": [
-    "ClientPlayerEntityMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "DownloadingTerrainScreenMixin",
-    "MinecraftClientMixin"
+    "com.abdelaziz.fastload.mixin.ClientPlayerEntityMixin",
+    "com.abdelaziz.fastload.mixin.ClientPlayNetworkHandlerMixin",
+    "com.abdelaziz.fastload.mixin.DownloadingTerrainScreenMixin",
+    "com.abdelaziz.fastload.mixin.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

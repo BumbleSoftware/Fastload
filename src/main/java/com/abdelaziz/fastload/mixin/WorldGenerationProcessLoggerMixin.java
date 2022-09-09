@@ -1,4 +1,4 @@
-package com.abdelaziz333.fastload.mixin;
+package com.abdelaziz.fastload.mixin;
 
 import com.abdelaziz.fastload.FLMath;
 import org.spongepowered.asm.mixin.Final;

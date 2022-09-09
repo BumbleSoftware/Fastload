@@ -1,6 +1,6 @@
 // Code burrowed from PixelAgent007, licensed under MIT.
 
-package com.abdelaziz333.fastload.mixin;
+package com.abdelaziz.fastload.mixin;
 
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import org.spongepowered.asm.mixin.Mixin;
