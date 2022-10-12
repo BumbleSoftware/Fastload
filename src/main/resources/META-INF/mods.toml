@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[40,)"
-license = "LGPL-2.1"
+license = "LGPL-3.0"
 
 issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
 
