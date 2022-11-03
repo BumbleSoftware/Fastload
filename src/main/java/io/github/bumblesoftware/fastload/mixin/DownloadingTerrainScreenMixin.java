@@ -13,11 +13,10 @@ public class DownloadingTerrainScreenMixin {
 
     //Code is from 'kennytv'. All credits are to this person. This is not our code.
     //Permission granted to do so from MIT License of 'forcecloseloadingscreen'.
-
     @Shadow private boolean closeOnNextTick;
 
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
-        this.closeOnNextTick = true;
+        closeOnNextTick = true;
     }
 }

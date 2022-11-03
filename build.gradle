@@ -2,9 +2,9 @@ plugins {
 	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+loom {
+	accessWidenerPath = file("src/main/resources/fastload.accesswidener")
+}
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version

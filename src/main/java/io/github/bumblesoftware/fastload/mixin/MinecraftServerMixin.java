@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        return FLMath.getSpawnChunkArea(0);
+        return FLMath.getPregenArea();
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        return FLMath.getSetSpawnChunkRadius();
+        return FLMath.getPregenRadius();
     }
 }

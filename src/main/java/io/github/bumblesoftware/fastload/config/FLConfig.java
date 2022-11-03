@@ -12,14 +12,19 @@ import java.util.Properties;
 
 public class FLConfig {
     public static void loadClass() {}
-
-    public static final int CHUNK_PREGEN_RADIUS;
-    public static final boolean CLOSE_LOADING_SCREEN_UNSAFELY;
+    protected static final int RAW_CHUNK_PREGEN_RADIUS;
+    protected static final int RAW_PRE_RENDER_RADIUS;
+    protected static final boolean CLOSE_LOADING_SCREEN_UNSAFELY;
 
     static {
         final Properties properties = new Properties();
         final Properties newProperties = new Properties();
         final Path path = FabricLoader.getInstance().getConfigDir().resolve("fastload.properties");
+
+        RAW_PRE_RENDER_RADIUS = getInt(properties, newProperties, "pre_render_radius", 0);
+        RAW_CHUNK_PREGEN_RADIUS = getInt(properties, newProperties, "chunk_pregen_radius", 5);
+        CLOSE_LOADING_SCREEN_UNSAFELY = getBoolean(properties, newProperties, "close_loading_screen_unsafely", false);
+
         if (Files.isRegularFile(path)) {
             try (InputStream in = Files.newInputStream(path, StandardOpenOption.CREATE)) {
                 properties.load(in);
@@ -27,8 +32,7 @@ public class FLConfig {
                 throw new RuntimeException(e);
             }
         }
-        CHUNK_PREGEN_RADIUS = getInt(properties, newProperties);
-        CLOSE_LOADING_SCREEN_UNSAFELY = getBoolean(properties, newProperties);
+
         try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             newProperties.store(out, "Fastload Config");
         } catch (IOException e) {
@@ -36,25 +40,26 @@ public class FLConfig {
         }
     }
 
-    private static int getInt(Properties properties, Properties newProperties) {
+    private static int getInt(Properties properties, Properties newProperties, String key, int def) {
         try {
-            final int i = Integer.parseInt(properties.getProperty("chunk_pregen_radius"));
-            newProperties.setProperty("chunk_pregen_radius", String.valueOf(i));
+            final int i = Integer.parseInt(properties.getProperty(key));
+            newProperties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
-            newProperties.setProperty("chunk_pregen_radius", String.valueOf(5));
-            return 5;
+            newProperties.setProperty(key, String.valueOf(def));
+            return def;
         }
     }
 
-    private static boolean getBoolean(Properties properties, Properties newProperties) {
+    @SuppressWarnings("SameParameterValue")
+    private static boolean getBoolean(Properties properties, Properties newProperties, String key, boolean def) {
         try {
-            final boolean b = parseBoolean(properties.getProperty("close_loading_screen_unsafely"));
-            newProperties.setProperty("close_loading_screen_unsafely", String.valueOf(b));
+            final boolean b = parseBoolean(properties.getProperty(key));
+            newProperties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {
-            newProperties.setProperty("close_loading_screen_unsafely", String.valueOf(true));
-            return true;
+            newProperties.setProperty(key, String.valueOf(def));
+            return def;
         }
     }
 

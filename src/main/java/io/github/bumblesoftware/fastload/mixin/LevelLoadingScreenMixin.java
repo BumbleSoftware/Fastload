@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class LevelLoadingScreenMixin {
     @ModifyConstant(method = "render", constant = @Constant(intValue = 30))
     private int fixPercentage(int constant) {
-        return 30 + FLMath.getSetSpawnChunkRadius()/2;
+        return 30 + FLMath.getPregenRadius(true)/2;
     }
 
 }

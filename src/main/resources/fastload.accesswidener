@@ -1,0 +1,4 @@
+accessWidener	v2	named
+accessible    field    net/minecraft/client/util/Window    eventHandler    Lnet/minecraft/client/WindowEventHandler;
+accessible    method    net/minecraft/client/util/Window    onCursorEnterChanged    (JZ)V
+accessible    method    net/minecraft/client/util/Window    updateWindowRegion    ()V
