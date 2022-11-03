@@ -41,7 +41,7 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (screen instanceof ProgressScreen) {
+        if (screen instanceof ProgressScreen && (getCloseUnsafe() || getCloseSafe())) {
             ci.cancel();
         }
         if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
