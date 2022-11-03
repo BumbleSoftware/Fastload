@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin;
 
+import io.github.bumblesoftware.fastload.FastLoad;
 import io.github.bumblesoftware.fastload.util.mixin.MinecraftClientMixinInterface;
 import io.github.bumblesoftware.fastload.util.screen.BuildingTerrainScreen;
 import net.minecraft.client.MinecraftClient;
@@ -35,6 +36,9 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     public void gameJoined() {
         playerJoined = true;
     }
+    private static void logTimes(String prefix) {
+        FastLoad.LOGGER.info(prefix);
+    }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
         if (screen instanceof ProgressScreen) {
@@ -69,7 +73,9 @@ public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     private void onRender(boolean tick, CallbackInfo ci) {
         if (this.world != null && isBuilding) {
             int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
-            if (chunkLoadedCount >= getPreRenderRadius()) {
+            if (chunkLoadedCount >= getPreRenderArea()) {
+                logTimes("Goal (Loaded Chunks): " + getPreRenderArea());
+                logTimes("Loaded Chunks: " + chunkLoadedCount);
                 setScreen(null);
                 isBuilding = false;
             }
