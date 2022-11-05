@@ -15,8 +15,12 @@ public class BuildingTerrainScreen extends Screen {
     private Integer getLoadedChunkCount() {
         return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
     }
-    private Integer getPercentage() {
-        return getLoadedChunkCount()/FLMath.getPreRenderRadius();
+    private Double getPercentage() {
+        return getLoadedChunkCount().doubleValue()/FLMath.getPreRenderArea().doubleValue();
+    }
+    private Integer getPercentageInt() {
+        double d = getPercentage() * 100;
+        return (int) d;
     }
     public BuildingTerrainScreen() {
         super(Text.literal("Building Terrain"));
@@ -27,7 +31,7 @@ public class BuildingTerrainScreen extends Screen {
         this.renderBackgroundTexture(0);
         int white = 0xFFFFFF;
         int heightUpFromCentre = 50;
-        final int i = getPercentage();
+        final int i = getPercentageInt();
         String percentage = i + "%";
         if (PROGRESS_STORAGE < i) {
             FastLoad.LOGGER.info("Terrain Building Progress: " + percentage);
@@ -45,6 +49,6 @@ public class BuildingTerrainScreen extends Screen {
     }
     @Override
     public boolean shouldCloseOnEsc() {
-        return getLoadedChunkCount() <= FLMath.getPreRenderRadius() / 4;
+        return getPercentage() >= 25;
     }
 }

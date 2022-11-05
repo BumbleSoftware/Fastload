@@ -12,9 +12,9 @@ public class FastLoad implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		FLConfig.loadClass();
-		LOGGER.info("DEBUG MODE: " + getDebug().toString().toUpperCase());
 		LOGGER.info("CHUNK_TRY_LIMIT: " + getChunkTryLimit());
 		LOGGER.info("CANCEL_LOADING_SCREEN: " + getCloseUnsafe().toString().toUpperCase());
+		LOGGER.info("DEBUG MODE: " + getDebug().toString().toUpperCase());
 		LOGGER.info("SPAWN_CHUNK_RADIUS: " + getPregenRadius(false));
 		LOGGER.info("SPAWN CHUNK AREA: " + getPregenArea());
 		LOGGER.info("PRE_RENDER_RADIUS: " + getPreRenderRadius());

@@ -165,7 +165,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     }
                     if (warnings > 0) {
                         if (oldWarningCache == warnings && warnings > 2) {
-                            log("FL_WARN# Same chunk count returned " + warnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a raw, pre-rendering would've stopped");
+                            log("FL_WARN# Same chunk count returned " + warnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, pre-rendering would've stopped");
                             if (debug) logPreRendering(chunkLoadedCount);
                         }
                         if (chunkLoadedCount > chunkLoadedCountStorage) {
