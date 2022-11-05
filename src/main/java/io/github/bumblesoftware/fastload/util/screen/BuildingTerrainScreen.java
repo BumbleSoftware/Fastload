@@ -5,6 +5,7 @@ import io.github.bumblesoftware.fastload.config.FLMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
@@ -23,8 +24,8 @@ public class BuildingTerrainScreen extends Screen {
         return (int) d;
     }
     public BuildingTerrainScreen() {
-        super(Text.literal("Building Terrain"));
-        text = Text.literal("Building Terrain");
+        super(NarratorManager.EMPTY);
+        text = Text.translatable("menu.generatingTerrain");
     }
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
