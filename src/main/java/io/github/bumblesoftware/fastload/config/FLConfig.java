@@ -29,7 +29,7 @@ public class FLConfig {
             }
         }
 
-        RAW_CHUNK_PREGEN_RADIUS = getInt(properties, newProperties, "pregen_chunk_radius", 5);
+        RAW_CHUNK_PREGEN_RADIUS = getInt(properties, newProperties, "pre_generator_chunk_radius", 5);
         RAW_PRE_RENDER_RADIUS = getInt(properties, newProperties, "pre_render_radius", 0);
         CLOSE_LOADING_SCREEN_UNSAFELY = getBoolean(properties, newProperties, "close_loading_screen_unsafely", false);
 
@@ -41,9 +41,10 @@ public class FLConfig {
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
             comment.write("\n# Definitions");
             comment.write("\n# 'pre_render_radius' = how many chunks are loaded until 'building terrain' is completed.");
-            comment.write("\n# Min = 0, Max = Your Render Distance OR 12, Whichever is smaller. Set 0 to disable\n#");
+            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable\n#");
+            comment.write("\n#Keep in mind that for safety reasons, pre-rendering may not always fully complete\n");
             comment.write("\n# 'pregen_chunk_radius' = how many chunks (from 441 Loading) are pre-generated until the server starts");
-            comment.write("\n# Min = 0, Max = 21. Set 0 to only pregen 1 chunk\n#");
+            comment.write("\n# Min = 0, Max = 32. Set 0 to only pregen 1 chunk\n#");
             comment.write("\n# 'close_loading_screen_unsafely' = should skip 'Joining World', and 'Downloading Terrain'. Potentially can result in joining world before chunks are properly loaded");
             comment.write("\n# Enabled = true, Disabled = false");
 

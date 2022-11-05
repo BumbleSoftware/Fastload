@@ -10,8 +10,9 @@ public class FLMath {
 
     //Constants
     private static final int RENDER_RADIUS_BOUND = 32;
+    private static final int PREGEN_RADIUS_BOUND = 32;
     private static final double PI = 3.14159265358979323846;
-    private static final int PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, 21);
+    private static final int PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND);
 
 
 
@@ -39,7 +40,8 @@ public class FLMath {
 
 
     //Calculations
-    private static int getSquareArea(boolean worldProgressTracker, int toCalc, @SuppressWarnings("SameParameterValue") boolean raw) {
+    @SuppressWarnings("SameParameterValue")
+    private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
         int i = toCalc * 2;
         if (!raw) {
             i++;
@@ -50,9 +52,6 @@ public class FLMath {
         }
         return i * i;
     }
-    public static int getSquareArea(boolean worldProgressTracker, int toCalc) {
-        return getSquareArea(worldProgressTracker, toCalc, false);
-    }
     public static Double getCircleArea(int radius) {
         return PI * radius * radius;
     }
@@ -60,9 +59,6 @@ public class FLMath {
 
 
     //Radii
-    public static int getPregenRadius() {
-        return getPregenRadius(true);
-    }
     public static Integer getPreRenderRadius() {
         return parseMinMax(RAW_PRE_RENDER_RADIUS, getRenderDistance());
     }
@@ -78,8 +74,11 @@ public class FLMath {
 
     //Areas
     public static int getPregenArea() {
-        return getSquareArea(false, PREGEN_RADIUS);
+        return getSquareArea(false, PREGEN_RADIUS, false);
    }
+    public static int getProgressArea() {
+        return getSquareArea(true, PREGEN_RADIUS, false);
+    }
     public static Integer getPreRenderArea() {
         int i = getPreRenderRadius() / 2;
         return getCircleArea(getPreRenderRadius()).intValue() - i * i;

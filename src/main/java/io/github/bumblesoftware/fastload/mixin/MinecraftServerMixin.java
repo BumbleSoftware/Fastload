@@ -7,8 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import static io.github.bumblesoftware.fastload.config.FLMath.getPregenArea;
-import static io.github.bumblesoftware.fastload.config.FLMath.getPregenRadius;
+import static io.github.bumblesoftware.fastload.config.FLMath.*;
 
 
 /*
@@ -18,7 +17,7 @@ import static io.github.bumblesoftware.fastload.config.FLMath.getPregenRadius;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
-    @Shadow @Final public static int START_TICKET_CHUNK_RADIUS = getPregenRadius();
+    @Shadow @Final public static int START_TICKET_CHUNK_RADIUS = getPregenRadius(false);
     @Shadow @Final private static int START_TICKET_CHUNKS = getPregenArea();
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))

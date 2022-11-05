@@ -30,6 +30,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     @Shadow private boolean windowFocused;
     @Shadow private volatile boolean running;
     @Shadow @Nullable public ClientWorld world;
+
     private boolean justLoaded = false;
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
@@ -38,9 +39,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private boolean isBuilding = false;
     private Integer chunkLoadedCountStorage = null;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int logLimit = 45;
+    private final int logLimit = 15;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int chunkLoadLimit = 50;
+    private final int chunkLoadLimit = 20;
     private int warnings = 0;
     //Ticks until Pause Menu is Active again
     private final int timeDownGoal = 10;
@@ -135,7 +136,6 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         if (isBuilding) {
             if (this.world != null) {
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
-                logPreRendering(chunkLoadedCount);
                 if (chunkLoadedCountStorage != null) {
                     if (chunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > getPreRenderArea() / 2) {
                         warnings++;
@@ -174,12 +174,14 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             log("");
                         }
                     }
-                    if (chunkLoadedCount > chunkLoadedCountStorage && warnings > 0) {
-                        if (warnings > logLimit || debug) {
-                            log("Progress is being made, setting warning count back to 0");
-                            log("");
+                    if (chunkLoadedCount > chunkLoadedCountStorage) {
+                        if (warnings > 0) {
+                            if (warnings > logLimit || debug) {
+                                log("Progress is being made, setting warning count back to 0");
+                                log("");
+                            }
+                            warnings = 0;
                         }
-                        warnings = 0;
                     }
                 }
                 chunkLoadedCountStorage = chunkLoadedCount;

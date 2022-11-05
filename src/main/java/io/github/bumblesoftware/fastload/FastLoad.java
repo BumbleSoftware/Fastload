@@ -13,7 +13,7 @@ public class FastLoad implements ModInitializer {
 	public void onInitialize() {
 		FLConfig.loadClass();
 		LOGGER.info("HARD_CODED_RENDER_RADIUS_CAP: " + getRenderRadiusBound());
-		LOGGER.info("SPAWN_CHUNK_RADIUS: " + getPregenRadius(true));
+		LOGGER.info("SPAWN_CHUNK_RADIUS: " + getPregenRadius(false));
 		LOGGER.info("SPAWN CHUNK AREA: " + getPregenArea());
 		LOGGER.info("PRE_RENDER_RADIUS: " + getPreRenderRadius());
 		LOGGER.info("PRE_RENDER_AREA: " + getPreRenderArea());
