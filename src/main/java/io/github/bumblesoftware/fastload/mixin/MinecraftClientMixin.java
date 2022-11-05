@@ -134,6 +134,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         //Pre-rendering Engine
         if (isBuilding) {
             if (this.world != null) {
+                if (debug) {
+                    logRenderDistanceDifference();
+                }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 final int oldWarningCache = warnings;
                 if (chunkLoadedCountStorage != null) {
