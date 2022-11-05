@@ -17,4 +17,8 @@ public class BuildingTerrainScreen extends Screen {
         DrawableHelper.drawCenteredText(matrices, this.textRenderer, text, this.width / 2, this.height / 2 - 50, 0xFFFFFF);
         super.render(matrices, mouseX, mouseY, delta);
     }
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
 }

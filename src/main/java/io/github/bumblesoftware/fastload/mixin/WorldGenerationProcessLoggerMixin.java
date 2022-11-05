@@ -10,8 +10,7 @@ import net.minecraft.server.WorldGenerationProgressLogger;
 
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
-    int anInt = FLMath.getSquareArea(1);
-    @Shadow @Final @Mutable private int totalCount = anInt;
+    @Shadow @Final @Mutable private int totalCount = FLMath.getPregenArea();
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int setRadius(int radius) {
         return FLMath.getPregenRadius();
