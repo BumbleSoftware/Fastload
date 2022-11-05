@@ -11,8 +11,12 @@ import net.minecraft.text.Text;
 public class BuildingTerrainScreen extends Screen {
     private final Text text;
     private final MinecraftClient client = MinecraftClient.getInstance();
-    private int getLoadedChunkCount() {
+    private Integer PROGRESS_STORAGE = 0;
+    private Integer getLoadedChunkCount() {
         return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
+    }
+    private Integer getPercentage() {
+        return getLoadedChunkCount()/FLMath.getPreRenderRadius();
     }
     public BuildingTerrainScreen() {
         super(Text.literal("Building Terrain"));
@@ -23,8 +27,12 @@ public class BuildingTerrainScreen extends Screen {
         this.renderBackgroundTexture(0);
         int white = 0xFFFFFF;
         int heightUpFromCentre = 50;
-        String percentage = getLoadedChunkCount()/FLMath.getPreRenderRadius() + "%";
-        FastLoad.LOGGER.info("Terrain Building Progress; " + percentage);
+        final int i = getPercentage();
+        String percentage = i + "%";
+        if (PROGRESS_STORAGE < i) {
+            FastLoad.LOGGER.info("Terrain Building Progress: " + percentage);
+        }
+        PROGRESS_STORAGE = i;
         DrawableHelper.drawCenteredText(matrices, this.textRenderer, text, this.width / 2, this.height / 2 - heightUpFromCentre, white);
         DrawableHelper.drawCenteredText(
                 matrices,

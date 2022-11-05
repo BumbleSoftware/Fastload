@@ -12,7 +12,19 @@ public class FLMath {
     private static final int RENDER_RADIUS_BOUND = 32;
     private static final int PREGEN_RADIUS_BOUND = 32;
     private static final double PI = 3.14159265358979323846;
-    private static final int PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND);
+
+    //Parsed Constants
+    private static final int PARSED_PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND, 0);
+    //RENDER_RADIUS// Cannot be parsed as parsing dynamically changes. No point in making it a field
+    private static final int PARSED_CHUNK_TRY_LIMIT = Math.max(RAW_CHUNK_TRY_LIMIT, 1);
+
+    //Unchanged Constant Getters
+    public static int getChunkTryLimit() {
+        return PARSED_CHUNK_TRY_LIMIT;
+    }
+    public static Boolean getDebug() {
+        return DEBUG;
+    }
 
 
 
@@ -24,17 +36,17 @@ public class FLMath {
     private static int getRenderDistance() {
         return RENDER_DISTANCE.get().intValue();
     }
-    private static int parseMinMax(int toProcess, int max) {
-        return Math.max(Math.min(toProcess, max), 0);
+    private static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
+        return Math.max(Math.min(toProcess, max), min);
     }
     public static int getPregenRadius(boolean raw) {
-        if (PREGEN_RADIUS == 0) {
+        if (PARSED_PREGEN_RADIUS == 0) {
             return 1;
         }
         if (raw) {
-            return PREGEN_RADIUS;
+            return PARSED_PREGEN_RADIUS;
         }
-        return PREGEN_RADIUS + 1;
+        return PARSED_PREGEN_RADIUS + 1;
     }
 
 
@@ -60,24 +72,21 @@ public class FLMath {
 
     //Radii
     public static Integer getPreRenderRadius() {
-        return parseMinMax(RAW_PRE_RENDER_RADIUS, getRenderDistance());
+        return parseMinMax(RAW_PRE_RENDER_RADIUS, Math.min(getRenderDistance(), RENDER_RADIUS_BOUND), 0);
     }
     public static Integer getPreRenderRadius(boolean raw) {
-        if (raw) return RAW_PRE_RENDER_RADIUS;
+        if (raw) return Math.max(RAW_PRE_RENDER_RADIUS, 0);
         else return getPreRenderRadius();
-    }
-    public static int getRenderRadiusBound() {
-        return RENDER_RADIUS_BOUND;
     }
 
 
 
     //Areas
     public static int getPregenArea() {
-        return getSquareArea(false, PREGEN_RADIUS, false);
+        return getSquareArea(false, PARSED_PREGEN_RADIUS, false);
    }
     public static int getProgressArea() {
-        return getSquareArea(true, PREGEN_RADIUS, false);
+        return getSquareArea(true, PARSED_PREGEN_RADIUS, false);
     }
     public static Integer getPreRenderArea() {
         int i = getPreRenderRadius() / 2;

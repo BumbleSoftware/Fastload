@@ -21,7 +21,7 @@ import static io.github.bumblesoftware.fastload.config.FLMath.*;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin implements MinecraftClientMixinInterface {
     //This constant permits some variables to be printed to diagnose an issue easier.
-    private final boolean debug = false;
+    private final boolean debug = getDebug();
 
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
     //Code is heavily modified to suit Fastload's needs
@@ -37,11 +37,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private boolean showRDDOnce = false;
     //Boolean to Initiate Pre-render
     private boolean isBuilding = false;
+    //Pre Renderer Log Constants
     private Integer chunkLoadedCountStorage = null;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int logLimit = 15;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final int chunkLoadLimit = 20;
+    private final int chunkTryLimit = getChunkTryLimit();
     private int warnings = 0;
     //Ticks until Pause Menu is Active again
     private final int timeDownGoal = 10;
@@ -136,10 +135,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         if (isBuilding) {
             if (this.world != null) {
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
+                final int oldWarningCache = warnings;
                 if (chunkLoadedCountStorage != null) {
                     if (chunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > getPreRenderArea() / 2) {
                         warnings++;
-                        boolean bool = true;
                         /*
                             The reason for this function (within the if() check, below this comment paragraph)
                             is that wasting time, generating chunks on the server IS NOT pre-rendering!
@@ -152,34 +151,24 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
                             Because, if that's the case, what the hell are you using this mod for????
                         */
-                        if (warnings == chunkLoadLimit) {
+                        if (warnings == chunkTryLimit) {
                             setScreen(null);
                             isBuilding = false;
                             warnings = 0;
                             log("Terrain Building is taking too long! Stopping...");
                             logPreRendering(chunkLoadedCount);
-                            bool = false;
                             if (!windowFocused) {
                                 timeDown = 0;
                                 if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
                             }
                         }
-                        if (warnings > logLimit || debug && bool) {
-                            log("Previous Chunk count is same as this one! Either rendering is slow or there is an unreachable goal.");
-                            log("This Happened " + warnings + " time(s)! If it happens " + (chunkLoadLimit - warnings) +
-                                        " more time(s), " + "chunk building will stop");
-                            if (debug) {
-                                logPreRendering(chunkLoadedCount);
-                            }
-                            log("");
-                        }
                     }
-                    if (chunkLoadedCount > chunkLoadedCountStorage) {
-                        if (warnings > 0) {
-                            if (warnings > logLimit || debug) {
-                                log("Progress is being made, setting warning count back to 0");
-                                log("");
-                            }
+                    if (warnings > 0) {
+                        if (oldWarningCache == warnings && warnings > 2) {
+                            log("FL_WARN# Same chunk count returned " + warnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a raw, pre-rendering would've stopped");
+                            if (debug) logPreRendering(chunkLoadedCount);
+                        }
+                        if (chunkLoadedCount > chunkLoadedCountStorage) {
                             warnings = 0;
                         }
                     }

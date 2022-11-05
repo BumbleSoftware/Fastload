@@ -1,5 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin;
 
+import io.github.bumblesoftware.fastload.FastLoad;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.util.mixin.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -17,6 +19,7 @@ public class ClientPlayNetworkHandlerMixin {
     private MinecraftClient client;
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoined(GameJoinS2CPacket packet, CallbackInfo ci) {
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("gameJoined = true");
         ((MinecraftClientMixinInterface)client).gameJoined();
     }
 }

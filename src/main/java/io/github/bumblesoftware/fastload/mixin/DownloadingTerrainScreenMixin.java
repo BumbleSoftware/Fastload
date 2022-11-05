@@ -1,5 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin;
 
+import io.github.bumblesoftware.fastload.FastLoad;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,6 +19,7 @@ public class DownloadingTerrainScreenMixin {
 
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("DTS will now close on next tick");
         closeOnNextTick = true;
     }
 }
