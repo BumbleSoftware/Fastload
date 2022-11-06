@@ -207,7 +207,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
                     Because, if that's the case, what the hell are you using this mod for????
                     */
-                    if (oldChunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > 0) {
+                    if (oldChunkLoadedCountStorage == chunkLoadedCount) {
                         preparationWarnings++;
                         //Guard Clause
                         if (preparationWarnings == chunkTryLimit) {
@@ -217,7 +217,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         }
                     }
                     //Same warning system but for building chunks
-                    if (oldChunkBuildCountStorage == chunkBuildCount && chunkBuildCount > 0) {
+                    if (oldChunkBuildCountStorage == chunkBuildCount) {
                         buildingWarnings++;
                         // Guard Clause
                         if (buildingWarnings == chunkTryLimit) {
