@@ -240,7 +240,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
                             if (debug) logPreRendering(chunkLoadedCount);
                         }
-                        if (chunkLoadedCount > oldChunkBuildCountStorage) {
+                        if (chunkBuildCount > oldChunkBuildCountStorage) {
                             buildingWarnings = 0;
                         }
                     }
