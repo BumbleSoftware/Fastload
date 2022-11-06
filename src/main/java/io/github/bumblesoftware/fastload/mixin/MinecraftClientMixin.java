@@ -208,7 +208,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     if (oldChunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > getPreRenderArea() / 2) {
                         preparationWarnings++;
                         //Guard Clause
-                        if (preparationWarnings == chunkTryLimit && chunkBuildCount > chunkBuildCountGoal / 2.0) {
+                        if (preparationWarnings == chunkTryLimit) {
                             preparationWarnings = 0;
                             log("Terrain Preparation is taking too long! Stopping...");
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
@@ -218,7 +218,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     if (oldChunkBuildCountStorage == chunkBuildCount && chunkBuildCount > chunkBuildCountGoal / 2.0) {
                         buildingWarnings++;
                         // Guard Clause
-                        if (buildingWarnings == chunkTryLimit && chunkLoadedCount > getPreRenderArea() / 2) {
+                        if (buildingWarnings == chunkTryLimit) {
                             buildingWarnings = 0;
                             log("Terrain Building is taking too long! Stopping...");
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
@@ -228,7 +228,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     final int spamLimit = 2;
                     if (preparationWarnings > 0) {
                         if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                            if (chunkBuildCount > chunkBuildCountGoal / 2.0) log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
+                            log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
                             if (debug) logPreRendering(chunkLoadedCount);
                         }
                         if (chunkLoadedCount > oldChunkLoadedCountStorage) {
@@ -237,7 +237,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     }
                     if (buildingWarnings > 0) {
                         if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                            if (chunkLoadedCount > getPreRenderArea() / 2) log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                            log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
                             if (debug) logPreRendering(chunkLoadedCount);
                         }
                         if (chunkLoadedCount > oldChunkBuildCountStorage) {
