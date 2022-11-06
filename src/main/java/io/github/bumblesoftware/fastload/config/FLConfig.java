@@ -35,7 +35,7 @@ public class FLConfig {
         }
 
         //Don't forget that these variables are sorted alphabetically in .properties files!
-        RAW_CHUNK_TRY_LIMIT = getInt(properties, newProperties, "chunk_try_limit", 20);
+        RAW_CHUNK_TRY_LIMIT = getInt(properties, newProperties, "chunk_try_limit", 100);
         CLOSE_LOADING_SCREEN_UNSAFELY = getBoolean(properties, newProperties, "close_loading_screen_unsafely", false);
         DEBUG = getBoolean(properties, newProperties, "debug", false);
         RAW_CHUNK_PREGEN_RADIUS = getInt(properties, newProperties, "pre_generator_chunk_radius", 5);
@@ -50,7 +50,7 @@ public class FLConfig {
             comment.write("\n");
             comment.write("\n# Definitions");
             comment.write("\n# 'chunk_try_limit' = how many times in a raw should the same count of loaded chunks be ignored before we cancel pre-rendering");
-            comment.write("\n# There are no limits for this, but it is recommended to keep this value below 100. Must be a positive Integer");
+            comment.write("\n# There are no limits for this. Must be a positive Integer");
             comment.write("\n#");
             comment.write("\n# 'close_loading_screen_unsafely' = should skip 'Joining World', and 'Downloading Terrain'. Potentially can result in joining world before chunks are properly loaded");
             comment.write("\n# Enabled = true, Disabled = false");

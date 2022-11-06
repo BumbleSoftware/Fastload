@@ -10,63 +10,54 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class BuildingTerrainScreen extends Screen {
-    private final Text text;
+    private final Text SCREEN_NAME;
+    private final Text PROPORTION;
     private final MinecraftClient client = MinecraftClient.getInstance();
 
-    private Integer RENDERING_PROGRESS_STORAGE = 0;
+    private Integer PREPARED_PROGRESS_STORAGE = 0;
     private Integer BUILDING_PROGRESS_STORAGE = 0;
     private Integer getLoadedChunkCount() {
         return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
     }
-    private Double getLoadedPercentage() {
-        return getLoadedChunkCount().doubleValue()/FLMath.getPreRenderArea().doubleValue();
-    }
     private Integer getBuiltChunkCount() {
         return client.world != null ? client.worldRenderer.getCompletedChunkCount() : 0;
     }
-    private Double getBuiltChunkPercentage() {
-        return getBuiltChunkCount().doubleValue() /(FLMath.getPreRenderArea() * client.options.getFov().getValue().doubleValue() / 360);
-    }
-    private Integer getPercentageInt(double percentage) {
-        double d = percentage * 100;
-        if (d > 100) d = 100;
-        return (int) d;
-    }
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        text = Text.translatable("menu.generatingTerrain");
+        SCREEN_NAME = Text.translatable("menu.generatingTerrain");
+        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
     }
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
         final int white = 0xFFFFFF;
         final int heightUpFromCentre = 50;
-        final int loadedPercentageInt = getPercentageInt(getLoadedPercentage());
-        final int builtPercentageInt = getPercentageInt(getBuiltChunkPercentage());
-        final String loadedPercentageOfString = loadedPercentageInt + "%";
-        final String builtPercentageOfString = builtPercentageInt + "%";
-        if (RENDERING_PROGRESS_STORAGE < loadedPercentageInt) {
-            FastLoad.LOGGER.info("World Chunk Sending: " + loadedPercentageOfString);
+        final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue()/360;
+        if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
+            FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }
-        if (BUILDING_PROGRESS_STORAGE < builtPercentageInt) {
-            FastLoad.LOGGER.info("Visible Chunk Building: " + builtPercentageOfString);
+        if (BUILDING_PROGRESS_STORAGE < getBuiltChunkCount()) {
+            FastLoad.LOGGER.info("Visible Chunk Building: " + builtChunksString);
         }
-        RENDERING_PROGRESS_STORAGE = loadedPercentageInt;
-        BUILDING_PROGRESS_STORAGE = builtPercentageInt;
-        DrawableHelper.drawCenteredText(matrices, this.textRenderer, text, this.width / 2, this.height / 2 - heightUpFromCentre, white);
+        PREPARED_PROGRESS_STORAGE = getLoadedChunkCount();
+        BUILDING_PROGRESS_STORAGE = getBuiltChunkCount();
+        DrawableHelper.drawCenteredText(matrices, this.textRenderer, SCREEN_NAME, this.width / 2, this.height / 2 - heightUpFromCentre, white);
+        DrawableHelper.drawCenteredText(matrices, this.textRenderer, PROPORTION, this.width / 2, this.height / 2 - heightUpFromCentre + 30, white);
+
         DrawableHelper.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                "Preparing All Chunks: " + loadedPercentageOfString,
+                "Preparing All Chunks: " + loadedChunksString,
                 width / 2,
-                height / 2 - heightUpFromCentre + 15,
+                height / 2 - heightUpFromCentre + 45,
                 white);
         DrawableHelper.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                "Building Visible Chunks: " + builtPercentageOfString,
+                "Building Visible Chunks: " + builtChunksString,
                 width / 2,
-                height / 2 - heightUpFromCentre + 30,
+                height / 2 - heightUpFromCentre + 60,
                 white);
         super.render(matrices, mouseX, mouseY, delta);
     }
