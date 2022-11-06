@@ -250,11 +250,11 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 //Next two if() statements stop building when their respective tasks are completed
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;
-                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/2.0) {
+                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/4.0) {
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                     log("Successfully prepared sufficient chunks! Stopping...");
                 }
-                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/2.0) {
+                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/4.0) {
                     log("Built Sufficient Chunks! Stopping...");
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                 }
