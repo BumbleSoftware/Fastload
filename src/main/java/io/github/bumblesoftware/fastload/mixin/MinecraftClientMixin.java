@@ -8,8 +8,14 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +36,12 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     @Shadow private boolean windowFocused;
     @Shadow private volatile boolean running;
     @Shadow @Nullable public ClientWorld world;
+    @Shadow @Final public WorldRenderer worldRenderer;
+    @Shadow @Final public GameOptions options;
 
+    @Shadow @Final public GameRenderer gameRenderer;
+    @Shadow @Nullable public ClientPlayerEntity player;
+    //Checkers
     private boolean justLoaded = false;
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
@@ -38,10 +49,15 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     //Boolean to Initiate Pre-render
     private boolean isBuilding = false;
     //Pre Renderer Log Constants
-    private Integer chunkLoadedCountStorage = null;
     @SuppressWarnings("FieldCanBeLocal")
     private final int chunkTryLimit = getChunkTryLimit();
-    private int warnings = 0;
+    //Pitch storage
+    private Float oldPitch = null;
+    //Warning Constants
+    private Integer oldChunkLoadedCountStorage = null;
+    private int preparationWarnings = 0;
+    private Integer oldChunkBuildCountStorage = null;
+    private int buildingWarnings = 0;
     //Ticks until Pause Menu is Active again
     private final int timeDownGoal = 10;
     // Set this to 0 to start timer for Pause Menu Cancellation
@@ -54,6 +70,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     @Override
     public void gameJoined() {
         playerJoined = true;
+    }
+    private Camera getCamera() {
+        return gameRenderer.getCamera();
     }
     //Basic Logger
     private static void log(String toLog) {
@@ -68,9 +87,27 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     "To resolve this, please adjust your render distance accordingly");
     }
     //Logs Goal Versus amount Pre-renderer could load
-    private static void logPreRendering(int chunkLoadedCount) {
+    private void logPreRendering(int chunkLoadedCount) {
         log("Goal (Loaded Chunks): " + getPreRenderArea());
         log("Loaded Chunks: " + chunkLoadedCount);
+    }
+    private void logBuilding(int chunkBuildCount, int chunkBuildCountGoal) {
+        log("Goal (Built Chunks): " + chunkBuildCountGoal);
+        log("Chunk Build Count: " + chunkBuildCount);
+    }
+    private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
+        logBuilding(chunkBuildCount, chunkBuildCountGoal);
+        logPreRendering(chunkLoadedCount);
+        setScreen(null);
+        isBuilding = false;
+        if (!windowFocused) {
+            timeDown = 0;
+            if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
+        }
+        assert this.player != null;
+        getCamera().setRotation(this.player.getYaw() , oldPitch);
+        this.player.setPitch(oldPitch);
+        oldPitch = null;
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
@@ -126,7 +163,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     @Inject(method = "render", at = @At("HEAD"))
     private void onRender(boolean tick, CallbackInfo ci) {
-        //Log differences in Pre-render and render distances
+        //Log differences differences
         if (showRDDOnce) {
             logRenderDistanceDifference();
             showRDDOnce = false;
@@ -134,58 +171,90 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         //Pre-rendering Engine
         if (isBuilding) {
             if (this.world != null) {
+                //Optimisations
+                assert player != null;
+                if (oldPitch == null) {
+                    oldPitch = this.player.getPitch();
+                }
+                this.player.setPitch(0);
+                if (debug) {
+                    log("Pitch:" + player.getPitch());
+                }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
+                //This is HIGHLY contingent on where your camera is looking
+                int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
+                double FOV = this.options.getFov().getValue();
+                double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
                 if (debug) {
                     logPreRendering(chunkLoadedCount);
+                    logBuilding(chunkBuildCount, (int) chunkBuildCountGoal);
                 }
-                final int oldWarningCache = warnings;
-                if (chunkLoadedCountStorage != null) {
-                    if (chunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > getPreRenderArea() / 2) {
-                        warnings++;
-                        /*
-                            The reason for this function (within the if() check, below this comment paragraph)
-                            is that wasting time, generating chunks on the server IS NOT pre-rendering!
-                            By this time, this module has cancelled your pre-rendering,
-                            because it has loaded all your important chunks and ones that were previously generated.
-                            This is done by only enabling pre-render cancellations until at least HALF of your goal is loaded.
-                            Due to this, it serves no purpose to keep pre-rendering past the given limits.
-                            Moreover, the purpose of the GOAL, in the first place, is to simply set a soft cap on how many chunks
-                            the renderer is permitted to build, so you can enter your world within a time that you desire!
-                            ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
-                            Because, if that's the case, what the hell are you using this mod for????
-                        */
-                        if (warnings == chunkTryLimit) {
-                            setScreen(null);
-                            isBuilding = false;
-                            warnings = 0;
-                            log("Terrain Building is taking too long! Stopping...");
-                            logPreRendering(chunkLoadedCount);
-                            if (!windowFocused) {
-                                timeDown = 0;
-                                if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
-                            }
+                final int oldPreparationWarningCache = preparationWarnings;
+                final int oldBuildingWarningCache = buildingWarnings;
+                //The warning system
+                if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null) {
+                    /*
+                    The reason for this function (within the if() check, below this comment paragraph)
+                    is that wasting time, generating chunks on the server IS NOT pre-rendering!
+                    By this time, this module has cancelled your pre-rendering,
+                    because it has loaded all your important chunks and ones that were previously generated.
+                    This is done by only enabling pre-render cancellations until at least HALF of your goal is loaded.
+                    Due to this, it serves no purpose to keep pre-rendering past the given limits.
+                    Moreover, the purpose of the GOAL, in the first place, is to simply set a soft cap on how many chunks
+                    the renderer is permitted to build, so you can enter your world within a time that you desire!
+                    ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
+                    Because, if that's the case, what the hell are you using this mod for????
+                    */
+                    if (oldChunkLoadedCountStorage == chunkLoadedCount && chunkLoadedCount > getPreRenderArea() / 2) {
+                        preparationWarnings++;
+                        //Guard Clause
+                        if (preparationWarnings == chunkTryLimit && chunkBuildCount > chunkBuildCountGoal / 2.0) {
+                            preparationWarnings = 0;
+                            log("Terrain Preparation is taking too long! Stopping...");
+                            stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                         }
                     }
-                    if (warnings > 0) {
-                        if (oldWarningCache == warnings && warnings > 2) {
-                            log("FL_WARN# Same chunk count returned " + warnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, pre-rendering would've stopped");
+                    //Same warning system but for building chunks
+                    if (oldChunkBuildCountStorage == chunkBuildCount && chunkBuildCount > chunkBuildCountGoal / 2.0) {
+                        buildingWarnings++;
+                        // Guard Clause
+                        if (buildingWarnings == chunkTryLimit && chunkLoadedCount > getPreRenderArea() / 2) {
+                            buildingWarnings = 0;
+                            log("Terrain Building is taking too long! Stopping...");
+                            stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
+                        }
+                    }
+                    //Log Warnings
+                    final int spamLimit = 2;
+                    if (preparationWarnings > 0) {
+                        if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                            log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
                             if (debug) logPreRendering(chunkLoadedCount);
                         }
-                        if (chunkLoadedCount > chunkLoadedCountStorage) {
-                            warnings = 0;
+                        if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                            preparationWarnings = 0;
+                        }
+                    }
+                    if (buildingWarnings > 0) {
+                        if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                            log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                            if (debug) logPreRendering(chunkLoadedCount);
+                        }
+                        if (chunkLoadedCount > oldChunkBuildCountStorage) {
+                            buildingWarnings = 0;
                         }
                     }
                 }
-                chunkLoadedCountStorage = chunkLoadedCount;
-                if (chunkLoadedCount >= getPreRenderArea()) {
-                    logPreRendering(chunkLoadedCount);
-                    setScreen(null);
-                    isBuilding = false;
-                    if (debug) log("Successfully Built Chunks Properly!");
-                    if (!windowFocused) {
-                        timeDown = 0;
-                        if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
-                    }
+                //Next two if() statements stop building when their respective tasks are completed
+                oldChunkLoadedCountStorage = chunkLoadedCount;
+                oldChunkBuildCountStorage = chunkBuildCount;
+                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/2.0) {
+                    stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
+                    log("Successfully prepared sufficient chunks! Stopping...");
+                }
+                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/2.0) {
+                    log("Built Sufficient Chunks! Stopping...");
+                    stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                 }
             }
         // Tick Timer for Pause Menu Cancellation
