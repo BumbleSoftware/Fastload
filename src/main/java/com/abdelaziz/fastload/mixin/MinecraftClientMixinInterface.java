@@ -1,4 +1,4 @@
-package com.abdelaziz.fastload;
+package com.abdelaziz.fastload.mixin;
 
 public interface MinecraftClientMixinInterface {
      void canPlayerLoad();

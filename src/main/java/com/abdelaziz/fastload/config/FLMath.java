@@ -1,6 +1,4 @@
-package com.abdelaziz.fastload;
-
-import com.abdelaziz.fastload.config.FLConfig;
+package com.abdelaziz.fastload.config;
 
 public class FLMath {
     public static final int ORIGINAL_SPAWN_CHUNK_RADIUS = FLConfig.CHUNK_PREGEN_RADIUS;

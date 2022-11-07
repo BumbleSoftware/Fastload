@@ -1,6 +1,6 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.FLMath;
+import com.abdelaziz.fastload.config.FLMath;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

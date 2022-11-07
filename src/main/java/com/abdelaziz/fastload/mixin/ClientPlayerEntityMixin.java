@@ -1,6 +1,5 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Final;

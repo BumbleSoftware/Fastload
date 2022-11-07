@@ -1,6 +1,5 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.MinecraftClientMixinInterface;
 import com.abdelaziz.fastload.config.FLConfig;
 import net.minecraft.client.MinecraftClient;
 
