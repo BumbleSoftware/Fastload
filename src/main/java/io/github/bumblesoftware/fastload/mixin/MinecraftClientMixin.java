@@ -51,12 +51,12 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     //Pre Renderer Log Constants
     @SuppressWarnings("FieldCanBeLocal")
     private final int chunkTryLimit = getChunkTryLimit();
-    //Pitch storage
+    //Storage
     private Float oldPitch = null;
-    //Warning Constants
     private Integer oldChunkLoadedCountStorage = null;
-    private int preparationWarnings = 0;
     private Integer oldChunkBuildCountStorage = null;
+    //Warning Constants
+    private int preparationWarnings = 0;
     private int buildingWarnings = 0;
     //Ticks until Pause Menu is Active again
     private final int timeDownGoal = 10;
@@ -108,7 +108,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         }
         assert this.player != null;
         getCamera().setRotation(this.player.getYaw() , oldPitch);
-        this.player.setPitch(oldPitch);
+        if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
         oldPitch = null;
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
@@ -180,10 +180,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 }
                 this.player.setPitch(0);
                 if (debug) {
-                    log("Pitch:" + player.getPitch());
+                    log("Pitch:" + oldPitch);
                 }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
-                //This is HIGHLY contingent on where your camera is looking
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
                 double FOV = this.options.getFov().getValue();
                 double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
