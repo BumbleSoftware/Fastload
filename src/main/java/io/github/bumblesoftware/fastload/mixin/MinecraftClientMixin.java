@@ -96,24 +96,27 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         log("Chunk Build Count: " + chunkBuildCount);
     }
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
-        if (debug) {
-            logBuilding(chunkBuildCount, chunkBuildCountGoal);
-            logPreRendering(chunkLoadedCount);
+        if (playerJoined) {
+            if (debug) {
+                logBuilding(chunkBuildCount, chunkBuildCountGoal);
+                logPreRendering(chunkLoadedCount);
+            }
+            isBuilding = false;
+            if (!windowFocused) {
+                timeDown = 0;
+                if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
+            }
+            assert this.player != null;
+            if (oldPitch != null) {
+                getCamera().setRotation(this.player.getYaw(), oldPitch);
+                if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
+                oldPitch = null;
+            }
+            playerJoined = false;
+            oldChunkLoadedCountStorage = 0;
+            oldChunkBuildCountStorage = 0;
+            setScreen(null);
         }
-        isBuilding = false;
-        if (!windowFocused) {
-            timeDown = 0;
-            if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
-        }
-        assert this.player != null;
-        if (oldPitch != null) {
-            getCamera().setRotation(this.player.getYaw(), oldPitch);
-            if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
-            oldPitch = null;
-        }
-        oldChunkLoadedCountStorage = 0;
-        oldChunkBuildCountStorage = 0;
-        setScreen(null);
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
@@ -135,7 +138,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (debug) log("Successfully Initiated Building Terrain");
         }
         //Close Progress Screen
-        if (screen instanceof ProgressScreen && (getCloseUnsafe())) {
+        if (screen instanceof ProgressScreen && getCloseUnsafe()) {
             ci.cancel();
             if (debug) log("Progress Screen Successfully Cancelled");
         }
@@ -143,7 +146,6 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
             if (debug) log("Downloading Terrain Accessed!");
             shouldLoad = false;
-            playerJoined = false;
             justLoaded = true;
             showRDDOnce = true;
             // Switch to Pre-render Phase
@@ -156,6 +158,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 setScreen(new BuildingTerrainScreen());
             //Skip Downloading Terrain Screen
             } else if (getCloseUnsafe()) {
+                playerJoined = false;
                 ci.cancel();
                 if (debug) log("Successfully Skipped Downloading Terrain Screen!");
                 timeDown = 0;
