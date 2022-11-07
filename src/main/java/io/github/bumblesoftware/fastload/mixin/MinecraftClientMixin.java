@@ -100,7 +100,6 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             logBuilding(chunkBuildCount, chunkBuildCountGoal);
             logPreRendering(chunkLoadedCount);
         }
-        setScreen(null);
         isBuilding = false;
         if (!windowFocused) {
             timeDown = 0;
@@ -112,9 +111,20 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
             oldPitch = null;
         }
+        setScreen(null);
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
+        //Failsafe
+        if (screen == null) {
+            isBuilding = false;
+            shouldLoad = false;
+            justLoaded = false;
+            showRDDOnce = false;
+            oldChunkLoadedCountStorage = null;
+            oldChunkBuildCountStorage = null;
+            oldPitch = null;
+        }
         //Stop Pause Menu interfering with rendering
         if (timeDown < timeDownGoal && screen instanceof GameMenuScreen && !windowFocused) {
             ci.cancel();
