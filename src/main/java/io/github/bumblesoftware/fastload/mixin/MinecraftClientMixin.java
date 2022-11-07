@@ -111,6 +111,8 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
             oldPitch = null;
         }
+        oldChunkLoadedCountStorage = 0;
+        oldChunkBuildCountStorage = 0;
         setScreen(null);
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
@@ -121,8 +123,6 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             shouldLoad = false;
             justLoaded = false;
             showRDDOnce = false;
-            oldChunkLoadedCountStorage = null;
-            oldChunkBuildCountStorage = null;
             oldPitch = null;
         }
         //Stop Pause Menu interfering with rendering
