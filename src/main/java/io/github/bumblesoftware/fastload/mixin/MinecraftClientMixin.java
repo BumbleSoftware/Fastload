@@ -107,9 +107,11 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
         }
         assert this.player != null;
-        getCamera().setRotation(this.player.getYaw() , oldPitch);
-        if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
-        oldPitch = null;
+        if (oldPitch != null) {
+            getCamera().setRotation(this.player.getYaw(), oldPitch);
+            if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
+            oldPitch = null;
+        }
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
