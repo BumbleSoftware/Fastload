@@ -17,12 +17,13 @@ import net.minecraft.server.MinecraftServer;
 */
 
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
         setChunkRadius();
         return FLMath.getSpawnChunkArea(0);
     }
+
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
         setChunkRadius();

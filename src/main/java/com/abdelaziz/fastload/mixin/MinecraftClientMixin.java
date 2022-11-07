@@ -1,6 +1,7 @@
 package com.abdelaziz.fastload.mixin;
 
 import com.abdelaziz.fastload.config.FLConfig;
+import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;

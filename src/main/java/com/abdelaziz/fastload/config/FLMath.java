@@ -1,10 +1,10 @@
 package com.abdelaziz.fastload.config;
 
 public class FLMath {
-    public static final int ORIGINAL_SPAWN_CHUNK_RADIUS = FLConfig.CHUNK_PREGEN_RADIUS;
-    public static final int SET_SPAWN_CHUNK_RADIUS = spawnChunkRadius();
+    private static final int ORIGINAL_SPAWN_CHUNK_RADIUS = FLConfig.CHUNK_PREGEN_RADIUS;
+    private static final int SET_SPAWN_CHUNK_RADIUS = parseSpawnChunkRadius();
 
-    public static int spawnChunkRadius() {
+    public static int parseSpawnChunkRadius() {
         if (ORIGINAL_SPAWN_CHUNK_RADIUS > 20) {
             return 20;
         } else return Math.max(ORIGINAL_SPAWN_CHUNK_RADIUS, 1);
