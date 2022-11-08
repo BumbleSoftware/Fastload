@@ -12,14 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
+@SuppressWarnings("SameParameterValue")
 public class FLConfig {
-    //Config Variables
-    protected static final int RAW_CHUNK_TRY_LIMIT;
-    protected static final boolean CLOSE_LOADING_SCREEN_UNSAFELY;
-    protected static final boolean DEBUG;
-    protected static final int RAW_CHUNK_PREGEN_RADIUS;
-    protected static final int RAW_PRE_RENDER_RADIUS;
-
     static {
         final Properties properties = new Properties();
         final Properties newProperties = new Properties();
@@ -57,8 +51,7 @@ public class FLConfig {
             comment.write("\n# 'debug' = debug (log) all things happening in fastload to aid in diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# 'pre_render_radius' = how many chunks are loaded until 'building terrain' is completed.");
-            comment.write("\n# Keep in mind that for safety reasons, pre-rendering may not always fully complete");
+            comment.write("\n# 'pre_render_radius' = how many chunks are loaded until 'building terrain' is completed. Adjusts with FOV to decide how many chunks are visible");
             comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable. Must be a positive Integer");
             comment.write("\n#");
             comment.write("\n# 'pregen_chunk_radius' = how many chunks (from 441 Loading) are pre-generated until the server starts");
@@ -69,6 +62,13 @@ public class FLConfig {
             throw new RuntimeException(e);
         }
     }
+
+    //Config Variables
+    protected static final int RAW_CHUNK_TRY_LIMIT;
+    protected static final boolean CLOSE_LOADING_SCREEN_UNSAFELY;
+    protected static final boolean DEBUG;
+    protected static final int RAW_CHUNK_PREGEN_RADIUS;
+    protected static final int RAW_PRE_RENDER_RADIUS;
 
     public static void loadClass() {
     }

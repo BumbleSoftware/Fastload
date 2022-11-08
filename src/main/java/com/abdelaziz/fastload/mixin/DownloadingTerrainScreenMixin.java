@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DownloadingTerrainScreen.class)
 public class DownloadingTerrainScreenMixin {
-
     //Code is from 'kennytv'. All credits are to this person. This is not our code.
     //Permission granted to do so from MIT License of 'forcecloseloadingscreen'.
     @Shadow private boolean closeOnNextTick;
@@ -19,6 +18,6 @@ public class DownloadingTerrainScreenMixin {
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
         if (FLMath.getDebug()) FastLoad.LOGGER.info("DTS will now close on next tick");
-        closeOnNextTick = true;
+        if (FLMath.getCloseUnsafe() || FLMath.getCloseSafe()) closeOnNextTick = true;
     }
 }

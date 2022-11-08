@@ -1,7 +1,6 @@
 package com.abdelaziz.fastload.mixin;
 
 import com.abdelaziz.fastload.FastLoad;
-import com.abdelaziz.fastload.config.FLConfig;
 import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import com.abdelaziz.fastload.util.screen.BuildingTerrainScreen;
 import net.minecraft.client.MinecraftClient;
@@ -33,6 +32,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
 
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
     //Code is heavily modified to suit Fastload's needs
+
     //Pre Renderer Log Constants
     @SuppressWarnings("FieldCanBeLocal")
     private final int chunkTryLimit = getChunkTryLimit();
@@ -55,42 +55,33 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     public ClientPlayerEntity player;
     @Shadow
     private boolean windowFocused;
-    @Shadow
-    private volatile boolean running;
+
     //Checkers
     private boolean justLoaded = false;
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
     private boolean showRDDOnce = false;
-    //Boolean to Initiate Pre-render
+    @Shadow
+    private volatile boolean running;
+    //Boolean  Pre-render
     private boolean isBuilding = false;
+    private boolean closeBuild = false;
+
     //Storage
     private Float oldPitch = null;
     private Integer oldChunkLoadedCountStorage = null;
     private Integer oldChunkBuildCountStorage = null;
+
     //Warning Constants
     private int preparationWarnings = 0;
     private int buildingWarnings = 0;
-    // Set this to 0 to start timer for Pause Menu Cancellation
-    private int timeDown = timeDownGoal;
-
-    //Basic Logger
-    private static void log(String toLog) {
-        FastLoad.LOGGER.info(toLog);
-    }
-
-    //Logs Difference in Render and Pre-render distances
-    private static void logRenderDistanceDifference() {
-        if (!getPreRenderRadius().equals(getPreRenderRadius(true)))
-            log("Pre-rendering radius changed to "
-                    + getPreRenderRadius() + " from " + getPreRenderRadius(true)
-                    + " to protect from chunks not loading past your given render distance. " +
-                    "To resolve this, please adjust your render distance accordingly");
-    }
 
     @Shadow
     public void setScreen(@Nullable Screen screen) {
     }
+
+    // Set this to 0 to start timer for Pause Menu Cancellation
+    private int timeDown = timeDownGoal;
 
     //Checks if Player is ready
     public void canPlayerLoad() {
@@ -107,6 +98,20 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         return gameRenderer.getCamera();
     }
 
+    //Basic Logger
+    private static void log(String toLog) {
+        FastLoad.LOGGER.info(toLog);
+    }
+
+    //Logs Difference in Render and Pre-render distances
+    private static void logRenderDistanceDifference() {
+        if (!getPreRenderRadius().equals(getPreRenderRadius(true)))
+            log("Pre-rendering radius changed to "
+                    + getPreRenderRadius() + " from " + getPreRenderRadius(true)
+                    + " to protect from chunks not loading past your given render distance. " +
+                    "To resolve this, please adjust your render distance accordingly");
+    }
+
     //Logs Goal Versus amount Pre-renderer could load
     private void logPreRendering(int chunkLoadedCount) {
         log("Goal (Loaded Chunks): " + getPreRenderArea());
@@ -120,21 +125,27 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
 
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
+            closeBuild = true;
             if (debug) {
                 logBuilding(chunkBuildCount, chunkBuildCountGoal);
                 logPreRendering(chunkLoadedCount);
             }
+
             isBuilding = false;
+
             if (!windowFocused) {
                 timeDown = 0;
                 if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
+
             assert this.player != null;
+
             if (oldPitch != null) {
                 getCamera().setRotation(this.player.getYaw(), oldPitch);
                 if (this.player.getPitch() != oldPitch) this.player.setPitch(oldPitch);
                 oldPitch = null;
             }
+
             playerJoined = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
@@ -152,26 +163,31 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             showRDDOnce = false;
             oldPitch = null;
         }
+
         //Stop Pause Menu interfering with rendering
         if (timeDown < timeDownGoal && screen instanceof GameMenuScreen && !windowFocused) {
             ci.cancel();
             setScreen(null);
         }
+
         //Log Pre-Render Initiation
         if (screen instanceof BuildingTerrainScreen) {
             if (debug) log("Successfully Initiated Building Terrain");
         }
+
         //Close Progress Screen
         if (screen instanceof ProgressScreen && getCloseUnsafe()) {
             ci.cancel();
             if (debug) log("Progress Screen Successfully Cancelled");
         }
+
         //Close Downloading Terrain Screen ASAP
         if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
             if (debug) log("Downloading Terrain Accessed!");
             shouldLoad = false;
             justLoaded = true;
             showRDDOnce = true;
+
             // Switch to Pre-render Phase
             if (getCloseSafe()) {
                 ci.cancel();
@@ -217,17 +233,13 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (this.world != null) {
                 //Optimisations
                 assert player != null;
-
                 if (oldPitch == null) {
                     oldPitch = this.player.getPitch();
                 }
-
                 this.player.setPitch(0);
-
                 if (debug) {
                     log("Pitch:" + oldPitch);
                 }
-
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
                 double FOV = this.options.getFov().getValue();
@@ -261,6 +273,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                         }
                     }
+
                     //Same warning system but for building chunks
                     if (oldChunkBuildCountStorage == chunkBuildCount) {
                         buildingWarnings++;
@@ -271,34 +284,43 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                         }
                     }
-                    //Log Warnings
-                    final int spamLimit = 2;
-                    if (preparationWarnings > 0) {
-                        if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                            log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
+
+                    if (!closeBuild) {
+                        //Log Warnings
+                        final int spamLimit = 2;
+                        if (preparationWarnings > 0) {
+                            if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+
+                            if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                                preparationWarnings = 0;
+                            }
                         }
-                        if (chunkLoadedCount > oldChunkLoadedCountStorage) {
-                            preparationWarnings = 0;
-                        }
-                    }
-                    if (buildingWarnings > 0) {
-                        if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                            log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
-                        }
-                        if (chunkBuildCount > oldChunkBuildCountStorage) {
-                            buildingWarnings = 0;
+
+                        if (buildingWarnings > 0) {
+                            if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+
+                            if (chunkBuildCount > oldChunkBuildCountStorage) {
+                                buildingWarnings = 0;
+                            }
                         }
                     }
                 }
+
                 //Next two if() statements stop building when their respective tasks are completed
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;
+
                 if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal / 4.0) {
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                     log("Successfully prepared sufficient chunks! Stopping...");
                 }
+
                 if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea() / 4.0) {
                     log("Built Sufficient Chunks! Stopping...");
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);

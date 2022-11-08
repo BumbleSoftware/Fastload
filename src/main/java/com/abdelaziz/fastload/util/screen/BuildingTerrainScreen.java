@@ -17,18 +17,18 @@ public class BuildingTerrainScreen extends Screen {
     private Integer PREPARED_PROGRESS_STORAGE = 0;
     private Integer BUILDING_PROGRESS_STORAGE = 0;
 
-    public BuildingTerrainScreen() {
-        super(NarratorManager.EMPTY);
-        SCREEN_NAME = Text.translatable("menu.generatingTerrain");
-        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
-    }
-
     private Integer getLoadedChunkCount() {
         return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
     }
 
     private Integer getBuiltChunkCount() {
         return client.world != null ? client.worldRenderer.getCompletedChunkCount() : 0;
+    }
+
+    public BuildingTerrainScreen() {
+        super(NarratorManager.EMPTY);
+        SCREEN_NAME = Text.translatable("menu.generatingTerrain");
+        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
     }
 
     @Override
@@ -70,6 +70,11 @@ public class BuildingTerrainScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldPause() {
         return false;
     }
 }

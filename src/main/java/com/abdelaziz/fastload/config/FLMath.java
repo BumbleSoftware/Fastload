@@ -16,11 +16,6 @@ public class FLMath {
     private static final int PARSED_PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND, 0);
     //RENDER_RADIUS// Cannot be parsed as parsing dynamically changes. No point in making it a field
     private static final int PARSED_CHUNK_TRY_LIMIT = Math.max(RAW_CHUNK_TRY_LIMIT, 1);
-    //Parsing
-    private static final Supplier<Double> RENDER_DISTANCE = () ->
-            MinecraftClient.getInstance().worldRenderer != null ?
-                    Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), RENDER_RADIUS_BOUND)
-                    : RENDER_RADIUS_BOUND;
 
     //Unchanged Constant Getters
     public static int getChunkTryLimit() {
@@ -30,6 +25,12 @@ public class FLMath {
     public static Boolean getDebug() {
         return DEBUG;
     }
+
+    //Parsing
+    private static final Supplier<Double> RENDER_DISTANCE = () ->
+            MinecraftClient.getInstance().worldRenderer != null ?
+                    Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), RENDER_RADIUS_BOUND)
+                    : RENDER_RADIUS_BOUND;
 
     private static int getRenderDistance() {
         return RENDER_DISTANCE.get().intValue();
@@ -43,9 +44,11 @@ public class FLMath {
         if (PARSED_PREGEN_RADIUS == 0) {
             return 1;
         }
+
         if (raw) {
             return PARSED_PREGEN_RADIUS;
         }
+
         return PARSED_PREGEN_RADIUS + 1;
     }
 
@@ -56,10 +59,12 @@ public class FLMath {
         if (!raw) {
             i++;
         }
+
         if (worldProgressTracker) {
             i++;
             i++;
         }
+
         return i * i;
     }
 
