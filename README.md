@@ -35,7 +35,7 @@ We do this in a better, safer way by simply dialing down the number of chunks re
 
 Furthermore, we integrated yet another, unstable/unsafe mod: "Force Close Loading Screen". By itself, it just cancels the Downloading Terrain Screen, which isn't stable. We improved upon this by a number of metrics, such as:
 
-   - Temporarily stop the Pause Menu from appearing too early when the world takes a screenshot for it's icon.
+    - Temporarily stop the Pause Menu from appearing too early when the world takes a screenshot for it's icon.
     - Cancelled 'Joining World' as well.
     - Added a number of failsafes, such as:
         - Only cancel when player is ready.
