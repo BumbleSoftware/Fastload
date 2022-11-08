@@ -58,8 +58,7 @@ public class FLConfig {
             comment.write("\n# 'debug' = debug (log) all things happening in fastload to aid in diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# 'pre_render_radius' = how many chunks are loaded until 'building terrain' is completed.");
-            comment.write("\n# Keep in mind that for safety reasons, pre-rendering may not always fully complete");
+            comment.write("\n# 'pre_render_radius' = how many chunks are loaded until 'building terrain' is completed. Adjusts with FOV to decide how many chunks are visible");
             comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable. Must be a positive Integer");
             comment.write("\n#");
             comment.write("\n# 'pregen_chunk_radius' = how many chunks (from 441 Loading) are pre-generated until the server starts");
