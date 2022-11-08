@@ -14,11 +14,12 @@ Fastload is a simple mod that reduces world loading time. This serves as an alte
 - Forcecloseloadingscreen by kennytv (Incompatible)
 
 # Here are its features:
-- Reducing 21^2 chunks to 5^2
-- Cancels 'Loading Terrain' for even quicker loading times.
+- Reducing 21^2 chunks to 5^2 (Configurable)
+- Cancels 'Loading Terrain' & 'Joining World' for even quicker loading times.
 - Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
+- Optional Pre-generator screen (Disabled by default)
 
-# Speed times: [All other elements are controlled!]
+# Speed times: (Default Settings) [All other elements are controlled!]
 - Vanilla: [
 - Create New world: ~32 sec
 - Load World: ~5 sec
@@ -30,8 +31,17 @@ Fastload is a simple mod that reduces world loading time. This serves as an alte
 
 # How it works (In detail) (In comparison with integrated mods):
 Ksyxis cancels 441 world loading by essentially telling the game "Hey, we're done!", which works on paper. But, it is a very unsafe method of loading and rather inefficient. It does this during chunk loading which is a big no-no in code. Not only does this cause potential crashes, and corruption, but it also makes it take longer to load in comparison to our way. Ksyxis doesn't even initialise at the beginning of 441, it does it after it is initialised! Which is just plain bad. But don't get angry at ksyxis yet! The developer of it issues a firm warning that it isn't stable and really shouldn't be used, which explains everything.
+We do this in a better, safer way by simply dialing down the number of chunks required to load before 441 initialises. This is fairly self-explanatory!
 
-We do this in a better, safer way by simply dialing down the number of chunks required to load before 441 initialises. This is fairly self-explanatory! To make world loading faster, we integrated yet another 'unstable' mod, Forcecloseloadingscreen. Like ksyxis, it also issues a firm warning of instability. How did we improve this? Just by preventing the 'Pause Menu' activating when not focused on the window until the real renderer initialised. We also make it cancel only when the player spawns, to avoid issues where the player spawns in the wrong locations with incorrect playerdata. Thus, fixing the bugs that mods bring in too! There's your technical explanation!
+Furthermore, we integrated yet another, unstable/unsafe mod: "Force Close Loading Screen". By itself, it just cancels the Downloading Terrain Screen, which isn't stable. We improved upon this by a number of metrics, such as:
+
+    - Temporarily stop the Pause Menu from appearing too early when the world takes a screenshot for it's icon.
+    - Cancelled 'Joining World' as well.
+    - Added a number of failsafes, such as:
+        - Only cancel when player is ready.
+        - Have a number of checkers to ensure that it doesn't interrupt other parts of the game.
+    - Added a separate screen to either replace or complement this feature.
+    - Made this toggleable (for very obvious reasons).
 
 Modrinth: https://modrinth.com/mod/fastload
 
