@@ -38,7 +38,7 @@ Furthermore, we integrated yet another, unstable/unsafe mod: "Force Close Loadin
     - Temporarily stop the Pause Menu from appearing too early when the world takes a screenshot for it's icon.
     - Cancelled 'Joining World' as well.
     - Added a number of failsafes, such as:
-        - Only cancel when player is ready.
+        - Only cancel when the player is ready.
         - Have a number of checkers to ensure that it doesn't interrupt other parts of the game.
     - Added a separate screen to either replace or complement this feature.
     - Made this toggleable (for very obvious reasons).
