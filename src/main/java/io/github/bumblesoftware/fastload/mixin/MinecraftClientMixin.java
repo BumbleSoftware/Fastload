@@ -199,7 +199,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
-                double FOV = this.options.getFov().getValue();
+                double FOV = this.options.fov;
                 double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
                 if (debug) {
                     logPreRendering(chunkLoadedCount);

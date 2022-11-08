@@ -24,8 +24,8 @@ public class BuildingTerrainScreen extends Screen {
     }
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        SCREEN_NAME = Text.translatable("menu.generatingTerrain");
-        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
+        SCREEN_NAME = Text.of("menu.generatingTerrain");
+        PROPORTION = Text.of("(COMPLETED)/(GOAL)");
     }
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -33,7 +33,7 @@ public class BuildingTerrainScreen extends Screen {
         final int white = 0xFFFFFF;
         final int heightUpFromCentre = 50;
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue()/360;
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.fov/360;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }
