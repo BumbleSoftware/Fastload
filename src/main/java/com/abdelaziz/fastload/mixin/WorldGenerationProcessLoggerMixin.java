@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.*;
 
 import net.minecraft.server.WorldGenerationProgressLogger;
 
-
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
     @Shadow

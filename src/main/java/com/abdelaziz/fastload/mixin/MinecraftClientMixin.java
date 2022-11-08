@@ -1,7 +1,6 @@
 package com.abdelaziz.fastload.mixin;
 
 import com.abdelaziz.fastload.FastLoad;
-import com.abdelaziz.fastload.config.FLConfig;
 import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import com.abdelaziz.fastload.util.screen.BuildingTerrainScreen;
 import net.minecraft.client.MinecraftClient;
@@ -38,8 +37,11 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     @Shadow private boolean windowFocused;
     @Shadow private volatile boolean running;
     @Shadow @Nullable public ClientWorld world;
-    @Shadow @Final public WorldRenderer worldRenderer;
-    @Shadow @Final
+    @Shadow
+    @Final
+    public WorldRenderer worldRenderer;
+    @Shadow
+    @Final
     public GameOptions options;
 
     @Shadow @Final public GameRenderer gameRenderer;
@@ -49,8 +51,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
     private boolean showRDDOnce = false;
-    //Boolean to Initiate Pre-render
+    //Boolean Pre-render
     private boolean isBuilding = false;
+    private boolean closeBuild = false;
     //Pre Renderer Log Constants
     @SuppressWarnings("FieldCanBeLocal")
     private final int chunkTryLimit = getChunkTryLimit();
@@ -100,6 +103,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
+            closeBuild = true;
             if (debug) {
                 logBuilding(chunkBuildCount, chunkBuildCountGoal);
                 logPreRendering(chunkLoadedCount);
@@ -181,7 +185,6 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             }
         }
     }
-
     @Inject(method = "render", at = @At("HEAD"))
     private void onRender(boolean tick, CallbackInfo ci) {
         //Log differences differences
@@ -189,27 +192,22 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             logRenderDistanceDifference();
             showRDDOnce = false;
         }
-
         //Pre-rendering Engine
         if (isBuilding) {
             if (this.world != null) {
                 //Optimisations
                 assert player != null;
-
                 if (oldPitch == null) {
                     oldPitch = this.player.getPitch();
                 }
-
                 this.player.setPitch(0);
-
                 if (debug) {
                     log("Pitch:" + oldPitch);
                 }
-
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
-                double FOV = this.options.getFov().getValue();
-                double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
+                int FOV = (int) this.options.fov;
+                double chunkBuildCountGoal = ((float) FOV / 360) * getPreRenderArea().doubleValue();
                 if (debug) {
                     logPreRendering(chunkLoadedCount);
                     logBuilding(chunkBuildCount, (int) chunkBuildCountGoal);
@@ -249,35 +247,37 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                         }
                     }
-                    //Log Warnings
-                    final int spamLimit = 2;
-                    if (preparationWarnings > 0) {
-                        if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                            log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
+                    if (!closeBuild) {
+                        //Log Warnings
+                        final int spamLimit = 2;
+                        if (preparationWarnings > 0) {
+                            if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+                            if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                                preparationWarnings = 0;
+                            }
                         }
-                        if (chunkLoadedCount > oldChunkLoadedCountStorage) {
-                            preparationWarnings = 0;
-                        }
-                    }
-                    if (buildingWarnings > 0) {
-                        if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                            log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
-                        }
-                        if (chunkBuildCount > oldChunkBuildCountStorage) {
-                            buildingWarnings = 0;
+                        if (buildingWarnings > 0) {
+                            if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+                            if (chunkBuildCount > oldChunkBuildCountStorage) {
+                                buildingWarnings = 0;
+                            }
                         }
                     }
                 }
                 //Next two if() statements stop building when their respective tasks are completed
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;
-                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/4.0) {
+                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal / 4.0) {
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                     log("Successfully prepared sufficient chunks! Stopping...");
                 }
-                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/4.0) {
+                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea() / 4.0) {
                     log("Built Sufficient Chunks! Stopping...");
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                 }
@@ -286,6 +286,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         } else if (timeDown < timeDownGoal) {
             timeDown++;
             if (debug) log("" + timeDown);
+        }
+        if (closeBuild) {
+            closeBuild = false;
         }
     }
 }

@@ -21,6 +21,7 @@ public class FLMath {
     public static int getChunkTryLimit() {
         return PARSED_CHUNK_TRY_LIMIT;
     }
+
     public static Boolean getDebug() {
         return DEBUG;
     }
@@ -30,19 +31,25 @@ public class FLMath {
             MinecraftClient.getInstance().worldRenderer != null ?
                     Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), RENDER_RADIUS_BOUND)
                     : RENDER_RADIUS_BOUND;
+
     private static int getRenderDistance() {
         return RENDER_DISTANCE.get().intValue();
     }
+
     private static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
+
     public static int getPregenRadius(boolean raw) {
+
         if (PARSED_PREGEN_RADIUS == 0) {
             return 1;
         }
+
         if (raw) {
             return PARSED_PREGEN_RADIUS;
         }
+
         return PARSED_PREGEN_RADIUS + 1;
     }
 
@@ -50,15 +57,19 @@ public class FLMath {
     @SuppressWarnings("SameParameterValue")
     private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
         int i = toCalc * 2;
+
         if (!raw) {
             i++;
         }
+
         if (worldProgressTracker) {
             i ++;
             i ++;
         }
+
         return i * i;
     }
+
     public static Double getCircleArea(int radius) {
         return PI * radius * radius;
     }
@@ -67,6 +78,7 @@ public class FLMath {
     public static Integer getPreRenderRadius() {
         return parseMinMax(RAW_PRE_RENDER_RADIUS, Math.min(getRenderDistance(), RENDER_RADIUS_BOUND), 0);
     }
+
     public static Integer getPreRenderRadius(boolean raw) {
         if (raw) return Math.max(RAW_PRE_RENDER_RADIUS, 0);
         else return getPreRenderRadius();
@@ -76,18 +88,22 @@ public class FLMath {
     public static int getPregenArea() {
         return getSquareArea(false, PARSED_PREGEN_RADIUS, false);
     }
+
     public static int getProgressArea() {
         return getSquareArea(true, PARSED_PREGEN_RADIUS, false);
     }
+
     public static Integer getPreRenderArea() {
         int i = getPreRenderRadius() / 2;
         return getCircleArea(getPreRenderRadius()).intValue() - i * i;
     }
 
+
     //Booleans
     public static Boolean getCloseUnsafe() {
         return CLOSE_LOADING_SCREEN_UNSAFELY;
     }
+
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
     }

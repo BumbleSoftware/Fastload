@@ -27,8 +27,8 @@ public class BuildingTerrainScreen extends Screen {
 
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        SCREEN_NAME = Text.translatable("menu.generatingTerrain");
-        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
+        SCREEN_NAME = Text.of("menu.generatingTerrain");
+        PROPORTION = Text.of("(COMPLETED)/(GOAL)");
     }
 
     @Override
@@ -36,8 +36,9 @@ public class BuildingTerrainScreen extends Screen {
         this.renderBackgroundTexture(0);
         final int white = 0xFFFFFF;
         final int heightUpFromCentre = 50;
-        final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue()/360;
+        final String loadedChunksString = getLoadedChunkCount() + "/" + FLMath.getPreRenderArea();
+        final String builtChunksString = getBuiltChunkCount() + "/" + FLMath.getPreRenderArea() * client.options.fov / 360;
+
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }
@@ -70,6 +71,11 @@ public class BuildingTerrainScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldPause() {
         return false;
     }
 }
