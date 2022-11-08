@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class WorldGenerationProgressTrackerMixin {
     @ModifyVariable(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressLogger;<init>(I)V"), argsOnly = true)
     public int getRadius(int radius) {
-        return FLMath.getSetSpawnChunkRadius();
+        return FLMath.getPregenRadius(false);
     }
 }

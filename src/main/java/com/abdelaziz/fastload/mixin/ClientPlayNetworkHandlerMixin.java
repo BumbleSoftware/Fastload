@@ -1,6 +1,8 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.util.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.FastLoad;
+import com.abdelaziz.fastload.config.FLMath;
+import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
@@ -17,6 +19,7 @@ public class ClientPlayNetworkHandlerMixin {
     private MinecraftClient client;
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoined(GameJoinS2CPacket packet, CallbackInfo ci) {
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("gameJoined = true");
         ((MinecraftClientMixinInterface)client).gameJoined();
     }
 }

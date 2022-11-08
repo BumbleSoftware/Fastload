@@ -1,37 +1,31 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.config.FLMath;
+import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import net.minecraft.server.MinecraftServer;
-
+import static com.abdelaziz.fastload.config.FLMath.getPregenArea;
+import static com.abdelaziz.fastload.config.FLMath.getPregenRadius;
 
 /*
-* This code is inspired by: https://github.com/VidTu/Ksyxis of which it's under the MIT License.
-* The BumbleSoftware team modified the code to make this possible.
-*/
+ * This code is inspired by: https://github.com/VidTu/Ksyxis of which it's under the MIT License.
+ * The BumbleSoftware team modified the code to make this possible.
+ */
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
+    @Shadow @Final public final static int START_TICKET_CHUNK_RADIUS = getPregenRadius(false);
+    @Shadow @Final private final static int START_TICKET_CHUNKS = getPregenArea();
+
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        setChunkRadius();
-        return FLMath.getSpawnChunkArea(0);
+        return START_TICKET_CHUNKS;
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        setChunkRadius();
-        return FLMath.getSetSpawnChunkRadius();
-    }
-    @Shadow @Mutable @Final public static int START_TICKET_CHUNK_RADIUS = 11;
-    @Shadow @Mutable @Final private static int START_TICKET_CHUNKS = 441;
-    private void setChunkRadius() {
-        START_TICKET_CHUNK_RADIUS = 4;
-        START_TICKET_CHUNKS = 49;
+        return START_TICKET_CHUNK_RADIUS;
     }
 }

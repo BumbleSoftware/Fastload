@@ -1,6 +1,8 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.util.MinecraftClientMixinInterface;
+import com.abdelaziz.fastload.FastLoad;
+import com.abdelaziz.fastload.config.FLMath;
+import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -16,6 +18,7 @@ public class ClientPlayerEntityMixin {
     protected MinecraftClient client;
     @Inject(method = "init", at = @At("HEAD"))
     private void setPlayerReady(CallbackInfo ci) {
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("playerLoaded = true");
         ((MinecraftClientMixinInterface)client).canPlayerLoad();
     }
 }
