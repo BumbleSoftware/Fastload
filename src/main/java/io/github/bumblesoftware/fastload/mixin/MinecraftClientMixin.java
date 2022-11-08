@@ -46,8 +46,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
     private boolean showRDDOnce = false;
-    //Boolean to Initiate Pre-render
+    //Boolean  Pre-render
     private boolean isBuilding = false;
+    private boolean closeBuild = false;
     //Pre Renderer Log Constants
     @SuppressWarnings("FieldCanBeLocal")
     private final int chunkTryLimit = getChunkTryLimit();
@@ -97,6 +98,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
+            closeBuild = true;
             if (debug) {
                 logBuilding(chunkBuildCount, chunkBuildCountGoal);
                 logPreRendering(chunkLoadedCount);
@@ -240,24 +242,26 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                             stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                         }
                     }
-                    //Log Warnings
-                    final int spamLimit = 2;
-                    if (preparationWarnings > 0) {
-                        if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                            log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
+                    if (!closeBuild) {
+                        //Log Warnings
+                        final int spamLimit = 2;
+                        if (preparationWarnings > 0) {
+                            if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+                            if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                                preparationWarnings = 0;
+                            }
                         }
-                        if (chunkLoadedCount > oldChunkLoadedCountStorage) {
-                            preparationWarnings = 0;
-                        }
-                    }
-                    if (buildingWarnings > 0) {
-                        if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                            log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
-                            if (debug) logPreRendering(chunkLoadedCount);
-                        }
-                        if (chunkBuildCount > oldChunkBuildCountStorage) {
-                            buildingWarnings = 0;
+                        if (buildingWarnings > 0) {
+                            if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                                if (debug) logPreRendering(chunkLoadedCount);
+                            }
+                            if (chunkBuildCount > oldChunkBuildCountStorage) {
+                                buildingWarnings = 0;
+                            }
                         }
                     }
                 }
