@@ -64,6 +64,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     // Set this to 0 to start timer for Pause Menu Cancellation
     private int timeDown = timeDownGoal;
     //Checks if Player is ready
+    @Override
     public void canPlayerLoad() {
         shouldLoad = true;
     }
