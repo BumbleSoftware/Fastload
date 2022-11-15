@@ -30,5 +30,9 @@
     "fabricloader": ">=0.14.9",
     "minecraft": ">=1.18.2",
     "java": ">=17"
+  },
+  "breaks": {
+    "forcecloseloadingscreen": "*",
+    "ksyxis": "*"
   }
 }
