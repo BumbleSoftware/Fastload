@@ -49,7 +49,7 @@ public class FLConfig {
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
             comment.write("\n");
             comment.write("\n# Definitions");
-            comment.write("\n# 'chunk_try_limit' = how many times in a raw should the same count of loaded chunks be ignored before we cancel pre-rendering");
+            comment.write("\n# 'chunk_try_limit' = how many times in a row should the same count of loaded chunks be ignored before we cancel pre-rendering");
             comment.write("\n# There are no limits for this. Must be a positive Integer");
             comment.write("\n#");
             comment.write("\n# 'close_loading_screen_unsafely' = should skip 'Joining World', and 'Downloading Terrain'. Potentially can result in joining world before chunks are properly loaded");
