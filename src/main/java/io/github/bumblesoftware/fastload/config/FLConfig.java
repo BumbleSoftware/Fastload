@@ -83,9 +83,16 @@ public class FLConfig {
             return def;
         }
     }
+
+    private static boolean parseBoolean(String string) {
+        if (string == null) throw new NumberFormatException("null");
+        if (string.trim().equalsIgnoreCase("true")) return true;
+        if (string.trim().equalsIgnoreCase("false")) return false;
+        throw new NumberFormatException(string);
+    }
     private static boolean getBoolean(Properties properties, Properties newProperties, String key, boolean def) {
         try {
-            final boolean b = Boolean.parseBoolean(properties.getProperty(key));
+            final boolean b = parseBoolean(properties.getProperty(key));
             newProperties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {
