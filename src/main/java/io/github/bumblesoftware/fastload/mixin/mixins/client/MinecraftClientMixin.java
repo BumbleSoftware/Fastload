@@ -1,8 +1,7 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.FastLoad;
-import io.github.bumblesoftware.fastload.util.mixin.MinecraftClientMixinInterface;
-import io.github.bumblesoftware.fastload.util.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.mixin.intercomm.client.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -15,6 +14,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,6 +41,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
 
     @Shadow @Final public GameRenderer gameRenderer;
     @Shadow @Nullable public ClientPlayerEntity player;
+    @Shadow @Final private static Logger LOGGER;
     //Checkers
     private boolean justLoaded = false;
     private boolean shouldLoad = false;
@@ -78,7 +79,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     //Basic Logger
     private static void log(String toLog) {
-        FastLoad.LOGGER.info(toLog);
+        LOGGER.info(toLog);
     }
     //Logs Difference in Render and Pre-render distances
     private static void logRenderDistanceDifference() {

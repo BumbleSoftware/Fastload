@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.util.screen;
+package io.github.bumblesoftware.fastload.config.screen;
 
-import io.github.bumblesoftware.fastload.FastLoad;
+import io.github.bumblesoftware.fastload.init.FastLoad;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -11,7 +11,9 @@ import net.minecraft.text.Text;
 
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
-    private final Text PROPORTION;
+    private final Text SCREEN_TEMPLATE;
+    private final Text BUILDING_CHUNKS;
+    private final Text PREPARING_CHUNKS;
     private final MinecraftClient client = MinecraftClient.getInstance();
 
     private Integer PREPARED_PROGRESS_STORAGE = 0;
@@ -25,7 +27,9 @@ public class BuildingTerrainScreen extends Screen {
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
         SCREEN_NAME = Text.translatable("menu.generatingTerrain");
-        PROPORTION = Text.literal("(COMPLETED)/(GOAL)");
+        SCREEN_TEMPLATE = Text.translatable("fastload.screen.buildingTerrain.template");
+        BUILDING_CHUNKS = Text.translatable("fastload.screen.buildingTerrain.building");
+        PREPARING_CHUNKS = Text.translatable("fastload.screen.buildingTerrain.preparing");
     }
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -42,23 +46,39 @@ public class BuildingTerrainScreen extends Screen {
         }
         PREPARED_PROGRESS_STORAGE = getLoadedChunkCount();
         BUILDING_PROGRESS_STORAGE = getBuiltChunkCount();
-        DrawableHelper.drawCenteredText(matrices, this.textRenderer, SCREEN_NAME, this.width / 2, this.height / 2 - heightUpFromCentre, white);
-        DrawableHelper.drawCenteredText(matrices, this.textRenderer, PROPORTION, this.width / 2, this.height / 2 - heightUpFromCentre + 30, white);
 
         DrawableHelper.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                "Preparing All Chunks: " + loadedChunksString,
-                width / 2,
-                height / 2 - heightUpFromCentre + 45,
-                white);
+                SCREEN_NAME,
+                this.width / 2,
+                this.height / 2 - heightUpFromCentre,
+                white
+        );
         DrawableHelper.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                "Building Visible Chunks: " + builtChunksString,
+                SCREEN_TEMPLATE,
+                this.width / 2,
+                this.height / 2 - heightUpFromCentre + 30,
+                white);
+
+        DrawableHelper.drawCenteredText(
+                matrices,
+                this.textRenderer,
+                 PREPARING_CHUNKS.getString() + ": " + loadedChunksString,
+                width / 2,
+                height / 2 - heightUpFromCentre + 45,
+                white);
+
+        DrawableHelper.drawCenteredText(
+                matrices,
+                this.textRenderer,
+                BUILDING_CHUNKS.getString() + ": " + builtChunksString,
                 width / 2,
                 height / 2 - heightUpFromCentre + 60,
                 white);
+
         super.render(matrices, mouseX, mouseY, delta);
     }
     @Override

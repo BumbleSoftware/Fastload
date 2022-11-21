@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.util.mixin;
+package io.github.bumblesoftware.fastload.mixin.intercomm.client;
 
 public interface MinecraftClientMixinInterface {
      void canPlayerLoad();

@@ -1,19 +1,19 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.bumblesoftware.fastload.mixin",
+  "package": "io.github.bumblesoftware.fastload.mixin.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MinecraftServerMixin",
-    "WorldGenerationProcessLoggerMixin",
-    "WorldGenerationProgressTrackerMixin"
+    "server.MinecraftServerMixin",
+    "server.WorldGenerationProcessLoggerMixin",
+    "server.WorldGenerationProgressTrackerMixin"
   ],
   "client": [
-    "ClientPlayerEntityMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "DownloadingTerrainScreenMixin",
-    "LevelLoadingScreenMixin",
-    "MinecraftClientMixin"
+    "client.ClientPlayerEntityMixin",
+    "client.ClientPlayNetworkHandlerMixin",
+    "client.DownloadingTerrainScreenMixin",
+    "client.LevelLoadingScreenMixin",
+    "client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload;
+package io.github.bumblesoftware.fastload.init;
 
 import io.github.bumblesoftware.fastload.config.FLConfig;
 import net.fabricmc.api.EnvType;

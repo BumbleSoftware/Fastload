@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
 import io.github.bumblesoftware.fastload.config.FLMath;
 import net.minecraft.util.math.MathHelper;

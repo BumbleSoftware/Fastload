@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.FastLoad;
+import io.github.bumblesoftware.fastload.init.FastLoad;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import org.spongepowered.asm.mixin.Mixin;

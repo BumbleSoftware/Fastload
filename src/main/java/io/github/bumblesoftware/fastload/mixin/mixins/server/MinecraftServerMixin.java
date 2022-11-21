@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Final;

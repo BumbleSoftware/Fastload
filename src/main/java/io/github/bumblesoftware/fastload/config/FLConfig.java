@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config;
 
-import io.github.bumblesoftware.fastload.FastLoad;
+import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.*;
