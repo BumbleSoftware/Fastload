@@ -12,7 +12,7 @@ public class FLConfigScreen extends Screen {
     public FLConfigScreen() {
         super(Text.translatable("fastload.screen.config"));
         list = new ButtonListWidget(MinecraftClient.getInstance(), this.width, this.height, 32, this.height - 32, 25);
-        list.addAll(MFModMenuButtons.asOptions());
+        list.addAll(MFModMenuButtons.asOptions().clone());
     }
 
     @Override
