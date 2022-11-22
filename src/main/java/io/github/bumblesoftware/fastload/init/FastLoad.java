@@ -1,27 +1,35 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.config.FLConfig;
+import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.github.bumblesoftware.fastload.config.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FastLoad implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("Fastload");
+	public static final String NAMESPACE = "Fastload";
+	public static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
+	private static String loggableString(String key) {
+		return key.toUpperCase() + ": ";
+	}
+	private static String loggableString(String key, String extra) {
+		return key.toUpperCase() + "_" + extra.toUpperCase() + ": ";
+	}
 	@Override
 	public void onInitialize() {
 		FLConfig.loadClass();
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-			LOGGER.info("CHUNK_TRY_LIMIT: " + getChunkTryLimit());
-			LOGGER.info("CANCEL_LOADING_SCREEN: " + getCloseUnsafe().toString().toUpperCase());
-			LOGGER.info("PRE_RENDER_RADIUS: " + getPreRenderRadius());
-			LOGGER.info("PRE_RENDER_AREA: " + getPreRenderArea());
+			LOGGER.info(loggableString(tryLimit()) + getChunkTryLimit());
+			LOGGER.info(loggableString(unsafeClose()) + getCloseUnsafe().toString().toUpperCase());
+			LOGGER.info(loggableString(render(true), "radius") + "" + getPreRenderRadius());
+			LOGGER.info(loggableString(render(true), "area") + getPreRenderArea());
 		}
-		LOGGER.info("DEBUG MODE: " + getDebug().toString().toUpperCase());
-		LOGGER.info("SPAWN_CHUNK_RADIUS: " + getPregenRadius(false));
-		LOGGER.info("SPAWN CHUNK AREA: " + getPregenArea());
+		LOGGER.info(loggableString(debug()) + getDebug().toString().toUpperCase());
+		LOGGER.info(loggableString(pregen(true), "radius") + getPregenRadius(true));
+		LOGGER.info(loggableString(pregen(true), "area") + getPregenArea());
 	}
 }

@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.screen;
 
-import io.github.bumblesoftware.fastload.config.FLMath;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -9,7 +9,7 @@ import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.constants.FLColourConstants.white;
+import static io.github.bumblesoftware.fastload.config.screen.FLColourConstants.white;
 
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
