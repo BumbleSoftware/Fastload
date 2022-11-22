@@ -40,9 +40,6 @@ public class FLModMenuButtons {
                 }
             );
     }
-    public static SimpleOption<Integer> getNewSlider(String type, int max, int defVal) {
-        return getNewSlider(type, new SimpleVec2i(max, 0), defVal);
-    }
 
     /**
      * Refer to DefaultConfig.propertyKeys.add[] for arrangement of this array!
@@ -50,8 +47,8 @@ public class FLModMenuButtons {
     public static SimpleOption<?>[] buttons = {
             getNewBoolButton(debug(), getDebug()),
             getNewBoolButton(unsafeClose(), getCloseUnsafe()),
-            getNewSlider(render(), getRadiusBoundMax(), getPreRenderRadius(true)),
-            getNewSlider(pregen(), getRadiusBoundMax(), getPregenRadius(true)),
+            getNewSlider(render(), getRadiusBound(), getPreRenderRadius(true)),
+            getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
             getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
     };
 

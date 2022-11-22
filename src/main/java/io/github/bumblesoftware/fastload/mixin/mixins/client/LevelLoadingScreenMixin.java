@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
 import io.github.bumblesoftware.fastload.init.FastLoad;
-import io.github.bumblesoftware.fastload.config.FLMath;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.WorldGenerationProgressTracker;

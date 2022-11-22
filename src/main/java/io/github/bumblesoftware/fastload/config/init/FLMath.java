@@ -1,54 +1,60 @@
-package io.github.bumblesoftware.fastload.config;
+package io.github.bumblesoftware.fastload.config.init;
 
+import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.function.Supplier;
 
-import static io.github.bumblesoftware.fastload.config.FLConfig.*;
+import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
 
 public class FLMath {
 
     //Constants
-    private static final int RENDER_RADIUS_BOUND = 32;
-    private static final int PREGEN_RADIUS_BOUND = 32;
     private static final double PI = 3.14159265358979323846;
 
-    //Parsed Constants
-    private static final int PARSED_PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND, 0);
-    //RENDER_RADIUS// Cannot be parsed as parsing dynamically changes. No point in making it a field
-    private static final int PARSED_CHUNK_TRY_LIMIT = Math.max(RAW_CHUNK_TRY_LIMIT, 1);
 
     //Unchanged Constant Getters
     public static int getChunkTryLimit() {
-        return PARSED_CHUNK_TRY_LIMIT;
+        return parseMinMax(FLConfig.getChunkTryLimit(), DefaultConfig.getTryLimitBound());
     }
     public static Boolean getDebug() {
-        return DEBUG;
+        return getRawDebug();
     }
-
+    public static int getRadiusBoundMax() {
+        return DefaultConfig.getRawRadiusBound().max();
+    }
+    @SuppressWarnings("unused")
+    public static SimpleVec2i getRadiusBound() {
+        return DefaultConfig.getRawRadiusBound();
+    }
+    public static SimpleVec2i getChunkTryLimitBound() {
+        return DefaultConfig.getTryLimitBound();
+    }
 
 
     //Parsing
     private static final Supplier<Double> RENDER_DISTANCE = () ->
             MinecraftClient.getInstance().worldRenderer != null ?
-                    Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), RENDER_RADIUS_BOUND)
-                    : RENDER_RADIUS_BOUND;
+                    Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), getRadiusBoundMax())
+                    : getRadiusBoundMax();
     private static int getRenderDistance() {
         return RENDER_DISTANCE.get().intValue();
     }
-    private static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
+    protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
+    protected static int parseMinMax(int toProcess, SimpleVec2i maxMin) {
+        return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
+    }
     public static int getPregenRadius(boolean raw) {
-        if (PARSED_PREGEN_RADIUS == 0) {
+        if (parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0) == 0) {
             return 1;
         }
         if (raw) {
-            return PARSED_PREGEN_RADIUS;
+            return parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0);
         }
-        return PARSED_PREGEN_RADIUS + 1;
+        return parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0) + 1;
     }
-
 
 
     //Calculations
@@ -69,24 +75,22 @@ public class FLMath {
     }
 
 
-
     //Radii
     public static Integer getPreRenderRadius() {
-        return parseMinMax(RAW_PRE_RENDER_RADIUS, Math.min(getRenderDistance(), RENDER_RADIUS_BOUND), 0);
+        return parseMinMax(getRawPreRenderRadius(), Math.min(getRenderDistance(), getRadiusBoundMax()), 0);
     }
     public static Integer getPreRenderRadius(boolean raw) {
-        if (raw) return Math.max(RAW_PRE_RENDER_RADIUS, 0);
+        if (raw) return Math.max(getRawPreRenderRadius(), 0);
         else return getPreRenderRadius();
     }
 
 
-
     //Areas
     public static int getPregenArea() {
-        return getSquareArea(false, PARSED_PREGEN_RADIUS, false);
+        return getSquareArea(false, parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0), false);
    }
     public static int getProgressArea() {
-        return getSquareArea(true, PARSED_PREGEN_RADIUS, false);
+        return getSquareArea(true, parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0), false);
     }
     public static Integer getPreRenderArea() {
         int i = getPreRenderRadius() / 2;
@@ -94,10 +98,9 @@ public class FLMath {
     }
 
 
-
     //Booleans
     public static Boolean getCloseUnsafe() {
-        return CLOSE_LOADING_SCREEN_UNSAFELY;
+        return getCloseLoadingScreenUnsafely();
     }
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
