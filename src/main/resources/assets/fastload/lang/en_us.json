@@ -5,11 +5,24 @@
 
   "fastload.screen.config": "Fastload Configuration",
 
-  "option.modmenu.fastload.debug": "Debug Mode",
-  "option.modmenu.fastload.debug.true": "True",
-  "option.modmenu.fastload.debug.false": "False",
+  "fastload.button.debug": "Debug Mode",
+  "fastload.button.debug.tooltip": "Should debugs be printed in the logs?",
 
-  "option.modmenu.fastload.force_close": "Close Loading Screen",
-  "option.modmenu.fastload.force_close.true": "True",
-  "option.modmenu.fastload.force_close.false": "False"
+  "fastload.button.force_close": "Close Loading Screen",
+  "fastload.button.force_close.tooltip": "Should fastload close the DownloadingTerrainScreen earlier, even if it's slightly unsafe?",
+
+  "fastload.button.pre_render": "Pre-render Radius",
+  "fastload.button.pre_render.tooltip": "Many many chunks in a radius should be prepared and built during pre-rendering? Limited by render distance",
+  "fastload.button.pre_render.min": "Disabled",
+  "fastload.button.pre_render.max": "Why?",
+
+  "fastload.button.gen_radius": "Pregen Radius",
+  "fastload.button.gen_radius.tooltip": "Many many chunks in a radius should be generated on the server until completed. Should inversely correlate with pre-render radius for optimal performance",
+  "fastload.button.gen_radius.min": "Ksyxis",
+  "fastload.button.gen_radius.max": "Chunky",
+
+  "fastload.button.try_limit": "Chunk Try Limit",
+  "fastload.button.try_limit.tooltip": "How many times should the same chunk count be return in a row before bailing on pre-rendering",
+  "fastload.button.try_limit.min": "NASA PC",
+  "fastload.button.try_limit.max": "Toaster"
 }

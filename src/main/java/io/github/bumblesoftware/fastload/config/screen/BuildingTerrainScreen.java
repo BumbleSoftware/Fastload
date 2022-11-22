@@ -9,7 +9,7 @@ import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.util.FLColourConstants.white;
+import static io.github.bumblesoftware.fastload.constants.FLColourConstants.white;
 
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
@@ -37,7 +37,7 @@ public class BuildingTerrainScreen extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue()/360;
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue() / 360;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }

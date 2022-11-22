@@ -6,7 +6,11 @@
   "name": "Fast Load",
   "description": "Load your world at lightning speed!",
   "authors": [
-    "FluffyBumblebees, JoostMSoftware, VidTu, kennytv, AbdElAziz"
+    "FluffyBumblebees [Owner]",
+    "JoostMSoftware [Co-Owner]",
+    "AbdElAziz [Forge]",
+    "kennytv [Indirect Contributor]",
+    "VidTu [Indirect Contributor]"
   ],
   "contact": {
     "sources": "https://github.com/BumbleSoftware/Fastload",
