@@ -2,30 +2,28 @@ package io.github.bumblesoftware.fastload.mixin;
 
 import io.github.bumblesoftware.fastload.FastLoad;
 import io.github.bumblesoftware.fastload.config.FLMath;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.WorldGenerationProgressTracker;
 import net.minecraft.client.gui.screen.LevelLoadingScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(LevelLoadingScreen.class)
 public class LevelLoadingScreenMixin {
-    @Shadow
-    public static void drawChunkMap(MatrixStack matrices, WorldGenerationProgressTracker progressProvider, int centerX, int centerY, int pixelSize, int pixelMargin) {
+
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V"), index = 3)
+    private int fastload_drawCorrectedChunkMap1(int centerY) {
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("Corrected LLS ChunkMap");
+        return centerY - 10;
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V"))
-    private void drawCorrectedChunkMap(MatrixStack matrices, WorldGenerationProgressTracker progressProvider, int centerX, int centerY, int pixelSize, int pixelMargin) {
-        if (FLMath.getDebug()) FastLoad.LOGGER.info("Corrected LLS ChunkMap");
-        drawChunkMap(matrices, progressProvider,  centerX, centerY - 10, pixelSize, 0);
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V"), index = 5)
+    private int fastload_drawCorrectedChunkMap2(int pixelMargin) {
+        return 0;
     }
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
-    private void drawCorrectedText(MatrixStack matrixStack, TextRenderer textRenderer, String s, int x, int y, int colour) {
+
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 4)
+    private int fastload_drawCorrectedText(int y) {
         if (FLMath.getDebug()) FastLoad.LOGGER.info("Corrected LLS Text");
-        DrawableHelper.drawCenteredText(matrixStack, textRenderer, s, x, y - 60, colour);
+        return y - 60;
     }
 }
