@@ -26,9 +26,6 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin implements MinecraftClientMixinInterface {
-    //This constant permits some variables to be printed to diagnose an issue easier.
-    private final boolean debug = getDebug();
-
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
     //Code is heavily modified to suit Fastload's needs
 
@@ -101,14 +98,14 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
             closeBuild = true;
-            if (debug) {
+            if (getDebug()) {
                 logBuilding(chunkBuildCount, chunkBuildCountGoal);
                 logPreRendering(chunkLoadedCount);
             }
             isBuilding = false;
             if (!windowFocused) {
                 timeDown = 0;
-                if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
+                if (getDebug()) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
             assert this.player != null;
             if (oldPitch != null) {
@@ -139,24 +136,26 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         }
         //Log Pre-Render Initiation
         if (screen instanceof BuildingTerrainScreen) {
-            if (debug) log("Successfully Initiated Building Terrain");
+            if (getDebug()) {
+                log("Successfully Initiated Building Terrain");
+            }
         }
         //Close Progress Screen
         if (screen instanceof ProgressScreen && getCloseUnsafe()) {
             ci.cancel();
-            if (debug) log("Progress Screen Successfully Cancelled");
+            if (getDebug()) log("Progress Screen Successfully Cancelled");
         }
         //Close Downloading Terrain Screen ASAP
         if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
-            if (debug) log("Downloading Terrain Accessed!");
+            if (getDebug()) log("Downloading Terrain Accessed!");
             shouldLoad = false;
             justLoaded = true;
             showRDDOnce = true;
             // Switch to Pre-render Phase
             if (getCloseSafe()) {
                 ci.cancel();
-                if (debug) log("Preparing to replace Download Terrain with Building Terrain");
-                if (debug) log("Goal (Loaded Chunks): " + getPreRenderArea());
+                if (getDebug()) log("Preparing to replace Download Terrain with Building Terrain");
+                if (getDebug()) log("Goal (Loaded Chunks): " + getPreRenderArea());
                 justLoaded = true;
                 isBuilding = true;
                 setScreen(new BuildingTerrainScreen());
@@ -164,7 +163,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             } else if (getCloseUnsafe()) {
                 playerJoined = false;
                 ci.cancel();
-                if (debug) log("Successfully Skipped Downloading Terrain Screen!");
+                if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
                 timeDown = 0;
                 setScreen(null);
             }
@@ -178,7 +177,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             else if (running) {
                 justLoaded = false;
                 ci.cancel();
-                if (debug) log("Pause Menu Cancelled");
+                if (getDebug()) log("Pause Menu Cancelled");
             }
         }
     }
@@ -198,14 +197,14 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     oldPitch = this.player.getPitch();
                 }
                 this.player.setPitch(0);
-                if (debug) {
+                if (getDebug()) {
                     log("Pitch:" + oldPitch);
                 }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
                 double FOV = this.options.getFov().getValue();
                 double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
-                if (debug) {
+                if (getDebug()) {
                     logPreRendering(chunkLoadedCount);
                     logBuilding(chunkBuildCount, (int) chunkBuildCountGoal);
                 }
@@ -250,7 +249,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         if (preparationWarnings > 0) {
                             if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
                                 log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
-                                if (debug) logPreRendering(chunkLoadedCount);
+                                if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkLoadedCount > oldChunkLoadedCountStorage) {
                                 preparationWarnings = 0;
@@ -259,7 +258,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         if (buildingWarnings > 0) {
                             if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
                                 log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
-                                if (debug) logPreRendering(chunkLoadedCount);
+                                if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkBuildCount > oldChunkBuildCountStorage) {
                                 buildingWarnings = 0;
@@ -282,7 +281,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         // Tick Timer for Pause Menu Cancellation
         } else if (timeDown < timeDownGoal) {
             timeDown++;
-            if (debug) log("" + timeDown);
+            if (getDebug()) log("" + timeDown);
         }
     }
 }

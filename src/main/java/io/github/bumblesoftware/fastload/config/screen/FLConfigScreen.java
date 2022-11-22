@@ -4,6 +4,7 @@ import io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.modmenu.button.FLModMenuButtons;
+import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -35,7 +36,7 @@ public class FLConfigScreen extends SimpleOptionsScreen {
                 String key = propertyKeys.all[i].toLowerCase();
                 String value = array.get()[i].getValue().toString().toLowerCase();
                 if (FLMath.getDebug())
-                    System.out.println(key.toUpperCase() + ": " + value.toUpperCase());
+                    FastLoad.LOGGER.info(key.toUpperCase() + ": " + value.toUpperCase());
                 FLConfig.writeToDisk(key, value, i >= 4);
             }
             client.setScreen(this.parent);

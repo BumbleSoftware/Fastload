@@ -21,7 +21,7 @@ public class FLModMenuButtons {
     }
     public static SimpleOption<Integer> getNewSlider(String type, SimpleVec2i vec2i , int defVal) {
         int max = vec2i.max();
-        int min = Math.max(0, vec2i.min()); //Cannot be lower than 0;
+        int min = vec2i.min();
         return new SimpleOption<>(FLB + type,
                 SimpleOption.constantTooltip(Text.translatable(FLB + type + ".tooltip")),
                 (optionText,value) -> {
@@ -47,7 +47,7 @@ public class FLModMenuButtons {
     public static SimpleOption<?>[] buttons = {
             getNewBoolButton(debug(), getDebug()),
             getNewBoolButton(unsafeClose(), getCloseUnsafe()),
-            getNewSlider(render(), getRadiusBound(), getPreRenderRadius(true)),
+            getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
             getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
             getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
     };

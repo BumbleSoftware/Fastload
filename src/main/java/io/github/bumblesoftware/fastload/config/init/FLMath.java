@@ -46,15 +46,6 @@ public class FLMath {
     protected static int parseMinMax(int toProcess, SimpleVec2i maxMin) {
         return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
     }
-    public static int getPregenRadius(boolean raw) {
-        if (parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0) == 0) {
-            return 1;
-        }
-        if (raw) {
-            return parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0);
-        }
-        return parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0) + 1;
-    }
 
 
     //Calculations
@@ -68,6 +59,9 @@ public class FLMath {
             i ++;
             i ++;
         }
+        if (i == 0) {
+            i = 1;
+        }
         return i * i;
     }
     public static Double getCircleArea(int radius) {
@@ -80,17 +74,26 @@ public class FLMath {
         return parseMinMax(getRawPreRenderRadius(), Math.min(getRenderDistance(), getRadiusBoundMax()), 0);
     }
     public static Integer getPreRenderRadius(boolean raw) {
-        if (raw) return Math.max(getRawPreRenderRadius(), 0);
+        if (raw) return Math.max(getRawPreRenderRadius(), getRadiusBound().min());
         else return getPreRenderRadius();
+    }
+    public static int getPregenRadius(boolean raw) {
+        if (raw) {
+            return parseMinMax(getRawChunkPregenRadius(), getRadiusBound());
+        }
+        return parseMinMax(getRawChunkPregenRadius(), getRadiusBound()) + 1;
+    }
+    public static int getPregenRadius() {
+        return getPregenRadius(true);
     }
 
 
     //Areas
     public static int getPregenArea() {
-        return getSquareArea(false, parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0), false);
+        return getSquareArea(false, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
    }
     public static int getProgressArea() {
-        return getSquareArea(true, parseMinMax(getRawChunkPregenRadius(), getRadiusBoundMax(), 0), false);
+        return getSquareArea(true, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
     }
     public static Integer getPreRenderArea() {
         int i = getPreRenderRadius() / 2;
