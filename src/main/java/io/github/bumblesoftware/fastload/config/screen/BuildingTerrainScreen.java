@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.config.screen;
 
-import io.github.bumblesoftware.fastload.init.FastLoad;
 import io.github.bumblesoftware.fastload.config.FLMath;
+import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
@@ -9,15 +9,17 @@ import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import static io.github.bumblesoftware.fastload.util.FLColourConstants.white;
+
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
     private final Text SCREEN_TEMPLATE;
     private final Text BUILDING_CHUNKS;
     private final Text PREPARING_CHUNKS;
-    private final MinecraftClient client = MinecraftClient.getInstance();
-
     private Integer PREPARED_PROGRESS_STORAGE = 0;
     private Integer BUILDING_PROGRESS_STORAGE = 0;
+    private static final int heightUpFromCentre = 50;
+    private final MinecraftClient client = MinecraftClient.getInstance();
     private Integer getLoadedChunkCount() {
         return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
     }
@@ -34,8 +36,6 @@ public class BuildingTerrainScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
-        final int white = 0xFFFFFF;
-        final int heightUpFromCentre = 50;
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
         final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue()/360;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {

@@ -2,5 +2,14 @@
   "fastload.screen.buildingTerrain.template": "Completed / Goal",
   "fastload.screen.buildingTerrain.building": "Building Visible Chunks",
   "fastload.screen.buildingTerrain.preparing": "Preparing All Chunks",
-  "fastload.screen.config": "Fastload Configuration"
+
+  "fastload.screen.config": "Fastload Configuration",
+
+  "option.modmenu.fastload.debug": "Debug Mode",
+  "option.modmenu.fastload.debug.true": "True",
+  "option.modmenu.fastload.debug.false": "False",
+
+  "option.modmenu.fastload.force_close": "Close Loading Screen",
+  "option.modmenu.fastload.force_close.true": "True",
+  "option.modmenu.fastload.force_close.false": "False"
 }
