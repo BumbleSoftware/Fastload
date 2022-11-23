@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
-import io.github.bumblesoftware.fastload.config.FLMath;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.client.gui.WorldGenerationProgressTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

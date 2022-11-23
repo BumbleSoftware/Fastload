@@ -1,8 +1,8 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.FastLoad;
-import io.github.bumblesoftware.fastload.config.FLMath;
-import io.github.bumblesoftware.fastload.util.mixin.MinecraftClientMixinInterface;
+import io.github.bumblesoftware.fastload.init.FastLoad;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.mixin.intercomm.client.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;

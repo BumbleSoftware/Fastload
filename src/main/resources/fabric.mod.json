@@ -6,7 +6,11 @@
   "name": "Fast Load",
   "description": "Load your world at lightning speed!",
   "authors": [
-    "FluffyBumblebees, JoostMSoftware, VidTu, kennytv, AbdElAziz"
+    "FluffyBumblebees [Owner]",
+    "JoostMSoftware [Co-Owner]",
+    "AbdElAziz [Forge]",
+    "kennytv [Indirect Contributor]",
+    "VidTu [Indirect Contributor]"
   ],
   "contact": {
     "sources": "https://github.com/BumbleSoftware/Fastload",
@@ -19,7 +23,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.bumblesoftware.fastload.FastLoad"
+      "io.github.bumblesoftware.fastload.init.FastLoad"
+    ],
+    "modmenu": [
+      "io.github.bumblesoftware.fastload.config.modmenu.register.FLModMenuIntegration"
     ]
   },
   "mixins": [
@@ -27,8 +34,8 @@
   ],
   "accessWidener": "fastload.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": ">=1.18.2",
+    "fabricloader": ">=0.14.10",
+    "minecraft": "~1.18.2",
     "java": ">=17"
   },
   "breaks": {

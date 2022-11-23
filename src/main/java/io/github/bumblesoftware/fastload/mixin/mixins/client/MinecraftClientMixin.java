@@ -1,8 +1,7 @@
-package io.github.bumblesoftware.fastload.mixin;
+package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.FastLoad;
-import io.github.bumblesoftware.fastload.util.mixin.MinecraftClientMixinInterface;
-import io.github.bumblesoftware.fastload.util.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.mixin.intercomm.client.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -15,6 +14,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,13 +22,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.bumblesoftware.fastload.config.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin implements MinecraftClientMixinInterface {
-    //This constant permits some variables to be printed to diagnose an issue easier.
-    private final boolean debug = getDebug();
-
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
     //Code is heavily modified to suit Fastload's needs
 
@@ -41,12 +38,13 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
 
     @Shadow @Final public GameRenderer gameRenderer;
     @Shadow @Nullable public ClientPlayerEntity player;
+    @Shadow @Final private static Logger LOGGER;
     //Checkers
     private boolean justLoaded = false;
     private boolean shouldLoad = false;
     private boolean playerJoined = false;
     private boolean showRDDOnce = false;
-    //Boolean Pre-render
+    //Boolean  Pre-render
     private boolean isBuilding = false;
     private boolean closeBuild = false;
     //Pre Renderer Log Constants
@@ -78,7 +76,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     //Basic Logger
     private static void log(String toLog) {
-        FastLoad.LOGGER.info(toLog);
+        LOGGER.info(toLog);
     }
     //Logs Difference in Render and Pre-render distances
     private static void logRenderDistanceDifference() {
@@ -99,15 +97,15 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
-            closeBuild= true;
-            if (debug) {
+            closeBuild = true;
+            if (getDebug()) {
                 logBuilding(chunkBuildCount, chunkBuildCountGoal);
                 logPreRendering(chunkLoadedCount);
             }
             isBuilding = false;
             if (!windowFocused) {
                 timeDown = 0;
-                if (debug) log("Temporarily Cancelling Pause Menu to enable Renderer");
+                if (getDebug()) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
             assert this.player != null;
             if (oldPitch != null) {
@@ -138,24 +136,26 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         }
         //Log Pre-Render Initiation
         if (screen instanceof BuildingTerrainScreen) {
-            if (debug) log("Successfully Initiated Building Terrain");
+            if (getDebug()) {
+                log("Successfully Initiated Building Terrain");
+            }
         }
         //Close Progress Screen
         if (screen instanceof ProgressScreen && getCloseUnsafe()) {
             ci.cancel();
-            if (debug) log("Progress Screen Successfully Cancelled");
+            if (getDebug()) log("Progress Screen Successfully Cancelled");
         }
         //Close Downloading Terrain Screen ASAP
         if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined && running) {
-            if (debug) log("Downloading Terrain Accessed!");
+            if (getDebug()) log("Downloading Terrain Accessed!");
             shouldLoad = false;
             justLoaded = true;
             showRDDOnce = true;
             // Switch to Pre-render Phase
             if (getCloseSafe()) {
                 ci.cancel();
-                if (debug) log("Preparing to replace Download Terrain with Building Terrain");
-                if (debug) log("Goal (Loaded Chunks): " + getPreRenderArea());
+                if (getDebug()) log("Preparing to replace Download Terrain with Building Terrain");
+                if (getDebug()) log("Goal (Loaded Chunks): " + getPreRenderArea());
                 justLoaded = true;
                 isBuilding = true;
                 setScreen(new BuildingTerrainScreen());
@@ -163,7 +163,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             } else if (getCloseUnsafe()) {
                 playerJoined = false;
                 ci.cancel();
-                if (debug) log("Successfully Skipped Downloading Terrain Screen!");
+                if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
                 timeDown = 0;
                 setScreen(null);
             }
@@ -177,7 +177,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             else if (running) {
                 justLoaded = false;
                 ci.cancel();
-                if (debug) log("Pause Menu Cancelled");
+                if (getDebug()) log("Pause Menu Cancelled");
             }
         }
     }
@@ -197,14 +197,14 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     oldPitch = this.player.getPitch();
                 }
                 this.player.setPitch(0);
-                if (debug) {
+                if (getDebug()) {
                     log("Pitch:" + oldPitch);
                 }
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
-                int FOV = (int) this.options.fov;
-                double chunkBuildCountGoal = ((float) FOV / 360) * getPreRenderArea().doubleValue();
-                if (debug) {
+                double FOV = this.options.fov;
+                double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
+                if (getDebug()) {
                     logPreRendering(chunkLoadedCount);
                     logBuilding(chunkBuildCount, (int) chunkBuildCountGoal);
                 }
@@ -249,7 +249,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         if (preparationWarnings > 0) {
                             if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
                                 log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
-                                if (debug) logPreRendering(chunkLoadedCount);
+                                if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkLoadedCount > oldChunkLoadedCountStorage) {
                                 preparationWarnings = 0;
@@ -258,7 +258,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         if (buildingWarnings > 0) {
                             if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
                                 log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
-                                if (debug) logPreRendering(chunkLoadedCount);
+                                if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkBuildCount > oldChunkBuildCountStorage) {
                                 buildingWarnings = 0;
@@ -269,22 +269,19 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 //Next two if() statements stop building when their respective tasks are completed
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;
-                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal / 4.0) {
+                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/4.0) {
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                     log("Successfully prepared sufficient chunks! Stopping...");
                 }
-                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea() / 4.0) {
+                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/4.0) {
                     log("Built Sufficient Chunks! Stopping...");
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                 }
             }
-            // Tick Timer for Pause Menu Cancellation
+        // Tick Timer for Pause Menu Cancellation
         } else if (timeDown < timeDownGoal) {
             timeDown++;
-            if (debug) log("" + timeDown);
-        }
-        if (closeBuild) {
-            closeBuild = false;
+            if (getDebug()) log("" + timeDown);
         }
     }
 }
