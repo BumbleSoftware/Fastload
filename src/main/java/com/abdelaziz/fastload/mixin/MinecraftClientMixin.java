@@ -1,10 +1,8 @@
 package com.abdelaziz.fastload.mixin;
 
-import com.abdelaziz.fastload.FastLoad;
 import com.abdelaziz.fastload.util.mixin.MinecraftClientMixinInterface;
 import com.abdelaziz.fastload.util.screen.BuildingTerrainScreen;
 import net.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
@@ -16,6 +14,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -53,6 +52,11 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
+
+    @Shadow
+    @Final
+    private static Logger LOGGER;
+
     @Shadow
     private boolean windowFocused;
 
@@ -83,9 +87,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     // Set this to 0 to start timer for Pause Menu Cancellation
     private int timeDown = timeDownGoal;
 
-    //Checks if Player is ready
-    public void canPlayerLoad() {
-        shouldLoad = true;
+    //Basic Logger
+    private static void log(String toLog) {
+        LOGGER.info(toLog);
     }
 
     //Checks if Player joined game
@@ -98,9 +102,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         return gameRenderer.getCamera();
     }
 
-    //Basic Logger
-    private static void log(String toLog) {
-        FastLoad.LOGGER.info(toLog);
+    //Checks if Player is ready
+    @Override
+    public void canPlayerLoad() {
+        shouldLoad = true;
     }
 
     //Logs Difference in Render and Pre-render distances
