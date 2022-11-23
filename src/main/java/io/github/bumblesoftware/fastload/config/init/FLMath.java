@@ -32,7 +32,12 @@ public class FLMath {
     }
 
 
-    //Parsing
+    /**
+     * This part just parses variables according to their limits. Such as:
+     *  - Bounds
+     *  - Minecraft
+     * Render Distant bounds the max pre-render distance to stop it from never completing
+     */
     private static final Supplier<Double> RENDER_DISTANCE = () ->
             MinecraftClient.getInstance().worldRenderer != null ?
                     Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), getRadiusBoundMax())
@@ -47,7 +52,9 @@ public class FLMath {
         return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
     }
 
-
+    /**
+     * Fastload does all the magical calculations here in order to simplify the config and avoid bugs
+     */
     //Calculations
     @SuppressWarnings("SameParameterValue")
     private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
@@ -105,6 +112,11 @@ public class FLMath {
     public static Boolean getCloseUnsafe() {
         return getCloseLoadingScreenUnsafely();
     }
+
+    /**
+     * Abstracts a boolean out of the given number to further simplify the config &
+     * to avoid more bugs
+     */
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
     }

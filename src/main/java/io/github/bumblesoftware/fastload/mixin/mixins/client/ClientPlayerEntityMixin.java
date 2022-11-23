@@ -12,6 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Sets playerLoaded to true when... player loads
+ */
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
     @Shadow @Final

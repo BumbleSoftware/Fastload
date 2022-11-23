@@ -17,6 +17,9 @@ public class DownloadingTerrainScreenMixin {
     //Permission granted to do so from MIT License of 'forcecloseloadingscreen'.
     @Shadow private boolean closeOnNextTick;
 
+    /**
+     *  Closes Downloading Terrain Screen ASAP, whilst being safe
+     */
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
         if (FLMath.getDebug()) FastLoad.LOGGER.info("DTS will now close on next tick");

@@ -5,6 +5,11 @@ import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
 
 public class DefaultConfig {
     //Get Strings
+
+    /**
+     * &#064; This class is here as the default values for the property keys, it's all centralised here
+     * as to make it easy to change things, because hardcoding = bad.
+     */
     public static class propertyKeys {
         public static String pregen() {
             return pregen(true) + "_radius";
@@ -32,19 +37,11 @@ public class DefaultConfig {
             return "debug";
         }
 
-        /**
-            Dependencies: FLModMenuButtons.buttons[]
-            Make sure to ALWAYS sync these arrays, otherwise stuff will get messed up
-        */
-        public static final String[] all = {
-                debug(),
-                unsafeClose(),
-                render(),
-                pregen(),
-                tryLimit()
-        };
     }
 
+    /**
+     * Bounds used by fastload in order to avoid crashes or other weird bugs.
+     */
 
     //Get Bounds
     protected static SimpleVec2i getRawRadiusBound() {
@@ -53,6 +50,9 @@ public class DefaultConfig {
     protected static SimpleVec2i getTryLimitBound() {
         return new SimpleVec2i(1000, 1);
     }
+    /**
+     * DEFAULT, NOT PERMANENT; Constants used by fastload.
+     */
 
     //Get Vars
     protected static int getRenderRadius() {

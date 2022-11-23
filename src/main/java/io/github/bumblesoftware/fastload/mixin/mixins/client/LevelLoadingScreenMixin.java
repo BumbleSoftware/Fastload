@@ -7,6 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+/**
+ * Fixes the chunkMap so that 32 pregen render distance can work
+ */
 @Mixin(LevelLoadingScreen.class)
 public class LevelLoadingScreenMixin {
 

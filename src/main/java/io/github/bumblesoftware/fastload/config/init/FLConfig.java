@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 
+@SuppressWarnings("DanglingJavadoc")
 public class FLConfig {
     public static void loadClass() {}
 
@@ -24,6 +25,10 @@ public class FLConfig {
     private static final Path path;
 
     //Config Variables
+
+    /**
+     * Just parses everything in default as specified in Default config, this package
+     */
     protected static int getChunkTryLimit() {
         return getInt(DefaultConfig.propertyKeys.tryLimit(), getTryLimit(), getTryLimitBound());
     }
@@ -54,6 +59,9 @@ public class FLConfig {
         }
 
         //Don't forget that these variables are sorted alphabetically in .properties files!
+        /**
+         * Return types aren't used here but they are called specifically just to get the default variables ready
+         */
         getChunkTryLimit();
         getRawChunkPregenRadius();
         getRawPreRenderRadius();
@@ -65,6 +73,9 @@ public class FLConfig {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        /**
+         * Writes our documentation for the config
+         */
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
             comment.write("\n");
             comment.write("\n# Definitions");
@@ -88,6 +99,10 @@ public class FLConfig {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Just parses and ensures values are doing their job
+     */
     private static void logError(String key) {
         FastLoad.LOGGER.error("Failed to parse variable '" + key + "' in " + FastLoad.NAMESPACE + "'s config, generating a new one!");
     }
@@ -123,6 +138,13 @@ public class FLConfig {
             return def;
         }
     }
+
+    /**
+     * This method is used by anything that writes a different variable to the config
+     * &#064;Param  key is the key is the address of the property that it's writing to
+     * &#064;Param  value is the value it's writing.
+     * &#064;param  last is the variable that the last key in a loop calls in order to finally write everything down to the new values
+     */
     public static void writeToDisk(String key, String value, boolean last) {
         properties.setProperty(key, value);
         if (last) {

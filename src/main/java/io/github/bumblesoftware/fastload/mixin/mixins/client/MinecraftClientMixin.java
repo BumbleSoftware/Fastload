@@ -24,6 +24,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
+/**
+ *  This is where most of fastload's client stuff happens. The alternate loading systems
+ *  of fastload is implemented here.
+ */
+@SuppressWarnings("DanglingJavadoc")
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin implements MinecraftClientMixinInterface {
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
@@ -74,6 +79,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private Camera getCamera() {
         return gameRenderer.getCamera();
     }
+
     //Basic Logger
     private static void log(String toLog) {
         LOGGER.info(toLog);
@@ -95,6 +101,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         log("Goal (Built Chunks): " + chunkBuildCountGoal);
         log("Chunk Build Count: " + chunkBuildCount);
     }
+
+    /**
+     * This is a common method to close the BuildingTerrainScree
+     */
     private void stopBuilding(int chunkLoadedCount, int chunkBuildCount, int chunkBuildCountGoal) {
         if (playerJoined) {
             closeBuild = true;
@@ -119,6 +129,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             setScreen(null);
         }
     }
+
+    /**
+     * Mixins to setScreen to allow fastload to do it's magic
+     */
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
         //Failsafe
@@ -169,6 +183,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             }
         }
     }
+
+    /**
+     * Failsafe to stop pause menu breaking stuff when it's not supposed to
+     */
     @Inject(method = "openPauseMenu", at = @At("HEAD"), cancellable = true)
     private void cancelOpenPauseMenu(boolean pause, CallbackInfo ci) {
         //Stop Pause for Downloading Terrain Skip (Failsafe)
@@ -181,6 +199,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             }
         }
     }
+
+    /**
+     * This inject is used to control when Building Terrain Screen closes.
+     */
     @Inject(method = "render", at = @At("HEAD"))
     private void onRender(boolean tick, CallbackInfo ci) {
         //Log differences differences
@@ -193,6 +215,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
             if (this.world != null) {
                 //Optimisations
                 assert player != null;
+                /**
+                 * Pitch is changed here to allow the player to see more chunks, so they render at a higher
+                 * priority. Bit janky but better than doing unsafely modifying the renderer.
+                 */
                 if (oldPitch == null) {
                     oldPitch = this.player.getPitch();
                 }
@@ -212,18 +238,18 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                 final int oldBuildingWarningCache = buildingWarnings;
                 //The warning system
                 if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null) {
-                    /*
-                    The reason for this function (within the if() check, below this comment paragraph)
-                    is that wasting time, generating chunks on the server IS NOT pre-rendering!
-                    By this time, this module has cancelled your pre-rendering,
-                    because it has loaded all your important chunks and ones that were previously generated.
-                    This is done by only enabling pre-render cancellations until at least HALF of your goal is loaded.
-                    Due to this, it serves no purpose to keep pre-rendering past the given limits.
-                    Moreover, the purpose of the GOAL, in the first place, is to simply set a soft cap on how many chunks
-                    the renderer is permitted to build, so you can enter your world within a time that you desire!
-                    ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
-                    Because, if that's the case, what the hell are you using this mod for????
-                    */
+                    /**
+                     * The reason for this function (within the if() check, below this comment paragraph)
+                     * is that wasting time, generating chunks on the server IS NOT pre-rendering!
+                     * By this time, this module has cancelled your pre-rendering,
+                     * because it has loaded all your important chunks and ones that were previously generated.
+                     * This is done by only enabling pre-render cancellations until at least HALF of your goal is loaded.
+                     * Due to this, it serves no purpose to keep pre-rendering past the given limits.
+                     * Moreover, the purpose of the GOAL, in the first place, is to simply set a soft cap on how many chunks
+                     * the renderer is permitted to build, so you can enter your world within a time that you desire!
+                     * ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
+                     * Because, if that's the case, what the hell are you using this mod for????
+                     */
                     if (oldChunkLoadedCountStorage == chunkLoadedCount) {
                         preparationWarnings++;
                         //Guard Clause
@@ -266,6 +292,9 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         }
                     }
                 }
+                /**
+                 * Closes when 1 task is 100% complete and other is atleast 25% complete
+                 */
                 //Next two if() statements stop building when their respective tasks are completed
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;

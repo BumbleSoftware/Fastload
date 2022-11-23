@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 
 import static io.github.bumblesoftware.fastload.config.screen.FLColourConstants.white;
 
+@SuppressWarnings("DanglingJavadoc")
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
     private final Text SCREEN_TEMPLATE;
@@ -28,6 +29,9 @@ public class BuildingTerrainScreen extends Screen {
     }
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
+        /**
+         * Translatable texts
+         */
         SCREEN_NAME = Text.translatable("menu.generatingTerrain");
         SCREEN_TEMPLATE = Text.translatable("fastload.screen.buildingTerrain.template");
         BUILDING_CHUNKS = Text.translatable("fastload.screen.buildingTerrain.building");
@@ -36,6 +40,9 @@ public class BuildingTerrainScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
+        /**
+         *  Progress parameters
+         */
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
         final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue() / 360;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
@@ -81,10 +88,18 @@ public class BuildingTerrainScreen extends Screen {
 
         super.render(matrices, mouseX, mouseY, delta);
     }
+
+    /**
+     * Fastload determines when to bail, not the user
+     */
     @Override
     public boolean shouldCloseOnEsc() {
         return false;
     }
+
+    /**
+     * Permits the server to keep ticking
+     */
     @Override
     public boolean shouldPause() {
         return false;

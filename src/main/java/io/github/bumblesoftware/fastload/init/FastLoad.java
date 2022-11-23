@@ -19,6 +19,10 @@ public class FastLoad implements ModInitializer {
 	private static String loggableString(String key, String extra) {
 		return key.toUpperCase() + "_" + extra.toUpperCase() + ": ";
 	}
+
+	/**
+	 * Logs config at start
+	 */
 	@Override
 	public void onInitialize() {
 		FLConfig.loadClass();
