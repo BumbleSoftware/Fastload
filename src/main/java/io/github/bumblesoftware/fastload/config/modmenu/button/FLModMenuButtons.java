@@ -12,23 +12,35 @@ import net.minecraft.text.TranslatableText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FLModMenuButtons {
+    private static final Map<String, String> storage = new HashMap<>();
+    private static void putStorage(String address, String value) {
+        storage.put(address, value);
+    }
+    private static String getStorage(String address) {
+        return storage.get(address);
+    }
     private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
     public static Option getNewBoolButton(String type, boolean getConfig) {
+            storage.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
                 new TranslatableText(FLB + type + ".tooltip"),
-                gameOptions -> getConfig,
+                gameOptions -> Boolean.getBoolean(getStorage(type)),
                 (gameOptions, option, value) -> FLConfig.writeToDisk(type, value.toString(), true)
         );
     }
     public static Option getNewSlider(String type, SimpleVec2i vec2i , int defVal) {
         int max = vec2i.max();
         int min = vec2i.min();
+        if (getStorage(type) == null)
+            putStorage(type, Integer.toString(defVal));
         return new DoubleOption(
                 FLB + type,
                 min,
