@@ -9,12 +9,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+//Code is from 'kennytv'. All credits are to this person. This is not our code.
+//Permission granted to do so from MIT License of 'forcecloseloadingscreen'.
+
 @Mixin(DownloadingTerrainScreen.class)
 public class DownloadingTerrainScreenMixin {
 
-    //Code is from 'kennytv'. All credits are to this person. This is not our code.
-    //Permission granted to do so from MIT License of 'forcecloseloadingscreen'.
-    @Shadow private boolean closeOnNextTick;
+    @Shadow
+    private boolean closeOnNextTick;
 
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {

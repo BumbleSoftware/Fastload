@@ -18,12 +18,14 @@ import static com.abdelaziz.fastload.config.FLMath.getPregenRadius;
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
     @Shadow @Final public final static int START_TICKET_CHUNK_RADIUS = getPregenRadius(false);
+
     @Shadow @Final private final static int START_TICKET_CHUNKS = getPregenArea();
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
         return START_TICKET_CHUNKS;
     }
+
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
         return START_TICKET_CHUNK_RADIUS;

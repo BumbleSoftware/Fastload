@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayNetworkHandlerMixin {
     @Shadow @Final
     private MinecraftClient client;
+
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoined(GameJoinS2CPacket packet, CallbackInfo ci) {
         if (FLMath.getDebug()) FastLoad.LOGGER.info("gameJoined = true");

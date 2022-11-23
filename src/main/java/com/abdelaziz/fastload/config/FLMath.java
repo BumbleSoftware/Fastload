@@ -14,6 +14,7 @@ public class FLMath {
 
     //Parsed Constants
     private static final int PARSED_PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND, 0);
+
     //RENDER_RADIUS// Cannot be parsed as parsing dynamically changes. No point in making it a field
     private static final int PARSED_CHUNK_TRY_LIMIT = Math.max(RAW_CHUNK_TRY_LIMIT, 1);
 

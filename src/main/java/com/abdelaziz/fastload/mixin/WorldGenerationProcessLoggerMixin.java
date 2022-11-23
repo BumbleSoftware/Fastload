@@ -9,15 +9,20 @@ import net.minecraft.server.WorldGenerationProgressLogger;
 
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
+
     @Shadow
     @Final
     @Mutable
     private int totalCount = FLMath.getProgressArea();
+
+    @Shadow
+    private int generatedCount;
+
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int setRadius(int radius) {
         return FLMath.getPregenRadius(false);
     }
-    @Shadow private int generatedCount;
+
     /**
      * @author Fluffy Bumblebee
      * @reason Cancel C2ME's interference
