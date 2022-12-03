@@ -41,8 +41,9 @@ public class FLConfigScreen extends SimpleOptionsScreen {
                 String value = array.get()[i].getValue().toString().toLowerCase();
                 if (FLMath.getDebug())
                     FastLoad.LOGGER.info(key.toUpperCase() + ": " + value.toUpperCase());
-                FLConfig.writeToDisk(key, value, i >= 4);
+                FLConfig.storeProperty(key, value);
             }
+            FLConfig.writeToDisk();
             /**
              * Then, once it's written, the screen is closed
              */
