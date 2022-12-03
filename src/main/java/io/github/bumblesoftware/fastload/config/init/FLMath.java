@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.function.Supplier;
@@ -24,10 +24,10 @@ public class FLMath {
         return DefaultConfig.getRawRadiusBound().max();
     }
     @SuppressWarnings("unused")
-    public static SimpleVec2i getRadiusBound() {
+    public static MinMaxHolder getRadiusBound() {
         return DefaultConfig.getRawRadiusBound();
     }
-    public static SimpleVec2i getChunkTryLimitBound() {
+    public static MinMaxHolder getChunkTryLimitBound() {
         return DefaultConfig.getTryLimitBound();
     }
 
@@ -43,7 +43,7 @@ public class FLMath {
     protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
-    protected static int parseMinMax(int toProcess, SimpleVec2i maxMin) {
+    protected static int parseMinMax(int toProcess, MinMaxHolder maxMin) {
         return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
     }
 

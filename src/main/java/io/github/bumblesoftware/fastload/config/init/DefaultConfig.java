@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.config.init;
 
 
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
 
 public class DefaultConfig {
     //Get Strings
@@ -35,11 +35,11 @@ public class DefaultConfig {
 
 
     //Get Bounds
-    protected static SimpleVec2i getRawRadiusBound() {
-        return new SimpleVec2i(32, 0);
+    protected static MinMaxHolder getRawRadiusBound() {
+        return new MinMaxHolder(32, 0);
     }
-    protected static SimpleVec2i getTryLimitBound() {
-        return new SimpleVec2i(1000, 1);
+    protected static MinMaxHolder getTryLimitBound() {
+        return new MinMaxHolder(1000, 1);
     }
 
     //Get Vars

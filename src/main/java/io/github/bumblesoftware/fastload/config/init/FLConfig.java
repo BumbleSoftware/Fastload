@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -95,9 +95,9 @@ public class FLConfig {
     private static String writable(String key) {
         return "'" + key.toLowerCase() + "'";
     }
-    private static int getInt(String key, int def, SimpleVec2i vec2i) {
+    private static int getInt(String key, int def, MinMaxHolder holder) {
         try {
-            int i = FLMath.parseMinMax(Integer.parseInt(properties.getProperty(key)), vec2i);
+            int i = FLMath.parseMinMax(Integer.parseInt(properties.getProperty(key)), holder);
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {

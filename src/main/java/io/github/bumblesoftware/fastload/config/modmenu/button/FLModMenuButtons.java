@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
@@ -30,6 +30,7 @@ public class FLModMenuButtons {
     }
 
     public static Option getNewBoolButton(String type, boolean getConfig) {
+        System.out.println(type + ":" + getConfig);
         storage.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
@@ -38,9 +39,9 @@ public class FLModMenuButtons {
                 (gameOptions, option, value) -> FLConfig.storeProperty(type, value.toString())
         );
     }
-    public static Option getNewSlider(String type, SimpleVec2i vec2i , int defVal) {
-        int max = vec2i.max();
-        int min = vec2i.min();
+    public static Option getNewSlider(String type, MinMaxHolder holder , int defVal) {
+        int max = holder.max();
+        int min = holder.min();
         storage.putIfAbsent(type, Integer.toString(defVal));
         return new DoubleOption(
                 FLB + type,
@@ -70,15 +71,15 @@ public class FLModMenuButtons {
     /**
      * Refer to DefaultConfig.propertyKeys.add[] for arrangement of this array!
      */
-    public static Option[] buttons = {
-            getNewBoolButton(debug(), getDebug()),
-            getNewBoolButton(unsafeClose(), getCloseUnsafe()),
-            getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
-            getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
-            getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
-    };
 
     public static Option[] asOptions() {
+        Option[] buttons = {
+                getNewBoolButton(debug(), getDebug()),
+                getNewBoolButton(unsafeClose(), getCloseUnsafe()),
+                getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
+                getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
+                getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
+        };
         ArrayList<Option> options = new ArrayList<>(Arrays.asList(buttons));
         return options.toArray(Option[]::new);
     }
