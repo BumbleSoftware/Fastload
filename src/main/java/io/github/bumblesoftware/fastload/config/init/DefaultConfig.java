@@ -31,20 +31,6 @@ public class DefaultConfig {
         public static String debug() {
             return "debug";
         }
-
-        /**
-            Dependencies: FLModMenuButtons.buttons[]
-            Make sure to ALWAYS sync these arrays, otherwise stuff will get messed up
-        */
-
-        @SuppressWarnings("unused")
-        public static final String[] all = {
-                debug(),
-                unsafeClose(),
-                render(),
-                pregen(),
-                tryLimit()
-        };
     }
 
 

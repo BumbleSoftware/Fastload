@@ -20,34 +20,39 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FLModMenuButtons {
     private static final Map<String, String> storage = new HashMap<>();
+    private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
+
     private static void putStorage(String address, String value) {
         storage.put(address, value);
     }
     private static String getStorage(String address) {
         return storage.get(address);
     }
-    private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
+
     public static Option getNewBoolButton(String type, boolean getConfig) {
-            storage.putIfAbsent(type, Boolean.toString(getConfig));
+        storage.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
                 new TranslatableText(FLB + type + ".tooltip"),
-                gameOptions -> Boolean.getBoolean(getStorage(type)),
-                (gameOptions, option, value) -> FLConfig.writeToDisk(type, value.toString(), true)
+                gameOptions -> getConfig,
+                (gameOptions, option, value) -> FLConfig.storeProperty(type, value.toString())
         );
     }
     public static Option getNewSlider(String type, SimpleVec2i vec2i , int defVal) {
         int max = vec2i.max();
         int min = vec2i.min();
-        if (getStorage(type) == null)
-            putStorage(type, Integer.toString(defVal));
+        storage.putIfAbsent(type, Integer.toString(defVal));
         return new DoubleOption(
                 FLB + type,
                 min,
                 max,
                 1.0F,
-                gameOptions -> (double) defVal,
-                (gameOptions, aDouble) -> FLConfig.writeToDisk(type, Integer.toString(aDouble.intValue()), true),
+                gameOptions -> Double.parseDouble(getStorage(type)),
+                (gameOptions, aDouble) -> {
+                    String dbl = Integer.toString(aDouble.intValue());
+                    putStorage(type, dbl);
+                    FLConfig.storeProperty(type, dbl);
+                },
                 (gameOptions, option) -> {
                     double d = option.get(gameOptions);
                     if (d == min) {

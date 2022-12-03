@@ -20,7 +20,6 @@ public class FLConfig {
 
     //Init Vars
     private static final Properties properties;
-    private static final Properties newProperties;
     private static final Path path;
 
     //Config Variables
@@ -42,7 +41,6 @@ public class FLConfig {
 
     static {
         properties = new Properties();
-        newProperties = new Properties();
         path = FabricLoader.getInstance().getConfigDir().resolve(FastLoad.NAMESPACE.toLowerCase() + ".properties");
 
         if (Files.isRegularFile(path)) {
@@ -60,13 +58,20 @@ public class FLConfig {
         getCloseLoadingScreenUnsafely();
         getRawDebug();
 
-        try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            newProperties.store(out,  FastLoad.NAMESPACE +  " Configuration File");
+        write();
+
+    }
+    private static void logError(String key) {
+        FastLoad.LOGGER.error("Failed to parse variable '" + key + "' in " + FastLoad.NAMESPACE + "'s config, generating a new one!");
+    }
+
+    private static void write() {
+        try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
+            properties.store(out,  FastLoad.NAMESPACE +  " Configuration File");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
-            comment.write("\n");
+        try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             comment.write("\n# Definitions");
             comment.write("\n# " + writable(propertyKeys.tryLimit()) + " = how many times in a row should the same count of loaded chunks be ignored before we cancel pre-rendering");
             comment.write("\n# Min = 1, Max = 1000. Must be a positive Integer");
@@ -83,13 +88,9 @@ public class FLConfig {
             comment.write("\n# " + writable(propertyKeys.pregen()) + " = how many chunks (from 441 Loading) are pre-generated until the server starts");
             comment.write("\n# Min = 0, Max = 32. Set 0 to only pregen 1 chunk. Must be a positive Integer");
 
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    private static void logError(String key) {
-        FastLoad.LOGGER.error("Failed to parse variable '" + key + "' in " + FastLoad.NAMESPACE + "'s config, generating a new one!");
     }
     private static String writable(String key) {
         return "'" + key.toLowerCase() + "'";
@@ -97,11 +98,11 @@ public class FLConfig {
     private static int getInt(String key, int def, SimpleVec2i vec2i) {
         try {
             int i = FLMath.parseMinMax(Integer.parseInt(properties.getProperty(key)), vec2i);
-            FLConfig.newProperties.setProperty(key, String.valueOf(i));
+            properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
             logError(key);
-            FLConfig.newProperties.setProperty(key, String.valueOf(def));
+            properties.setProperty(key, String.valueOf(def));
             return def;
         }
     }
@@ -114,23 +115,20 @@ public class FLConfig {
     }
     private static boolean getBoolean(String key, boolean def) {
         try {
-            final boolean b = parseBoolean(FLConfig.properties.getProperty(key));
-            FLConfig.newProperties.setProperty(key, String.valueOf(b));
+            final boolean b = parseBoolean(properties.getProperty(key));
+            properties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {
             logError(key);
-            FLConfig.newProperties.setProperty(key, String.valueOf(def));
+            properties.setProperty(key, String.valueOf(def));
             return def;
         }
     }
-    public static void writeToDisk(String key, String value, boolean last) {
+    public static void storeProperty(String key, String value) {
         properties.setProperty(key, value);
-        if (last) {
-            try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
-                properties.store(out, FastLoad.NAMESPACE +  " Configuration File");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        System.out.println(key + ":" + value);
+    }
+    public static void writeToDisk() {
+        write();
     }
 }
