@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.function.Supplier;
@@ -24,20 +24,15 @@ public class FLMath {
         return DefaultConfig.getRawRadiusBound().max();
     }
     @SuppressWarnings("unused")
-    public static SimpleVec2i getRadiusBound() {
+    public static MinMaxHolder getRadiusBound() {
         return DefaultConfig.getRawRadiusBound();
     }
-    public static SimpleVec2i getChunkTryLimitBound() {
+    public static MinMaxHolder getChunkTryLimitBound() {
         return DefaultConfig.getTryLimitBound();
     }
 
 
-    /**
-     * This part just parses variables according to their limits. Such as:
-     *  - Bounds
-     *  - Minecraft
-     * Render Distant bounds the max pre-render distance to stop it from never completing
-     */
+    //Parsing
     private static final Supplier<Double> RENDER_DISTANCE = () ->
             MinecraftClient.getInstance().worldRenderer != null ?
                     Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), getRadiusBoundMax())
@@ -48,13 +43,11 @@ public class FLMath {
     protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
-    protected static int parseMinMax(int toProcess, SimpleVec2i maxMin) {
+    protected static int parseMinMax(int toProcess, MinMaxHolder maxMin) {
         return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
     }
 
-    /**
-     * Fastload does all the magical calculations here in order to simplify the config and avoid bugs
-     */
+
     //Calculations
     @SuppressWarnings("SameParameterValue")
     private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
@@ -112,12 +105,10 @@ public class FLMath {
     public static Boolean getCloseUnsafe() {
         return getCloseLoadingScreenUnsafely();
     }
-
-    /**
-     * Abstracts a boolean out of the given number to further simplify the config &
-     * to avoid more bugs
-     */
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
+    }
+    public static Boolean getForceLoadSafe() {
+        return getChunkTryLimit() >= 1000;
     }
 }

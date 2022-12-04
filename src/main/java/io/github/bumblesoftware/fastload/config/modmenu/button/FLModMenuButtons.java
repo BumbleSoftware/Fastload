@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import com.mojang.serialization.Codec;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.extensions.SimpleVec2i;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
@@ -42,10 +42,10 @@ public class FLModMenuButtons {
      * SimpleVec2i is just a simple class in package: io.github.bumblesoftware.fastload.extensions that holds two variables
      * as it doesn't make sense for min and maxes to be seperated. Refer to the class for more info!
      */
-    public static SimpleOption<Integer> getNewSlider(String type, SimpleVec2i vec2i , int defVal) {
+    public static SimpleOption<Integer> getNewSlider(String type, MinMaxHolder holder , int defVal) {
         addressStorage.add(type);
-        int max = vec2i.max();
-        int min = vec2i.min();
+        int max = holder.max();
+        int min = holder.min();
         return new SimpleOption<>(FLB + type,
                 SimpleOption.constantTooltip(Text.translatable(FLB + type + ".tooltip")),
                 (optionText,value) -> {
