@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.config.init;
 
 
-import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 
 public class DefaultConfig {
     //Get Strings

@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.function.Supplier;
@@ -107,5 +107,8 @@ public class FLMath {
     }
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
+    }
+    public static Boolean getForceLoadSafe() {
+        return getChunkTryLimit() >= 1000;
     }
 }

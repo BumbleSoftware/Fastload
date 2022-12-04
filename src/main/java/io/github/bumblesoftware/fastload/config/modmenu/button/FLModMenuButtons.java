@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;

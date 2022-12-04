@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.mixin.intercomm.client.MinecraftClientMixinInterface;
 import net.minecraft.client.MinecraftClient;
@@ -191,58 +192,43 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
         //Pre-rendering Engine
         if (isBuilding) {
             if (this.world != null) {
-                //Optimisations
-                assert player != null;
-                if (oldPitch == null) {
-                    oldPitch = this.player.getPitch();
+                //Sets player to face horizontally to prioritise chunk loading
+                {
+                    assert player != null;
+                    if (oldPitch == null) {
+                        oldPitch = this.player.getPitch();
+                    }
+                    this.player.setPitch(0);
+                    if (getDebug()) {
+                        log("Pitch:" + oldPitch);
+                    }
                 }
-                this.player.setPitch(0);
-                if (getDebug()) {
-                    log("Pitch:" + oldPitch);
-                }
+
                 int chunkLoadedCount = this.world.getChunkManager().getLoadedChunkCount();
                 int chunkBuildCount = this.worldRenderer.getCompletedChunkCount();
                 double FOV = this.options.fov;
                 double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
+                final int oldPreparationWarningCache = preparationWarnings;
+                final int oldBuildingWarningCache = buildingWarnings;
+
                 if (getDebug()) {
                     logPreRendering(chunkLoadedCount);
                     logBuilding(chunkBuildCount, (int) chunkBuildCountGoal);
                 }
-                final int oldPreparationWarningCache = preparationWarnings;
-                final int oldBuildingWarningCache = buildingWarnings;
                 //The warning system
                 if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null) {
-                    /*
-                    The reason for this function (within the if() check, below this comment paragraph)
-                    is that wasting time, generating chunks on the server IS NOT pre-rendering!
-                    By this time, this module has cancelled your pre-rendering,
-                    because it has loaded all your important chunks and ones that were previously generated.
-                    This is done by only enabling pre-render cancellations until at least HALF of your goal is loaded.
-                    Due to this, it serves no purpose to keep pre-rendering past the given limits.
-                    Moreover, the purpose of the GOAL, in the first place, is to simply set a soft cap on how many chunks
-                    the renderer is permitted to build, so you can enter your world within a time that you desire!
-                    ... Unless you enjoy pre-rendering 3000 chunks (on a 32-Ren-Dist) to enter your game for a 5-minute session. -_-
-                    Because, if that's the case, what the hell are you using this mod for????
-                    */
-                    if (oldChunkLoadedCountStorage == chunkLoadedCount) {
+                    if (oldChunkLoadedCountStorage == chunkLoadedCount)
                         preparationWarnings++;
-                        //Guard Clause
-                        if (preparationWarnings == chunkTryLimit) {
-                            preparationWarnings = 0;
-                            log("Terrain Preparation is taking too long! Stopping...");
-                            stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
-                        }
-                    }
-                    //Same warning system but for building chunks
-                    if (oldChunkBuildCountStorage == chunkBuildCount) {
+                    if (oldChunkBuildCountStorage == chunkBuildCount)
                         buildingWarnings++;
-                        // Guard Clause
-                        if (buildingWarnings == chunkTryLimit) {
-                            buildingWarnings = 0;
-                            log("Terrain Building is taking too long! Stopping...");
-                            stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
-                        }
+
+                    if ((buildingWarnings >= chunkTryLimit || preparationWarnings >= chunkTryLimit) && !FLMath.getForceLoadSafe()) {
+                        buildingWarnings = 0;
+                        preparationWarnings = 0;
+                        log("Pre-loading is taking too long! Stopping...");
+                        stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
                     }
+
                     if (!closeBuild) {
                         //Log Warnings
                         final int spamLimit = 2;
@@ -266,16 +252,15 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         }
                     }
                 }
-                //Next two if() statements stop building when their respective tasks are completed
+
+                //Stops when completed
+
                 oldChunkLoadedCountStorage = chunkLoadedCount;
                 oldChunkBuildCountStorage = chunkBuildCount;
-                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal/4.0) {
+
+                if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= chunkBuildCountGoal) {
                     stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
-                    log("Successfully prepared sufficient chunks! Stopping...");
-                }
-                if (chunkBuildCount >= chunkBuildCountGoal && chunkLoadedCount >= getPreRenderArea()/4.0) {
-                    log("Built Sufficient Chunks! Stopping...");
-                    stopBuilding(chunkLoadedCount, chunkBuildCount, (int) chunkBuildCountGoal);
+                    log("Successfully pre-loaded the world! Stopping...");
                 }
             }
         // Tick Timer for Pause Menu Cancellation

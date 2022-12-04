@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.extensions.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.fabricmc.loader.api.FabricLoader;
 
