@@ -31,7 +31,7 @@ public class FLConfigScreen extends SimpleOptionsScreen {
 
     @Override
     protected void initFooter() {
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, button -> {
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
             /**
              * When the button "Done" is pressed, this for loop simply iterates through the values stored in memory,
              * the addresses to the config & writes it.
@@ -48,7 +48,7 @@ public class FLConfigScreen extends SimpleOptionsScreen {
              * Then, once it's written, the screen is closed
              */
             client.setScreen(this.parent);
-        }));
+        }).dimensions(this.width / 2 - 100, this.height - 27, 200, 20).build());
     }
 
     /**
