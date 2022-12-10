@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.api.events.FLEvents.RecordTypes.*;
-import io.github.bumblesoftware.fastload.api.events.custom.FLGenericEvent;
+import io.github.bumblesoftware.fastload.api.events.abstract_events.FLGenericEvent;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.events.custom;
+package io.github.bumblesoftware.fastload.api.events.abstract_events;
 
 import java.util.ArrayList;
 
@@ -11,4 +11,5 @@ public final class FLGenericEvent<T extends Record> implements AbstractEvent<T> 
     public ArrayList<EventArgs<T>> getEventHolder() {
         return EVENT_HOLDER;
     }
+
 }

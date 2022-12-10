@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.events.custom;
+package io.github.bumblesoftware.fastload.api.events.abstract_events;
 
 import java.util.ArrayList;
 
