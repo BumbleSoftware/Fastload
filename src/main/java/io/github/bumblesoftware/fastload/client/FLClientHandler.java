@@ -111,8 +111,8 @@ public final class FLClientHandler {
     static {
 
         //Null Screen
-        FLEvents.SET_SCREEN_EVENT.register((screen, ci) -> {
-            if (screen == null) {
+        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+            if (eventContext.screen() == null) {
                 isBuilding = false;
                 shouldLoad = false;
                 justLoaded = false;
@@ -122,42 +122,42 @@ public final class FLClientHandler {
         });
 
         // Game Menu Event to stop it from interfering with Fastload's stuff
-        FLEvents.SET_SCREEN_EVENT.register((screen, ci) -> {
-            if (timeDown < timeDownGoal && screen instanceof GameMenuScreen && !client.windowFocused) {
-                ci.cancel();
+        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+            if (timeDown < timeDownGoal && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
+                eventContext.ci().cancel();
                 client.setScreen(null);
             }
         });
 
         //Debug when BuildingTerrainScreen is initiated
-        FLEvents.SET_SCREEN_EVENT.register((screen, ci) -> {
-            if (screen instanceof BuildingTerrainScreen && getDebug()) {
+        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+            if (eventContext.screen() instanceof BuildingTerrainScreen && getDebug()) {
                 log("Successfully Initiated Building Terrain");
             }
         });
 
-        FLEvents.SET_SCREEN_EVENT.register((screen, ci) -> {
-            if (screen instanceof ProgressScreen && getCloseUnsafe()) {
-                ci.cancel();
+        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+            if (eventContext.screen() instanceof ProgressScreen && getCloseUnsafe()) {
+                eventContext.ci().cancel();
                 if (getDebug()) log("Progress Screen Successfully Cancelled");
             }
         });
 
-        FLEvents.SET_SCREEN_EVENT.register((screen, ci) -> {
-            if (screen instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
+        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+            if (eventContext.screen() instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
                 if (getDebug()) log("Downloading Terrain Accessed!");
                 shouldLoad = false;
                 justLoaded = true;
                 showRDDOnce = true;
                 if (getCloseSafe()) {
-                    ci.cancel();
+                    eventContext.ci().cancel();
                     if (getDebug()) log("Preparing to replace Download Terrain with Building Terrain");
                     if (getDebug()) log("Goal (Loaded Chunks): " + getPreRenderArea());
                     isBuilding = true;
                     client.setScreen(new BuildingTerrainScreen());
                 } else if (getCloseUnsafe()) {
                     playerJoined = false;
-                    ci.cancel();
+                    eventContext.ci().cancel();
                     if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
                     timeDown = 0;
                     client.setScreen(null);
@@ -165,18 +165,18 @@ public final class FLClientHandler {
             }
         });
 
-        FLEvents.PAUSE_MENU_EVENT.register((pause, ci) -> {
+        FLEvents.PAUSE_MENU_EVENT.register(eventContext -> {
             if (justLoaded) {
                 if (client.windowFocused) justLoaded = false;
                 else {
                     justLoaded = false;
-                    ci.cancel();
+                    eventContext.ci().cancel();
                     if (getDebug()) log("Pause Menu Cancelled");
                 }
             }
         });
 
-        FLEvents.RENDER_TICK_EVENT.register((tick, ci) -> {
+        FLEvents.RENDER_TICK_EVENT.register((eventContext) -> {
             // Logs render distance
             if (showRDDOnce) {
                 logRenderDistanceDifference();

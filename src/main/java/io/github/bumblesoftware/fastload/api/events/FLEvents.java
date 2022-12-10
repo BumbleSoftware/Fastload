@@ -1,13 +1,18 @@
 package io.github.bumblesoftware.fastload.api.events;
 
-import io.github.bumblesoftware.fastload.api.events.custom.FLPauseMenuEvent;
-import io.github.bumblesoftware.fastload.api.events.custom.FLRenderTickEvent;
-import io.github.bumblesoftware.fastload.api.events.custom.FLSetScreenEvent;
+import io.github.bumblesoftware.fastload.api.events.FLEvents.RecordTypes.*;
+import io.github.bumblesoftware.fastload.api.events.custom.FLGenericEvent;
+import net.minecraft.client.gui.screen.Screen;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class FLEvents {
-    public static final FLSetScreenEvent SET_SCREEN_EVENT = new FLSetScreenEvent();
-    public static final FLRenderTickEvent RENDER_TICK_EVENT = new FLRenderTickEvent();
-    public static final FLPauseMenuEvent PAUSE_MENU_EVENT = new FLPauseMenuEvent();
+    public static final FLGenericEvent<SetScreenEventContext> SET_SCREEN_EVENT = new FLGenericEvent<>();
+    public static final FLGenericEvent<RenderTickEventContext> RENDER_TICK_EVENT = new FLGenericEvent<>();
+    public static final FLGenericEvent<PauseMenuEventContext> PAUSE_MENU_EVENT = new FLGenericEvent<>();
 
-
+    public static class RecordTypes {
+        public record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
+        public record RenderTickEventContext(boolean tick, CallbackInfo ci) {}
+        public record PauseMenuEventContext(boolean tick, CallbackInfo ci) {}
+    }
 }
