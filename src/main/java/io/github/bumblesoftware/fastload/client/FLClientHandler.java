@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.events.FLEvents;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.events.FLEvents;
 import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -16,8 +16,8 @@ public final class FLClientHandler {
     public static void init() {}
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public static boolean shouldLoad = false;
-    public static boolean playerJoined = false;
+    private static boolean playerReady = false;
+    private static boolean playerJoined = false;
 
     private static boolean justLoaded = false;
     private static boolean showRDDOnce = false;
@@ -25,7 +25,6 @@ public final class FLClientHandler {
     private static boolean isBuilding = false;
     private static boolean closeBuild = false;
     //Pre Renderer Log Constants
-    @SuppressWarnings("FieldCanBeLocal")
     private static final int chunkTryLimit = getChunkTryLimit();
     //Storage
     private static Float oldPitch = null;
@@ -109,20 +108,31 @@ public final class FLClientHandler {
     }
 
     static {
+        //Player is ready when it initialises
+        FLEvents.CLIENT_PLAYER_INIT_EVENT.register(eventContext -> {
+            if (FLMath.getDebug()) FastLoad.LOGGER.info("shouldLoad = true");
+            playerReady = true;
+        });
+
+        FLEvents.PLAYER_JOIN_EVENT.register(eventContext -> {
+            if (FLMath.getDebug()) FastLoad.LOGGER.info("playerJoined = true");
+            FLClientHandler.playerJoined = true;
+        });
 
         //Null Screen
-        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
             if (eventContext.screen() == null) {
                 isBuilding = false;
-                shouldLoad = false;
+                playerReady = false;
                 justLoaded = false;
                 showRDDOnce = false;
                 oldPitch = null;
             }
         });
 
+
         // Game Menu Event to stop it from interfering with Fastload's stuff
-        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
             if (timeDown < timeDownGoal && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
                 eventContext.ci().cancel();
                 client.setScreen(null);
@@ -130,23 +140,25 @@ public final class FLClientHandler {
         });
 
         //Debug when BuildingTerrainScreen is initiated
-        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
             if (eventContext.screen() instanceof BuildingTerrainScreen && getDebug()) {
                 log("Successfully Initiated Building Terrain");
             }
         });
 
-        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
+        //Cancels Progress screen when FORCE_CLOSE_LOADING_SCREEN is true. Makes things slightly faster
+        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
             if (eventContext.screen() instanceof ProgressScreen && getCloseUnsafe()) {
                 eventContext.ci().cancel();
                 if (getDebug()) log("Progress Screen Successfully Cancelled");
             }
         });
 
-        FLEvents.SET_SCREEN_EVENT.register((eventContext) -> {
-            if (eventContext.screen() instanceof DownloadingTerrainScreen && shouldLoad && playerJoined) {
+        //It's just magic
+        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
+            if (eventContext.screen() instanceof DownloadingTerrainScreen && playerReady && playerJoined) {
                 if (getDebug()) log("Downloading Terrain Accessed!");
-                shouldLoad = false;
+                playerReady = false;
                 justLoaded = true;
                 showRDDOnce = true;
                 if (getCloseSafe()) {
@@ -165,6 +177,7 @@ public final class FLClientHandler {
             }
         });
 
+        //Redundancy impl for pause menu cancellation as it this shit's unpredictable
         FLEvents.PAUSE_MENU_EVENT.register(eventContext -> {
             if (justLoaded) {
                 if (client.windowFocused) justLoaded = false;
@@ -176,7 +189,8 @@ public final class FLClientHandler {
             }
         });
 
-        FLEvents.RENDER_TICK_EVENT.register((eventContext) -> {
+        //More magic
+        FLEvents.RENDER_TICK_EVENT.register(eventContext -> {
             // Logs render distance
             if (showRDDOnce) {
                 logRenderDistanceDifference();

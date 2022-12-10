@@ -13,16 +13,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
-    private void setScreen(final Screen screen, final CallbackInfo ci) {
+    private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
         FLEvents.SET_SCREEN_EVENT.fireEvent(new SetScreenEventContext(screen, ci));
     }
     @Inject(method = "openPauseMenu", at = @At("HEAD"), cancellable = true)
-    private void cancelOpenPauseMenu(boolean pause, CallbackInfo ci) {
+    private void openPauseMenuEvent(boolean pause, CallbackInfo ci) {
         FLEvents.PAUSE_MENU_EVENT.fireEvent(new PauseMenuEventContext(pause, ci));
 
     }
     @Inject(method = "render", at = @At("HEAD"))
-    private void onRender(boolean tick, CallbackInfo ci) {
+    private void renderEvent(boolean tick, CallbackInfo ci) {
         FLEvents.RENDER_TICK_EVENT.fireEvent(new RenderTickEventContext(tick, ci));
     }
 }

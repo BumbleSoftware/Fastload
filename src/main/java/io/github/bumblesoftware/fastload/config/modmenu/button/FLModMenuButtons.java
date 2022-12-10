@@ -69,7 +69,7 @@ public class FLModMenuButtons {
      * This array determines the ORDER OF BUTTONS
      * Designed to be iterable
      */
-    protected static SimpleOption<?>[] buttons = {
+    protected static final SimpleOption<?>[] buttons = {
             getNewBoolButton(debug(), getDebug()),
             getNewBoolButton(unsafeClose(), getCloseUnsafe()),
             getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
