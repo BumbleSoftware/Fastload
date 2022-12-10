@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.api.events.FLEvents;
-import io.github.bumblesoftware.fastload.api.events.FLEvents.RecordTypes.*;
+import io.github.bumblesoftware.fastload.events.FLEvents;
+import io.github.bumblesoftware.fastload.events.FLEvents.RecordTypes.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
