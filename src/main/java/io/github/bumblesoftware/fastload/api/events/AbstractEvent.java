@@ -13,6 +13,11 @@ public interface AbstractEvent<T extends Record> {
      * your given method.
      */
     ArrayList<EventArgs<T>> getEventHolder();
+
+    /**
+     *  Registers by adding the given EventArgs impl to the arraylist that stores all impl. This is the method
+     *  that gets called to add your custom method body off the event.
+     */
     default void register(EventArgs<T> eventContext) {
         getEventHolder().add(eventContext);
     }
