@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public interface AbstractEvent<T extends Record> {
     /**
-     * This abstract method requires a ArrayList field in order to store all the registered event registrations attached to
+     * This abstract method requires a ArrayList field in order to store all the  event registrations attached to
      * your given method.
      */
     ArrayList<EventArgs<T>> getEventHolder();
