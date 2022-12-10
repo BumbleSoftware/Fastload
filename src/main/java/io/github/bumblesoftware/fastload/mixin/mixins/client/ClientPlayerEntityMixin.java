@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayerEntityMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void onClientPlayerEntityMixinInitEvent(CallbackInfo ci) {
-        FLEvents.CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLEvents.RecordTypes.ClientPlayerInitEventContext(ci));
+        FLEvents.CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLEvents.RecordTypes.Empty());
     }
 }

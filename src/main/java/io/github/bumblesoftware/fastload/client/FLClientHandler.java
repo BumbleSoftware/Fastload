@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.api.FLTimer;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.events.FLEvents;
@@ -12,34 +13,74 @@ import net.minecraft.client.render.Camera;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
+/**
+ * Fastload's client handling, based upon the abstract events.
+ */
 public final class FLClientHandler {
-    public static void init() {}
-    private static final MinecraftClient client = MinecraftClient.getInstance();
-
-    private static boolean playerReady = false;
-    private static boolean playerJoined = false;
-
-    private static boolean justLoaded = false;
-    private static boolean showRDDOnce = false;
-    //Boolean  Pre-render
-    private static boolean isBuilding = false;
-    private static boolean closeBuild = false;
-    //Pre Renderer Log Constants
-    private static final int chunkTryLimit = getChunkTryLimit();
-    //Storage
-    private static Float oldPitch = null;
-    private static Integer oldChunkLoadedCountStorage = null;
-    private static Integer oldChunkBuildCountStorage = null;
-    //Warning Constants
-    private static int preparationWarnings = 0;
-    private static int buildingWarnings = 0;
-    //Ticks until Pause Menu is Active again
-    private static final int timeDownGoal = 10;
-    // Set this to 0 to start timer for Pause Menu Cancellation
-    private static int timeDown = timeDownGoal;
+    public static void init() {
+        registerEvents();
+    }
 
     /**
-     * It gets the instance of the players camera
+     * Local client instance to access
+     */
+    private static final MinecraftClient client = MinecraftClient.getInstance();
+
+    /**
+     * Boolean whether an object of Player has been initialised
+     */
+    private static boolean playerReady = false;
+    /**
+     * Boolean whether player has joined ClientWorld
+     */
+    private static boolean playerJoined = false;
+    /**
+     * Checks true when the DownloadingTerrainScreen instanceof setScreen() event has been fired.
+     */
+    private static boolean justLoaded = false;
+
+    /**
+     * Shows render-distance difference between set value & fastload's one if there is a difference.
+     * Used to send a debug message.
+     */
+    private static boolean showRDDOnce = false;
+    /**
+     * Boolean for when BuildingTerrainScreen is active
+     */
+    private static boolean isBuilding = false;
+    /**
+     * Boolean to let other methods init the process of closing the terrain building
+     */
+    private static boolean closeBuild = false;
+    /**
+     * Stores the old player camera pitch so that it can be set back to it upon completion of preloading
+     */
+    private static Float oldPitch = null;
+    /**
+     * Stores the old count to compare values on the next method call to see if the value
+     * of loaded chunks is same.
+     */
+    private static Integer oldChunkLoadedCountStorage = null;
+    /**
+     * Stores the old count to compare values on the next method call to see if the value
+     * of built chunks is same.
+     */
+    private static Integer oldChunkBuildCountStorage = null;
+    /**
+     * Stores the amount of warnings (or chunk tries) for terrain preparation
+     */
+    private static int preparationWarnings = 0;
+    /**
+     * Stores the amount of warnings (or chunk tries) for terrain building
+     */
+    private static int buildingWarnings = 0;
+    /**
+     * Timer storage, set to any value above 0 to use it
+     */
+    private static FLTimer timer = new FLTimer(0);
+
+    /**
+     * Camera instance getter
      */
     private static Camera getCamera() {
         return client.gameRenderer.getCamera();
@@ -48,7 +89,7 @@ public final class FLClientHandler {
     /**
      *  Quick, easy, and lazy logging method
      */
-    private static void log(String toLog) {
+    public static void log(String toLog) {
         FastLoad.LOGGER.info(toLog);
     }
 
@@ -91,7 +132,7 @@ public final class FLClientHandler {
             }
             isBuilding = false;
             if (!client.windowFocused) {
-                timeDown = 0;
+                timer = new FLTimer(10);
                 if (getDebug()) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
             assert client.player != null;
@@ -107,7 +148,10 @@ public final class FLClientHandler {
         }
     }
 
-    static {
+    /**
+     * Event Registration for fastload
+     */
+    private static void registerEvents() {
         //Player is ready when it initialises
         FLEvents.CLIENT_PLAYER_INIT_EVENT.register(eventContext -> {
             if (FLMath.getDebug()) FastLoad.LOGGER.info("shouldLoad = true");
@@ -133,7 +177,8 @@ public final class FLClientHandler {
 
         // Game Menu Event to stop it from interfering with Fastload's stuff
         FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
-            if (timeDown < timeDownGoal && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
+            if (timer.isReady() && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
+                if (getDebug()) log(Integer.toString(timer.getTime()));
                 eventContext.ci().cancel();
                 client.setScreen(null);
             }
@@ -171,7 +216,6 @@ public final class FLClientHandler {
                     playerJoined = false;
                     eventContext.ci().cancel();
                     if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
-                    timeDown = 0;
                     client.setScreen(null);
                 }
             }
@@ -228,7 +272,7 @@ public final class FLClientHandler {
                         if (oldChunkBuildCountStorage == chunkBuildCount)
                             buildingWarnings++;
 
-                        if ((buildingWarnings >= chunkTryLimit || preparationWarnings >= chunkTryLimit) && !FLMath.getForceBuild()) {
+                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit()) && !FLMath.getForceBuild()) {
                             buildingWarnings = 0;
                             preparationWarnings = 0;
                             log("Pre-loading is taking too long! Stopping...");
@@ -242,7 +286,7 @@ public final class FLClientHandler {
                                 if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
                                     log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
                                     if (!getForceBuild()) {
-                                        log("Had it be " + chunkTryLimit + " time(s) in a row, pre-loading would've stopped");
+                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                     }
                                     if (getDebug()) logPreRendering(chunkLoadedCount);
                                 }
@@ -254,7 +298,7 @@ public final class FLClientHandler {
                                 if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
                                     log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
                                     if (!getForceBuild()) {
-                                        log("Had it be " + chunkTryLimit + " time(s) in a row, pre-loading would've stopped");
+                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                     }
                                     if (getDebug()) logPreRendering(chunkLoadedCount);
                                 }
@@ -275,10 +319,6 @@ public final class FLClientHandler {
                         log("Successfully pre-loaded the world! Stopping...");
                     }
                 }
-                // Tick Timer for Pause Menu Cancellation
-            } else if (timeDown < timeDownGoal) {
-                timeDown++;
-                if (getDebug()) log("" + timeDown);
             }
         });
     }

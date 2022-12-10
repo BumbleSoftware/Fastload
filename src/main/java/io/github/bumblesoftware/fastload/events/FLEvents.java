@@ -13,14 +13,18 @@ public class FLEvents {
     public static final GenericEvent<SetScreenEventContext> SET_SCREEN_EVENT = new GenericEvent<>();
     public static final GenericEvent<RenderTickEventContext> RENDER_TICK_EVENT = new GenericEvent<>();
     public static final GenericEvent<PauseMenuEventContext> PAUSE_MENU_EVENT = new GenericEvent<>();
-    public static final GenericEvent<ClientPlayerInitEventContext> CLIENT_PLAYER_INIT_EVENT = new GenericEvent<>();
+    public static final GenericEvent<Empty> CLIENT_PLAYER_INIT_EVENT = new GenericEvent<>();
     public static final GenericEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new GenericEvent<>();
 
+    /**
+     * Record that holds important params and packages it in one object so that params are consistent among
+     * multiple events
+     */
     public static class RecordTypes {
+        public record Empty() {}
+        public record RenderTickEventContext(boolean tick) {}
         public record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
-        public record RenderTickEventContext(boolean tick, CallbackInfo ci) {}
         public record PauseMenuEventContext(boolean pause, CallbackInfo ci) {}
-        public record ClientPlayerInitEventContext(CallbackInfo ci) {}
         public record PlayerJoinEventContext(GameJoinS2CPacket packet, CallbackInfo ci) {}
     }
 }

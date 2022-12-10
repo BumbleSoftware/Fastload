@@ -7,9 +7,10 @@ import java.util.ArrayList;
  * your very own event. When returning a value to getEventHolder, make sure that it's a field that you're returning,
  * otherwise you'll be returning a new instance of nothing everytime the event is fired.
  */
+@FunctionalInterface
 public interface AbstractEvent<T extends Record> {
     /**
-     * This abstract method requires a ArrayList field in order to store all the  event registrations attached to
+     * This abstract method requires a ArrayList Field in order to store all the  event registrations attached to
      * your given method.
      */
     ArrayList<EventArgs<T>> getEventHolder();
@@ -20,6 +21,13 @@ public interface AbstractEvent<T extends Record> {
      */
     default void register(EventArgs<T> eventContext) {
         getEventHolder().add(eventContext);
+    }
+
+    /**
+     * Removes an event out of the storage. Use this when your events are only temporary
+     */
+    default void removeEvent(EventArgs<T> eventContext) {
+        getEventHolder().remove(eventContext);
     }
 
     /**
@@ -34,8 +42,8 @@ public interface AbstractEvent<T extends Record> {
     }
 
     /**
-     * A functional interface that takes in the generic type as its param. This is why records are used. They are good for
-     * packing and unpacking lots of objects without having to make more params.
+     * A functional interface that takes in a record as its type. This is to be able to store multiple objects and params into one
+     * object holder so that custom interfaces do not need to be created.
      */
     @FunctionalInterface
     interface EventArgs<T> {

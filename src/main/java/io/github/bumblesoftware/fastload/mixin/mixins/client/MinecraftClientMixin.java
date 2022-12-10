@@ -23,6 +23,6 @@ public abstract class MinecraftClientMixin {
     }
     @Inject(method = "render", at = @At("HEAD"))
     private void renderEvent(boolean tick, CallbackInfo ci) {
-        FLEvents.RENDER_TICK_EVENT.fireEvent(new RenderTickEventContext(tick, ci));
+        FLEvents.RENDER_TICK_EVENT.fireEvent(new RenderTickEventContext(tick));
     }
 }
