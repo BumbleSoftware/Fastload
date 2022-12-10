@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Sets gameJoined to true when the player joins the game
+ * Sets setPlayerJoined to true when the player joins the game
  */
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
@@ -22,7 +22,7 @@ public class ClientPlayNetworkHandlerMixin {
     private MinecraftClient client;
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoined(GameJoinS2CPacket packet, CallbackInfo ci) {
-        if (FLMath.getDebug()) FastLoad.LOGGER.info("gameJoined = true");
-        ((MinecraftClientMixinInterface)client).gameJoined();
+        if (FLMath.getDebug()) FastLoad.LOGGER.info("setPlayerJoined = true");
+        ((MinecraftClientMixinInterface)client).setPlayerJoined(true);
     }
 }

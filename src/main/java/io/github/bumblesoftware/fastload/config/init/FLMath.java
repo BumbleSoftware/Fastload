@@ -108,7 +108,7 @@ public class FLMath {
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
     }
-    public static Boolean getForceLoadSafe() {
+    public static Boolean getForceBuild() {
         return getChunkTryLimit() >= 1000;
     }
 }

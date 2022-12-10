@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
+import io.github.bumblesoftware.fastload.api.events.SetScreenEvent;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.mixin.intercomm.client.MinecraftClientMixinInterface;
@@ -26,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 @Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin implements MinecraftClientMixinInterface {
+public class MinecraftClientMixin implements MinecraftClientMixinInterface {
     //Original code is from 'kennytv, forceloadingscreen' under the 'MIT' License.
     //Code is heavily modified to suit Fastload's needs
 
@@ -62,15 +63,20 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     private final int timeDownGoal = 10;
     // Set this to 0 to start timer for Pause Menu Cancellation
     private int timeDown = timeDownGoal;
-    //Checks if Player is ready
+
+    /**
+     * External interface setter for @field shouldLoad
+     */
     @Override
-    public void canPlayerLoad() {
-        shouldLoad = true;
+    public void setShouldLoad(boolean toValue) {
+        shouldLoad = toValue;
     }
-    //Checks if Player joined game
+    /**
+     * External interface setter for @field playerJoined
+     */
     @Override
-    public void gameJoined() {
-        playerJoined = true;
+    public void setPlayerJoined(boolean toValue) {
+        playerJoined = toValue;
     }
     private Camera getCamera() {
         return gameRenderer.getCamera();
@@ -122,6 +128,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
     }
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreen(final Screen screen, final CallbackInfo ci) {
+        SetScreenEvent.onSetScreen(screen, ci);
         //Failsafe
         if (screen == null) {
             isBuilding = false;
@@ -222,7 +229,7 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                     if (oldChunkBuildCountStorage == chunkBuildCount)
                         buildingWarnings++;
 
-                    if ((buildingWarnings >= chunkTryLimit || preparationWarnings >= chunkTryLimit) && !FLMath.getForceLoadSafe()) {
+                    if ((buildingWarnings >= chunkTryLimit || preparationWarnings >= chunkTryLimit) && !FLMath.getForceBuild()) {
                         buildingWarnings = 0;
                         preparationWarnings = 0;
                         log("Pre-loading is taking too long! Stopping...");
@@ -234,7 +241,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         final int spamLimit = 2;
                         if (preparationWarnings > 0) {
                             if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk preparation would've stopped");
+                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
+                                if (!getForceBuild()) {
+                                    log("Had it be " + chunkTryLimit + " time(s) in a row, pre-loading would've stopped");
+                                }
                                 if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkLoadedCount > oldChunkLoadedCountStorage) {
@@ -243,7 +253,10 @@ public abstract class MinecraftClientMixin implements MinecraftClientMixinInterf
                         }
                         if (buildingWarnings > 0) {
                             if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row! Had it be " + chunkTryLimit + " time(s) in a row, chunk building would've stopped");
+                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
+                                if (!getForceBuild()) {
+                                    log("Had it be " + chunkTryLimit + " time(s) in a row, pre-loading would've stopped");
+                                }
                                 if (getDebug()) logPreRendering(chunkLoadedCount);
                             }
                             if (chunkBuildCount > oldChunkBuildCountStorage) {

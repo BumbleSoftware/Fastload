@@ -22,6 +22,6 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void setPlayerReady(CallbackInfo ci) {
         if (FLMath.getDebug()) FastLoad.LOGGER.info("playerLoaded = true");
-        ((MinecraftClientMixinInterface)client).canPlayerLoad();
+        ((MinecraftClientMixinInterface)client).setShouldLoad(true);
     }
 }
