@@ -17,7 +17,7 @@ import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
 
 public class FLConfig {
-    public static void loadClass() {}
+    public static void init() {}
 
     //Init Vars
     private static final Properties properties;
