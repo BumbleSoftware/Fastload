@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoinEvent(GameJoinS2CPacket packet, CallbackInfo ci) {
-        FLEvents.PLAYER_JOIN_EVENT.fireEvent(new FLEvents.RecordTypes.PlayerJoinEventContext(packet, ci));
+        FLEvents.PLAYER_JOIN_EVENT.fireEvent(new FLEvents.RecordTypes.PlayerJoinEventContext(packet));
     }
 }

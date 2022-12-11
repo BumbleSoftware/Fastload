@@ -1,7 +1,5 @@
 package io.github.bumblesoftware.fastload.api.events;
 
-import java.util.ArrayList;
-
 /**
  * Implements AbstractEvent and allows for a record to be parsed as the type so that the params are 100% dynamic.
  * In order to register your params, just make a record with a header containing your desired params. Then you simply need to
@@ -13,7 +11,7 @@ public final class GenericEvent<T extends Record> implements AbstractEvent<T> {
      * Register() to add your implementation to the arraylist of implementations that get iterated and called
      * upon the event firing.
      */
-    private final ArrayList<EventArgs<T>> EVENT_HOLDER = new ArrayList<>();
+    private final EventHolder<T> EVENT_HOLDER = newHolder();
 
     /**
      * Simply provides the necessary field so that the interface can access it. It is not in there
@@ -22,7 +20,7 @@ public final class GenericEvent<T extends Record> implements AbstractEvent<T> {
      * work with the way this event is designed.
      */
     @Override
-    public ArrayList<EventArgs<T>> getEventHolder() {
+    public EventHolder<T> getEventHolder() {
         return EVENT_HOLDER;
     }
 }

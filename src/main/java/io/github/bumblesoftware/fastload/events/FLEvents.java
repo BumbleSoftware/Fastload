@@ -16,15 +16,15 @@ public class FLEvents {
     public static final GenericEvent<Empty> CLIENT_PLAYER_INIT_EVENT = new GenericEvent<>();
     public static final GenericEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new GenericEvent<>();
 
-    /**
+    /**w
      * Record that holds important params and packages it in one object so that params are consistent among
      * multiple events
      */
     public static class RecordTypes {
         public record Empty() {}
         public record RenderTickEventContext(boolean tick) {}
+        public record PlayerJoinEventContext(GameJoinS2CPacket packet) {}
         public record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
         public record PauseMenuEventContext(boolean pause, CallbackInfo ci) {}
-        public record PlayerJoinEventContext(GameJoinS2CPacket packet, CallbackInfo ci) {}
     }
 }

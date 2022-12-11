@@ -1,10 +1,8 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.FLTimer;
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
-import io.github.bumblesoftware.fastload.events.FLEvents;
 import io.github.bumblesoftware.fastload.init.FastLoad;
+import io.github.bumblesoftware.fastload.util.FLTimer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
@@ -12,6 +10,7 @@ import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.render.Camera;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.events.FLEvents.*;
 
 /**
  * Fastload's client handling, based upon the abstract events.
@@ -74,10 +73,6 @@ public final class FLClientHandler {
      * Stores the amount of warnings (or chunk tries) for terrain building
      */
     private static int buildingWarnings = 0;
-    /**
-     * Timer storage, set to any value above 0 to use it
-     */
-    private static FLTimer timer = new FLTimer(0);
 
     /**
      * Camera instance getter
@@ -132,7 +127,7 @@ public final class FLClientHandler {
             }
             isBuilding = false;
             if (!client.windowFocused) {
-                timer = new FLTimer(10);
+                FLTimer.setTime(20);
                 if (getDebug()) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
             assert client.player != null;
@@ -152,19 +147,20 @@ public final class FLClientHandler {
      * Event Registration for fastload
      */
     private static void registerEvents() {
-        //Player is ready when it initialises
-        FLEvents.CLIENT_PLAYER_INIT_EVENT.register(eventContext -> {
-            if (FLMath.getDebug()) FastLoad.LOGGER.info("shouldLoad = true");
-            playerReady = true;
-        });
 
-        FLEvents.PLAYER_JOIN_EVENT.register(eventContext -> {
-            if (FLMath.getDebug()) FastLoad.LOGGER.info("playerJoined = true");
+        //Player is ready when it initialises
+        CLIENT_PLAYER_INIT_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
+            if (getDebug()) FastLoad.LOGGER.info("shouldLoad = true");
+            playerReady = true;
+        }, 1);
+
+        PLAYER_JOIN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
+            if (getDebug()) FastLoad.LOGGER.info("playerJoined = true");
             FLClientHandler.playerJoined = true;
-        });
+        }, 1);
 
         //Null Screen
-        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
+        SET_SCREEN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             if (eventContext.screen() == null) {
                 isBuilding = false;
                 playerReady = false;
@@ -172,35 +168,34 @@ public final class FLClientHandler {
                 showRDDOnce = false;
                 oldPitch = null;
             }
-        });
-
+        }, 1);
 
         // Game Menu Event to stop it from interfering with Fastload's stuff
-        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
-            if (timer.isReady() && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
-                if (getDebug()) log(Integer.toString(timer.getTime()));
+        SET_SCREEN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
+            if (FLTimer.isReady() && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
+                if (getDebug()) log(Integer.toString(FLTimer.getTime()));
                 eventContext.ci().cancel();
                 client.setScreen(null);
             }
-        });
+        },1);
 
         //Debug when BuildingTerrainScreen is initiated
-        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
+        SET_SCREEN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             if (eventContext.screen() instanceof BuildingTerrainScreen && getDebug()) {
                 log("Successfully Initiated Building Terrain");
             }
-        });
+        }, 1);
 
         //Cancels Progress screen when FORCE_CLOSE_LOADING_SCREEN is true. Makes things slightly faster
-        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
+        SET_SCREEN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             if (eventContext.screen() instanceof ProgressScreen && getCloseUnsafe()) {
                 eventContext.ci().cancel();
                 if (getDebug()) log("Progress Screen Successfully Cancelled");
             }
-        });
+        }, 2);
 
         //It's just magic
-        FLEvents.SET_SCREEN_EVENT.register(eventContext -> {
+        SET_SCREEN_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             if (eventContext.screen() instanceof DownloadingTerrainScreen && playerReady && playerJoined) {
                 if (getDebug()) log("Downloading Terrain Accessed!");
                 playerReady = false;
@@ -214,15 +209,16 @@ public final class FLClientHandler {
                     client.setScreen(new BuildingTerrainScreen());
                 } else if (getCloseUnsafe()) {
                     playerJoined = false;
-                    eventContext.ci().cancel();
                     if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
+                    eventContext.ci().cancel();
                     client.setScreen(null);
+                    FLTimer.setTime(20);
                 }
             }
-        });
+        }, 1);
 
         //Redundancy impl for pause menu cancellation as it this shit's unpredictable
-        FLEvents.PAUSE_MENU_EVENT.register(eventContext -> {
+        PAUSE_MENU_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             if (justLoaded) {
                 if (client.windowFocused) justLoaded = false;
                 else {
@@ -231,10 +227,10 @@ public final class FLClientHandler {
                     if (getDebug()) log("Pause Menu Cancelled");
                 }
             }
-        });
+        }, 1);
 
         //More magic
-        FLEvents.RENDER_TICK_EVENT.register(eventContext -> {
+        RENDER_TICK_EVENT.register((eventContext, abstractEvent, eventArgs) -> {
             // Logs render distance
             if (showRDDOnce) {
                 logRenderDistanceDifference();
@@ -257,7 +253,7 @@ public final class FLClientHandler {
                     int chunkLoadedCount = client.world.getChunkManager().getLoadedChunkCount();
                     int chunkBuildCount = client.worldRenderer.getCompletedChunkCount();
                     double FOV = client.options.getFov().getValue();
-                    double chunkBuildCountGoal = (FOV/360) * getPreRenderArea().doubleValue();
+                    double chunkBuildCountGoal = (FOV /180) * getPreRenderArea().doubleValue();
                     final int oldPreparationWarningCache = preparationWarnings;
                     final int oldBuildingWarningCache = buildingWarnings;
 
@@ -272,7 +268,7 @@ public final class FLClientHandler {
                         if (oldChunkBuildCountStorage == chunkBuildCount)
                             buildingWarnings++;
 
-                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit()) && !FLMath.getForceBuild()) {
+                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit()) && !getForceBuild()) {
                             buildingWarnings = 0;
                             preparationWarnings = 0;
                             log("Pre-loading is taking too long! Stopping...");
@@ -320,6 +316,6 @@ public final class FLClientHandler {
                     }
                 }
             }
-        });
+        }, 10);
     }
 }

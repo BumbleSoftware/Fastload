@@ -11,7 +11,6 @@ import net.minecraft.text.Text;
 
 import static io.github.bumblesoftware.fastload.config.screen.FLColourConstants.white;
 
-@SuppressWarnings("DanglingJavadoc")
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
     private final Text SCREEN_TEMPLATE;
@@ -27,24 +26,26 @@ public class BuildingTerrainScreen extends Screen {
     private Integer getBuiltChunkCount() {
         return client.world != null ? client.worldRenderer.getCompletedChunkCount() : 0;
     }
+
+    /**
+     * Texts to draw
+     */
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        /**
-         * Translatable texts
-         */
         SCREEN_NAME = Text.translatable("menu.generatingTerrain");
         SCREEN_TEMPLATE = Text.translatable("fastload.screen.buildingTerrain.template");
         BUILDING_CHUNKS = Text.translatable("fastload.screen.buildingTerrain.building");
         PREPARING_CHUNKS = Text.translatable("fastload.screen.buildingTerrain.preparing");
     }
+
+    /**
+     * Renders screen texts
+     */
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
-        /**
-         *  Progress parameters
-         */
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue() / 360;
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * client.options.getFov().getValue() / 180;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }

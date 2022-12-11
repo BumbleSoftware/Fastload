@@ -96,8 +96,7 @@ public class FLMath {
         return getSquareArea(true, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
     }
     public static Integer getPreRenderArea() {
-        int i = getPreRenderRadius() / 2;
-        return getCircleArea(getPreRenderRadius()).intValue() - i * i;
+        return getCircleArea(getPreRenderRadius()).intValue();
     }
 
 
