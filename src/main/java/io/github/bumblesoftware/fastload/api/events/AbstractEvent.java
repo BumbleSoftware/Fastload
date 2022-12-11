@@ -99,7 +99,7 @@ public interface AbstractEvent<T extends Record> {
                 @Nullable T eventContext,
                 @Nullable AbstractEvent<T> abstractParent,
                 @Nullable Object closer,
-                @NotNull EventArgs<T> eventArgs)
+                @NotNull EventRecursiveArgs<T> eventArgs)
         {
             if (closer == null) {
                 return null;
@@ -130,7 +130,7 @@ public interface AbstractEvent<T extends Record> {
                 @Nullable T eventContext,
                 @Nullable AbstractEvent<T> abstractParent,
                 @Nullable Object closer,
-                @NotNull EventArgs<T> eventArgs
+                @NotNull EventRecursiveArgs<T> eventArgs
         );
     }
 
