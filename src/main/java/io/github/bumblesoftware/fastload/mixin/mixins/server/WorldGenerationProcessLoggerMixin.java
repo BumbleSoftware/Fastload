@@ -8,6 +8,9 @@ import org.spongepowered.asm.mixin.injection.*;
 import net.minecraft.server.WorldGenerationProgressLogger;
 
 
+/**
+ * Fixes the progress logger to watch the new amount of chunks to be pregenerated
+ */
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)

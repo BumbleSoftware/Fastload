@@ -27,6 +27,10 @@ public class BuildingTerrainScreen extends Screen {
     private Integer getBuiltChunkCount() {
         return client.world != null ? client.worldRenderer.getCompletedChunkCount() : 0;
     }
+
+    /**
+     * Texts to draw
+     */
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
         SCREEN_NAME = new TranslatableText("menu.generatingTerrain");
@@ -34,11 +38,15 @@ public class BuildingTerrainScreen extends Screen {
         BUILDING_CHUNKS = new TranslatableText("fastload.screen.buildingTerrain.building");
         PREPARING_CHUNKS = new TranslatableText("fastload.screen.buildingTerrain.preparing");
     }
+
+    /**
+     * Renders screen texts
+     */
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackgroundTexture(0);
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + (int) (FLMath.getPreRenderArea() * client.options.fov / 360);
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * (int)client.options.fov / 180;
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             FastLoad.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }
@@ -82,10 +90,18 @@ public class BuildingTerrainScreen extends Screen {
 
         super.render(matrices, mouseX, mouseY, delta);
     }
+
+    /**
+     * Fastload determines when to bail, not the user
+     */
     @Override
     public boolean shouldCloseOnEsc() {
         return false;
     }
+
+    /**
+     * Permits the server to keep ticking
+     */
     @Override
     public boolean shouldPause() {
         return false;

@@ -2,8 +2,8 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import io.github.bumblesoftware.fastload.init.FastLoad;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
 import net.minecraft.client.option.Option;
@@ -16,33 +16,47 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.FLConfig.storeProperty;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FLModMenuButtons {
-    private static final Map<String, String> storage = new HashMap<>();
+    /**
+     *  This just stores the .properties address in order by method call. This is done in order
+     *  to make it safe to iterate through the values in order to write it to disk.
+     */
+    private static final Map<String, String> addressStorage = new HashMap<>();
     private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
 
     private static void putStorage(String address, String value) {
-        storage.put(address, value);
+        addressStorage.put(address, value);
     }
     private static String getStorage(String address) {
-        return storage.get(address);
+        return addressStorage.get(address);
     }
 
+
+    /**
+     * Next 2 method just create the required buttons, nothing really special aside  from the local variables to ensure
+     * naming convention consistency
+     */
     public static Option getNewBoolButton(String type, boolean getConfig) {
         System.out.println(type + ":" + getConfig);
-        storage.putIfAbsent(type, Boolean.toString(getConfig));
+        addressStorage.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
                 new TranslatableText(FLB + type + ".tooltip"),
                 gameOptions -> getConfig,
-                (gameOptions, option, value) -> FLConfig.storeProperty(type, value.toString())
+                (gameOptions, option, value) -> storeProperty(type, value.toString())
         );
     }
+    /**
+     * SimpleVec2i is just a simple class in package: io.github.bumblesoftware.fastload.extensions that holds two variables
+     * as it doesn't make sense for min and maxes to be seperated. Refer to the class for more info!
+     */
     public static Option getNewSlider(String type, MinMaxHolder holder , int defVal) {
         int max = holder.max();
         int min = holder.min();
-        storage.putIfAbsent(type, Integer.toString(defVal));
+        addressStorage.putIfAbsent(type, Integer.toString(defVal));
         return new DoubleOption(
                 FLB + type,
                 min,
@@ -69,9 +83,8 @@ public class FLModMenuButtons {
     }
 
     /**
-     * Refer to DefaultConfig.propertyKeys.add[] for arrangement of this array!
+     * Options getter for screens that use this
      */
-
     public static Option[] asOptions() {
         Option[] buttons = {
                 getNewBoolButton(debug(), getDebug()),

@@ -10,6 +10,9 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
+/**
+ * Initialised Fastload's config screen
+ */
 public class FLConfigScreen extends SimpleOptionsScreen {
     private static final Text title = new TranslatableText("fastload.screen.config");
     private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -25,3 +28,4 @@ public class FLConfigScreen extends SimpleOptionsScreen {
         }));
     }
 }
+

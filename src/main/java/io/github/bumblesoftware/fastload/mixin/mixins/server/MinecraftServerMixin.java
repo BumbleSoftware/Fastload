@@ -14,8 +14,11 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenRadi
 * The BumbleSoftware team modified the code to make this possible.
 */
 
+/**
+ * Used to change how many chunks should load at 441.
+ */
 @Mixin(MinecraftServer.class)
-public abstract class MinecraftServerMixin {
+public class MinecraftServerMixin {
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {

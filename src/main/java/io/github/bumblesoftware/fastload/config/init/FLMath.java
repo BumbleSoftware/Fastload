@@ -96,8 +96,7 @@ public class FLMath {
         return getSquareArea(true, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
     }
     public static Integer getPreRenderArea() {
-        int i = getPreRenderRadius() / 2;
-        return getCircleArea(getPreRenderRadius()).intValue() - i * i;
+        return getCircleArea(getPreRenderRadius()).intValue();
     }
 
 
@@ -108,7 +107,7 @@ public class FLMath {
     public static Boolean getCloseSafe() {
         return getPreRenderRadius() > 0;
     }
-    public static Boolean getForceLoadSafe() {
+    public static Boolean getForceBuild() {
         return getChunkTryLimit() >= 1000;
     }
 }

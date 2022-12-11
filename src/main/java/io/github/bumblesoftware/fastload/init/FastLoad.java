@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.init;
 
+import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
@@ -19,9 +20,14 @@ public class FastLoad implements ModInitializer {
 	private static String loggableString(String key, String extra) {
 		return key.toUpperCase() + "_" + extra.toUpperCase() + ": ";
 	}
+
+	/**
+	 * Logs config at start
+	 */
 	@Override
 	public void onInitialize() {
-		FLConfig.loadClass();
+		FLClientHandler.init();
+		FLConfig.init();
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
 			LOGGER.info(loggableString(tryLimit()) + getChunkTryLimit());
 			LOGGER.info(loggableString(unsafeClose()) + getCloseUnsafe().toString().toUpperCase());
