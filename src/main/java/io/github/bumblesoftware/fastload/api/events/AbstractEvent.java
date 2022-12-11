@@ -41,6 +41,7 @@ public interface AbstractEvent<T extends Record> {
             getEventHolder().priorityHolder.add(priority);
     }
 
+    @SuppressWarnings("unused")
     default void registerRecursive(EventRecursiveArgs<T> eventContext, long priority) {
         register(eventContext, priority);
     }
@@ -93,6 +94,8 @@ public interface AbstractEvent<T extends Record> {
          * Provides event params. Supplies the instance of EventArgs in order to allow for complex recursion. Furthermore,
          * AbstractEvent is supplied to dynamically register and remove events with ease.
          */
+
+        @SuppressWarnings("unused")
         default EventArgs<T> recurse(
                 @Nullable T eventContext,
                 @Nullable AbstractEvent<T> abstractParent,
