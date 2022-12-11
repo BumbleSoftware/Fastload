@@ -19,15 +19,6 @@ public interface AbstractEvent<T extends Record> {
      */
     EventHolder<T> getEventHolder();
 
-
-
-    /**
-     * Returns a new event holder
-     */
-    default EventHolder<T> newHolder() {
-        return new EventHolder<>(new HashMap<>(), new ArrayList<>());
-    }
-
     /**
      *  Registers by adding the given EventArgs impl to the arraylist that stores all impl. This is the method
      *  that gets called to add your custom method body off the event.
@@ -115,7 +106,9 @@ public interface AbstractEvent<T extends Record> {
     }
 
     /**
-     * EventArgs but the functional method is the recursive alternative.
+     * Extends EventArgs and overrides the method in order to make the recursive one the lambda. It extends EventArgs and is not abstract
+     * simply because it makes it safe to pass this interface where EventArgs would normally be passed. It also allows access to both calls
+     * regardless of instance, which having to do instance checks to call the methods.
      */
     @FunctionalInterface
     interface EventRecursiveArgs<T extends Record> extends EventArgs<T> {
@@ -134,9 +127,34 @@ public interface AbstractEvent<T extends Record> {
         );
     }
 
-
     /**
      * Holds the necessary params in order to appropriately manage EventArgs and their priorities.
      */
     record EventHolder<T extends Record>(HashMap<Long, ArrayList<EventArgs<T>>> argsHolder, ArrayList<Long> priorityHolder) {}
+
+    /**
+     * Implements AbstractEvent and allows for a record to be parsed as the type so that the params are 100% dynamic.
+     * In order to register your params, just make a record with a header containing your desired params. Then you simply need to
+     * register this object with your custom record as the generic type, and there's your custom event!
+     */
+    final class DefaultEvent<T extends Record> implements AbstractEvent<T> {
+
+        /**
+         * Simple field that stores an implementation of the args() method from the EventArgs interface. Use
+         * Register() to add your implementation to the arraylist of implementations that get iterated and called
+         * upon the event firing.
+         */
+        public final EventHolder<T> EVENT_HOLDER = new EventHolder<>(new HashMap<>(), new ArrayList<>());
+
+        /**
+         * Simply provides the necessary field so that the interface can access it. It is not in there
+         * so that it can be private, prevented people from mucking around with it and breaking stuff.
+         * The field is not supposed be accessed. Plus fields have to be static when in an interface, which doesn't
+         * work with the way this event is designed.
+         */
+        @Override
+        public EventHolder<T> getEventHolder() {
+            return EVENT_HOLDER;
+        }
+    }
 }
