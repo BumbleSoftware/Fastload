@@ -15,8 +15,7 @@ import java.util.HashMap;
 @FunctionalInterface
 public interface AbstractEvent<T extends Record> {
     /**
-     * This abstract method requires a ArrayList Field in order to store all the  event registrations attached to
-     * your given method.
+     * This abstract method requires a field to be returned so that it can store all event registrations.
      */
     EventHolder<T> getEventHolder();
 
