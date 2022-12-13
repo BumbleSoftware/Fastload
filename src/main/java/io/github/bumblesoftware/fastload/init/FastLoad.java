@@ -2,6 +2,7 @@ package io.github.bumblesoftware.fastload.init;
 
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
+import io.github.bumblesoftware.fastload.events.FLEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -26,6 +27,7 @@ public class FastLoad implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
+		FLEvents.init();
 		FLClientHandler.init();
 		FLConfig.init();
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
