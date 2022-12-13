@@ -1,9 +1,16 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
+import io.github.bumblesoftware.fastload.events.FLEvents;
+import io.github.bumblesoftware.fastload.events.FLEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.function.BooleanSupplier;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenArea;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenRadius;
@@ -19,7 +26,6 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenRadi
  */
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
-
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
         return getPregenArea();
@@ -27,5 +33,10 @@ public class MinecraftServerMixin {
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
         return getPregenRadius(false);
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        FLEvents.SERVER_TICK_EVENT.fireEvent(new TickEventContext(shouldKeepTicking.getAsBoolean()));
     }
 }
