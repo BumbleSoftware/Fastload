@@ -1,7 +1,7 @@
-package io.github.bumblesoftware.fastload.events;
+package io.github.bumblesoftware.fastload.config;
 
 import io.github.bumblesoftware.fastload.api.events.EventFactory;
-import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.*;
+import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

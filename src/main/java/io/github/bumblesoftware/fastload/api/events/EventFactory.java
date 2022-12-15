@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.api.events;
 
-import io.github.bumblesoftware.fastload.events.FLClientEvents;
+import io.github.bumblesoftware.fastload.config.FLClientEvents;
 
 import java.util.ArrayList;
 import java.util.Comparator;

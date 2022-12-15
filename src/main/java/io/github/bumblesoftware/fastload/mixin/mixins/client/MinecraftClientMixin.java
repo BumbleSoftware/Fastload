@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.events.FLClientEvents;
-import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.PauseMenuEventContext;
-import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.SetScreenEventContext;
-import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.TickEventContext;
+import io.github.bumblesoftware.fastload.config.FLClientEvents;
+import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.PauseMenuEventContext;
+import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.SetScreenEventContext;
+import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;

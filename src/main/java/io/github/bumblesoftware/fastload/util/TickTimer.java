@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.util;
 
 import io.github.bumblesoftware.fastload.api.events.EventFactory;
-import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.TickEventContext;
+import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.TickEventContext;
 
 import static io.github.bumblesoftware.fastload.client.FLClientHandler.log;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getDebug;
