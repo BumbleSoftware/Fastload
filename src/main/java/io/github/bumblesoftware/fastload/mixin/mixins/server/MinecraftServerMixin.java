@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
-import io.github.bumblesoftware.fastload.events.FLEvents;
-import io.github.bumblesoftware.fastload.events.FLEvents.RecordTypes.TickEventContext;
+import io.github.bumblesoftware.fastload.events.FLClientEvents;
+import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,6 +38,6 @@ public class MinecraftServerMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        FLEvents.SERVER_TICK_EVENT.fireEvent(new TickEventContext(shouldKeepTicking.getAsBoolean()));
+        FLClientEvents.SERVER_TICK_EVENT.fireEvent(new TickEventContext(shouldKeepTicking.getAsBoolean()));
     }
 }

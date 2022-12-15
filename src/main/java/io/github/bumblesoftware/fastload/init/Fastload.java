@@ -1,8 +1,6 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
-import io.github.bumblesoftware.fastload.events.FLEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -12,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
-public class FastLoad implements ModInitializer {
+public class Fastload implements ModInitializer {
 	public static final String NAMESPACE = "Fastload";
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 	private static String loggableString(String key) {
@@ -27,8 +25,6 @@ public class FastLoad implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
-		FLEvents.init();
-		FLClientHandler.init();
 		FLConfig.init();
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
 			LOGGER.info(loggableString(tryLimit()) + getChunkTryLimit());

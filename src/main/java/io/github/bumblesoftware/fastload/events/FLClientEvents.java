@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.events;
 
 import io.github.bumblesoftware.fastload.api.events.EventFactory;
-import io.github.bumblesoftware.fastload.events.FLEvents.RecordTypes.*;
+import io.github.bumblesoftware.fastload.events.FLClientEvents.RecordTypes.*;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Stores important events based on {@link EventFactory AbstractEventFactory}
  * that fastload uses. Feel free to make your own events by using this as an example.
  */
-public class FLEvents {
+public class FLClientEvents {
     public static void init() {}
 
     public static final EventFactory<Empty> CLIENT_PLAYER_INIT_EVENT = new EventFactory<>();
@@ -20,7 +20,7 @@ public class FLEvents {
     public static final EventFactory<PauseMenuEventContext> PAUSE_MENU_EVENT = new EventFactory<>();
     public static final EventFactory<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new EventFactory<>();
     /**
-     * Stores the default record types for {@link FLEvents}
+     * Stores the default record types for {@link FLClientEvents}
      */
     public static class RecordTypes {
         public record Empty() {}

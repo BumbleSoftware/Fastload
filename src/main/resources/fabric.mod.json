@@ -23,7 +23,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.bumblesoftware.fastload.init.FastLoad"
+      "io.github.bumblesoftware.fastload.init.Fastload"
+    ],
+    "client" : [
+      "io.github.bumblesoftware.fastload.init.FastloadClient"
     ],
     "modmenu": [
       "io.github.bumblesoftware.fastload.config.modmenu.register.FLModMenuIntegration"

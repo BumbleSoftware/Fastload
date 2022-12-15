@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.init.FastLoad;
+import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
@@ -25,7 +25,7 @@ public class FLModMenuButtons {
      *  to make it safe to iterate through the values in order to write it to disk.
      */
     private static final Map<String, String> addressStorage = new HashMap<>();
-    private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
+    private static final String FLB = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     private static void putStorage(String address, String value) {
         addressStorage.put(address, value);
