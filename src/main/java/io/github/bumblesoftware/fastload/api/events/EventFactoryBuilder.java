@@ -1,11 +1,12 @@
 package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.api.events.EventProviders.*;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
 
 /**
  * An extension of {@link EventFactory} which adds builders to override methods with custom implementations via
  * {@link EventProviders}
- * @param <T> used for custom event params. Refer to {@link io.github.bumblesoftware.fastload.events.FLEvents FLEvents}
+ * @param <T> used for custom event params. Refer to {@link FLClientEvents FLEvents}
  *           for examples.
  */
 @SuppressWarnings("unused")

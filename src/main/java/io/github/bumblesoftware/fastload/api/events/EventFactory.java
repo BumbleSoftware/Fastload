@@ -1,5 +1,7 @@
 package io.github.bumblesoftware.fastload.api.events;
 
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,11 +10,11 @@ import java.util.HashMap;
 /**
  * EventFactory is a simple but powerful tool. It's easy to use, allows for recursion & dynamic registration.
  * Examples of how to register events are found in {@link io.github.bumblesoftware.fastload.client.FLClientHandler
- * FlClientHandler} & examples of instantiation are found in {@link io.github.bumblesoftware.fastload.events.FLEvents
+ * FlClientHandler} & examples of instantiation are found in {@link FLClientEvents
  * FLEvents}. Since it's 100% abstract, it can be used anywhere, ranging from mixins and even from other events
  * including ones of this type. To use this, see javadocs for individual things inside this to see what they do.
  *
- * @param <T> used for custom event params. Refer to {@link io.github.bumblesoftware.fastload.events.FLEvents FLEvents}
+ * @param <T> used for custom event params. Refer to {@link FLClientEvents FLEvents}
  *           for examples.
  */
 public class EventFactory<T extends Record> {
@@ -110,7 +112,7 @@ public class EventFactory<T extends Record> {
      * Common storage type for {@link EventFactory AbstractEventFactory}
      * @param argsHolder Holds an array of {@link EventArgs} attached to a key of a given priority.
      * @param priorityHolder Holds all the priorities that are used to access a specific arraylist of events to iterate through.
-     * @param <T> used for custom event params. Refer to {@link io.github.bumblesoftware.fastload.events.FLEvents FLEvents}
+     * @param <T> used for custom event params. Refer to {@link FLClientEvents FLEvents}
      *           for examples.
      */
     protected record EventHolder<T extends Record>(HashMap<Long, ArrayList<EventArgs<T>>> argsHolder, ArrayList<Long> priorityHolder) {}

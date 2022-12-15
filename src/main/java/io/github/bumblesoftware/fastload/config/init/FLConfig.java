@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.config.init;
 
+import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
-import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.BufferedWriter;
@@ -42,7 +42,7 @@ public class FLConfig {
 
     static {
         properties = new Properties();
-        path = FabricLoader.getInstance().getConfigDir().resolve(FastLoad.NAMESPACE.toLowerCase() + ".properties");
+        path = FabricLoader.getInstance().getConfigDir().resolve(Fastload.NAMESPACE.toLowerCase() + ".properties");
 
         if (Files.isRegularFile(path)) {
             try (InputStream in = Files.newInputStream(path, StandardOpenOption.CREATE)) {
@@ -63,12 +63,12 @@ public class FLConfig {
 
     }
     private static void logError(String key) {
-        FastLoad.LOGGER.error("Failed to parse variable '" + key + "' in " + FastLoad.NAMESPACE + "'s config, generating a new one!");
+        Fastload.LOGGER.error("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, generating a new one!");
     }
 
     private static void write() {
         try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
-            properties.store(out,  FastLoad.NAMESPACE +  " Configuration File");
+            properties.store(out,  Fastload.NAMESPACE +  " Configuration File");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,8 +2,8 @@ package io.github.bumblesoftware.fastload.config.modmenu.button;
 
 import com.mojang.serialization.Codec;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
-import io.github.bumblesoftware.fastload.init.FastLoad;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
@@ -20,7 +20,7 @@ public class FLModMenuButtons {
      *  to make it safe to iterate through the values in order to write it to disk.
      */
     private static final ArrayList<String> addressStorage = new ArrayList<>();
-    private static final String FLB = FastLoad.NAMESPACE.toLowerCase() + ".button.";
+    private static final String FLB = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     /**
      * This method is a thing because it's the only thing other classes would need in order to
