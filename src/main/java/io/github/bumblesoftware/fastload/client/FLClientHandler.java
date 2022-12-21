@@ -11,7 +11,7 @@ import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.render.Camera;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
-import static io.github.bumblesoftware.fastload.config.FLClientEvents.*;
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.*;
 
 /**
  * Fastload's client handling, based upon {@link EventFactory DefaultEventFactory}.

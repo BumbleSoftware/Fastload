@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.config.FLClientEvents;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

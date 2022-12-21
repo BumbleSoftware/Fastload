@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
-import io.github.bumblesoftware.fastload.config.FLClientEvents;
-import io.github.bumblesoftware.fastload.config.FLClientEvents.RecordTypes.TickEventContext;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
+import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.api.events;
 
-import io.github.bumblesoftware.fastload.config.FLClientEvents;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -93,14 +93,14 @@ public class EventFactory<T extends Record> {
 
         for (long priority : argsHolder.priorityHolder) {
             for (EventArgs<T> eventArgs : argsHolder.argsHolder.get(priority)) {
-                if (eventArgs == null) return;
+                if (eventArgs == null) continue;
                 eventArgs.recurse(eventContext, this, new Object(), eventArgs);
             }
         }
 
         for (long priority : eventsToRemove.priorityHolder)
             for (EventArgs<T> eventArgs : eventsToRemove.argsHolder.get(priority)) {
-                if (eventArgs == null) return;
+                if (eventArgs == null) continue;
                 argsHolder.argsHolder.get(priority).remove(eventArgs);
         }
 

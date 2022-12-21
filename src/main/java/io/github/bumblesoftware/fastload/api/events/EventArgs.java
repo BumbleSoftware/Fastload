@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.api.events;
 
-import io.github.bumblesoftware.fastload.config.FLClientEvents;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
 
 /**
  * Event args holds a specific implementation that is added to the main registry for {@link EventFactory
