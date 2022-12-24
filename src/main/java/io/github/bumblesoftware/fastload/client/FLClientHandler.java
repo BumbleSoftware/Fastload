@@ -145,6 +145,7 @@ public final class FLClientHandler {
             playerJoined = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
+            System.gc();
             client.setScreen(null);
         }
     }
@@ -219,6 +220,7 @@ public final class FLClientHandler {
                     if (getDebug()) log("Goal (Loaded Chunks): " + getPreRenderArea());
                     isBuilding = true;
                     client.setScreen(new BuildingTerrainScreen());
+                    System.gc();
                 } else if (getCloseUnsafe()) {
                     playerJoined = false;
                     if (getDebug()) log("Successfully Skipped Downloading Terrain Screen!");
