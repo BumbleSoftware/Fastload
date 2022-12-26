@@ -3,8 +3,8 @@ Specification-Title: fastload
 Specification-Vendor: AbdElAziz333
 Specification-Version: 1
 Implementation-Title: Fastload
-Implementation-Version: 2.4.0+1.19.2
+Implementation-Version: 2.6.9+1.19.3
 Implementation-Vendor: AbdElAziz333
-Implementation-Timestamp: 2022-11-23T14:55:16+0200
+Implementation-Timestamp: 2022-12-26T22:54:13+0200
 MixinConfigs: fastload.mixins.json
 
