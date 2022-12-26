@@ -14,15 +14,12 @@ import java.util.Properties;
 
 @SuppressWarnings("SameParameterValue")
 public class FLConfig {
-    public static void loadClass() {}
-
     //Config Variables
     protected static final int RAW_CHUNK_TRY_LIMIT;
     protected static final boolean CLOSE_LOADING_SCREEN_UNSAFELY;
     protected static final boolean DEBUG;
     protected static final int RAW_CHUNK_PREGEN_RADIUS;
     protected static final int RAW_PRE_RENDER_RADIUS;
-
 
     static {
         final Properties properties = new Properties();
@@ -52,7 +49,7 @@ public class FLConfig {
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
             comment.write("\n");
             comment.write("\n# Definitions");
-            comment.write("\n# 'chunk_try_limit' = how many times in a raw should the same count of loaded chunks be ignored before we cancel pre-rendering");
+            comment.write("\n# 'chunk_try_limit' = how many times in a row should the same count of loaded chunks be ignored before we cancel pre-rendering");
             comment.write("\n# There are no limits for this. Must be a positive Integer");
             comment.write("\n#");
             comment.write("\n# 'close_loading_screen_unsafely' = should skip 'Joining World', and 'Downloading Terrain'. Potentially can result in joining world before chunks are properly loaded");
@@ -73,6 +70,9 @@ public class FLConfig {
         }
     }
 
+    public static void loadClass() {
+    }
+
     private static void logError(String key) {
         FastLoad.LOGGER.error("Failed to parse variable '" + key + "' in Fastload's config, generating a new one!");
     }
@@ -89,9 +89,16 @@ public class FLConfig {
         }
     }
 
+    private static boolean parseBoolean(String string) {
+        if (string == null) throw new NumberFormatException("null");
+        if (string.trim().equalsIgnoreCase("true")) return true;
+        if (string.trim().equalsIgnoreCase("false")) return false;
+        throw new NumberFormatException(string);
+    }
+
     private static boolean getBoolean(Properties properties, Properties newProperties, String key, boolean def) {
         try {
-            final boolean b = Boolean.parseBoolean(properties.getProperty(key));
+            final boolean b = parseBoolean(properties.getProperty(key));
             newProperties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {

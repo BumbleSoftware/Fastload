@@ -14,7 +14,6 @@ public class FLMath {
 
     //Parsed Constants
     private static final int PARSED_PREGEN_RADIUS = parseMinMax(RAW_CHUNK_PREGEN_RADIUS, PREGEN_RADIUS_BOUND, 0);
-
     //RENDER_RADIUS// Cannot be parsed as parsing dynamically changes. No point in making it a field
     private static final int PARSED_CHUNK_TRY_LIMIT = Math.max(RAW_CHUNK_TRY_LIMIT, 1);
 
@@ -42,7 +41,6 @@ public class FLMath {
     }
 
     public static int getPregenRadius(boolean raw) {
-
         if (PARSED_PREGEN_RADIUS == 0) {
             return 1;
         }
@@ -58,14 +56,13 @@ public class FLMath {
     @SuppressWarnings("SameParameterValue")
     private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
         int i = toCalc * 2;
-
         if (!raw) {
             i++;
         }
 
         if (worldProgressTracker) {
-            i ++;
-            i ++;
+            i++;
+            i++;
         }
 
         return i * i;
@@ -98,7 +95,6 @@ public class FLMath {
         int i = getPreRenderRadius() / 2;
         return getCircleArea(getPreRenderRadius()).intValue() - i * i;
     }
-
 
     //Booleans
     public static Boolean getCloseUnsafe() {
