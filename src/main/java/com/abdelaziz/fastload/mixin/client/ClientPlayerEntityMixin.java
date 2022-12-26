@@ -1,0 +1,19 @@
+package com.abdelaziz.fastload.mixin.client;
+
+import com.abdelaziz.fastload.client.FLClientEvents;
+import net.minecraft.client.network.ClientPlayerEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+/**
+ * Sets playerLoaded to true when... player loads
+ */
+@Mixin(ClientPlayerEntity.class)
+public class ClientPlayerEntityMixin {
+    @Inject(method = "init", at = @At("HEAD"))
+    private void onClientPlayerEntityMixinInitEvent(CallbackInfo ci) {
+        FLClientEvents.CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLClientEvents.RecordTypes.Empty());
+    }
+}
