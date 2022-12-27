@@ -1,0 +1,32 @@
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "LGPL-3.0"
+
+issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
+
+[[mods]]
+modId = "fastload"
+version = "2.6.9+1.18.2"
+displayName = "Fastload"
+updateJSONURL = "https://github.com/BumbleSoftware/Fastload/raw/mc1.19.2/dev/updates.json"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/fastload"
+logoFile = "logo.png"
+credits = "AbdElAziz, FluffyBumblebees, JoostMSoftware, VidTu, kennytv"
+authors = "AbdElAziz"
+description = '''
+Load your world at lightning speed!
+'''
+
+[[dependencies.fastload]]
+modId = "forge"
+mandatory = true
+versionRange = "[40,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fastload]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18.2,)"
+ordering = "NONE"
+side = "BOTH"
