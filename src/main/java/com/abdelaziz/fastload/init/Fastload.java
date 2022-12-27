@@ -16,7 +16,7 @@ import static com.abdelaziz.fastload.config.init.FLMath.*;
 
 @Mod(Fastload.MOD_ID)
 public class Fastload {
-    public static final String MOD_ID = "fastload"
+    public static final String MOD_ID = "fastload";
     public static final String NAMESPACE = "Fastload";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 
