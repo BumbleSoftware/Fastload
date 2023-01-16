@@ -1,0 +1,28 @@
+{
+  "fastload.screen.buildingTerrain.template": "Hoàn thành / Mục tiêu",
+  "fastload.screen.buildingTerrain.building": "Xây dựng khối có thể nhìn thấy",
+  "fastload.screen.buildingTerrain.preparing": "Chuẩn bị tất cả các khối",
+
+  "fastload.screen.config": "Cấu hình tải nhanh",
+
+  "fastload.button.debug": "Chế độ gỡ lỗi",
+  "fastload.button.debug.tooltip": "Có nên tạo các bản sửa lỗi trong nhật ký không?",
+
+  "fastload.button.close_loading_screen_unsafely": "Đóng màn hình loading",
+  "fastload.button.close_loading_screen_unsafely.tooltip": "Fastload có nên đóng sớm giao diện địa hình tải mặc dù nó hơi không an toàn?",
+
+  "fastload.button.pre_render_radius": "Bán kính kết xuất trước",
+  "fastload.button.pre_render_radius.tooltip": "Nhiều khối trong một bán kính có nên được chuẩn bị và xây dựng trong quá trình kết xuất trước không? Giới hạn bởi khoảng cách hiển thị",
+  "fastload.button.pre_render_radius.min": "Vô hiệu hóa",
+  "fastload.button.pre_render_radius.max": "Tại sao vậy?",
+
+  "fastload.button.pregen_chunk_radius": "Bán kính được tạo trước",
+  "fastload.button.pregen_chunk_radius.tooltip": "Nhiều khối trong một bán kính sẽ được tạo trên máy chủ cho đến khi hoàn thành. Nên tương quan nghịch với bán kính trước khi kết xuất để có hiệu suất tối ưu",
+  "fastload.button.pregen_chunk_radius.min": "Ksyxis",
+  "fastload.button.pregen_chunk_radius.max": "Chunky",
+
+  "fastload.button.chunk_try_limit": "chặn giới hạn nỗ lực",
+  "fastload.button.chunk_try_limit.tooltip": "Số lượng khối giống nhau sẽ được phép trả về liên tiếp bao nhiêu lần trước khi kết xuất lại",
+  "fastload.button.chunk_try_limit.min": "NASA PC",
+  "fastload.button.chunk_try_limit.max": "Vô hạn"
+}
