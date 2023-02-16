@@ -9,10 +9,6 @@ import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
 
 public class FLMath {
 
-    //Constants
-    private static final double PI = 3.14159265358979323846;
-
-
     //Unchanged Constant Getters
     public static int getChunkTryLimit() {
         return parseMinMax(FLConfig.getChunkTryLimit(), DefaultConfig.getTryLimitBound());
@@ -65,7 +61,7 @@ public class FLMath {
         return i * i;
     }
     public static Double getCircleArea(int radius) {
-        return PI * radius * radius;
+        return Math.PI * radius * radius;
     }
 
 

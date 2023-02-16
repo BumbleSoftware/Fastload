@@ -22,7 +22,7 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 public class FLModMenuButtons {
     /**
      *  This just stores the .properties address in order by method call. This is done in order
-     *  to make it safe to iterate through the values in order to write it to disk.
+     *  to make it safe to onElement through the values in order to write it to disk.
      */
     private static final Map<String, String> addressStorage = new HashMap<>();
     private static final String FLB = Fastload.NAMESPACE.toLowerCase() + ".button.";

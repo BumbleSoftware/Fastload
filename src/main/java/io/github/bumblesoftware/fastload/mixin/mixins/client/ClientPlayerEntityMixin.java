@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.CLIENT_PLAYER_INIT_EVENT;
+
 /**
  * Sets playerLoaded to true when... player loads
  */
@@ -14,6 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayerEntityMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void onClientPlayerEntityMixinInitEvent(CallbackInfo ci) {
-        FLClientEvents.CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLClientEvents.RecordTypes.Empty());
+        CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLClientEvents.RecordTypes.Empty());
     }
 }

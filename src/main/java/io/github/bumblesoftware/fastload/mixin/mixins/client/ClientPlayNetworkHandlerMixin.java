@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.PLAYER_JOIN_EVENT;
+
 /**
  * Sets setPlayerJoined to true when the player joins the game
  */
@@ -15,6 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At("HEAD"))
     private void onGamedJoinEvent(GameJoinS2CPacket packet, CallbackInfo ci) {
-        FLClientEvents.PLAYER_JOIN_EVENT.fireEvent(new FLClientEvents.RecordTypes.PlayerJoinEventContext(packet));
+        PLAYER_JOIN_EVENT.fireEvent(new FLClientEvents.RecordTypes.PlayerJoinEventContext(packet));
     }
 }

@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
-import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
 
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SERVER_TICK_EVENT;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenArea;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenRadius;
 
@@ -38,6 +38,6 @@ public class MinecraftServerMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        FLClientEvents.SERVER_TICK_EVENT.fireEvent(new TickEventContext(shouldKeepTicking.getAsBoolean()));
+        SERVER_TICK_EVENT.fireEvent(new TickEventContext(shouldKeepTicking.getAsBoolean()));
     }
 }

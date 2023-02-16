@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.events.EventFactory;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
@@ -10,11 +9,11 @@ import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.render.Camera;
 
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.*;
 
 /**
- * Fastload's client handling, based upon {@link EventFactory DefaultEventFactory}.
+ * Fastload's client handling, based upon {@link AbstractThreadUnsafeEvent DefaultEventFactory}.
  */
 public final class FLClientHandler {
     public static void init() {
@@ -156,20 +155,20 @@ public final class FLClientHandler {
     private static void registerEvents() {
 
         //Player is ready when it initialises
-        CLIENT_PLAYER_INIT_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        CLIENT_PLAYER_INIT_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (getDebug()) Fastload.LOGGER.info("shouldLoad = true");
             playerReady = true;
             return null;
         });
 
-        PLAYER_JOIN_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        PLAYER_JOIN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (getDebug()) Fastload.LOGGER.info("playerJoined = true");
             FLClientHandler.playerJoined = true;
             return null;
         });
 
         //Null Screen
-        SET_SCREEN_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (eventContext.screen() == null) {
                 isBuilding = false;
                 playerReady = false;
@@ -181,7 +180,7 @@ public final class FLClientHandler {
         });
 
         // Game Menu Event to stop it from interfering with Fastload's stuff
-        SET_SCREEN_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (CLIENT_TIMER.isReady() && eventContext.screen() instanceof GameMenuScreen && !client.windowFocused) {
                 if (getDebug()) log(Integer.toString(CLIENT_TIMER.getTime()));
                 eventContext.ci().cancel();
@@ -191,7 +190,7 @@ public final class FLClientHandler {
         });
 
         //Debug when BuildingTerrainScreen is initiated
-        SET_SCREEN_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (eventContext.screen() instanceof BuildingTerrainScreen && getDebug()) {
                 log("Successfully Initiated Building Terrain");
             }
@@ -199,7 +198,7 @@ public final class FLClientHandler {
         });
 
         //Cancels Progress screen when FORCE_CLOSE_LOADING_SCREEN is true. Makes things slightly faster
-        SET_SCREEN_EVENT.register(2, (eventContext, abstractEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(2, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (eventContext.screen() instanceof ProgressScreen && getCloseUnsafe()) {
                 eventContext.ci().cancel();
                 if (getDebug()) log("Progress Screen Successfully Cancelled");
@@ -208,7 +207,7 @@ public final class FLClientHandler {
         });
 
         //It's just magic
-        SET_SCREEN_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (eventContext.screen() instanceof DownloadingTerrainScreen && playerReady && playerJoined) {
                 if (getDebug()) log("Downloading Terrain Accessed!");
                 playerReady = false;
@@ -233,7 +232,7 @@ public final class FLClientHandler {
         });
 
         //Redundancy impl for pause menu cancellation as it this shit's unpredictable
-        PAUSE_MENU_EVENT.register(1, (eventContext, abstractEvent, closer, eventArgs) -> {
+        PAUSE_MENU_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (justLoaded) {
                 if (client.windowFocused) justLoaded = false;
                 else {
@@ -246,7 +245,7 @@ public final class FLClientHandler {
         });
 
         //More magic
-        RENDER_TICK_EVENT.register(10, (eventContext, abstractEvent, closer, eventArgs) -> {
+        RENDER_TICK_EVENT.registerThreadUnsafe(10, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             // Logs render distance
             if (showRDDOnce) {
                 logRenderDistanceDifference();
