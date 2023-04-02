@@ -39,7 +39,7 @@ public class BuildingTerrainScreen extends Screen {
     }
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackgroundTexture(0);
+        this.renderBackgroundTexture(matrices);
         /**
          *  Progress parameters
          */
@@ -54,7 +54,7 @@ public class BuildingTerrainScreen extends Screen {
         PREPARED_PROGRESS_STORAGE = getLoadedChunkCount();
         BUILDING_PROGRESS_STORAGE = getBuiltChunkCount();
 
-        DrawableHelper.drawCenteredText(
+        DrawableHelper.drawCenteredTextWithShadow(
                 matrices,
                 this.textRenderer,
                 SCREEN_NAME,
@@ -62,7 +62,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.height / 2 - heightUpFromCentre,
                 white
         );
-        DrawableHelper.drawCenteredText(
+        DrawableHelper.drawCenteredTextWithShadow(
                 matrices,
                 this.textRenderer,
                 SCREEN_TEMPLATE,
@@ -70,7 +70,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.height / 2 - heightUpFromCentre + 30,
                 white);
 
-        DrawableHelper.drawCenteredText(
+        DrawableHelper.drawCenteredTextWithShadow(
                 matrices,
                 this.textRenderer,
                  PREPARING_CHUNKS.getString() + ": " + loadedChunksString,
@@ -78,7 +78,7 @@ public class BuildingTerrainScreen extends Screen {
                 height / 2 - heightUpFromCentre + 45,
                 white);
 
-        DrawableHelper.drawCenteredText(
+        DrawableHelper.drawCenteredTextWithShadow(
                 matrices,
                 this.textRenderer,
                 BUILDING_CHUNKS.getString() + ": " + builtChunksString,
