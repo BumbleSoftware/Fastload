@@ -32,7 +32,7 @@ public final class FLClientHandler {
     private static boolean justLoaded = false;
 
     /**
-     * Shows render-distance difference between set value & fastload's one if there is a difference.
+     * Shows getRenderKey-distance difference between set value & fastload's one if there is a difference.
      * Used to send a debug message.
      */
     private static boolean showRDDOnce = false;
@@ -76,14 +76,14 @@ public final class FLClientHandler {
     public static final TickTimer CLIENT_TIMER = new TickTimer(RENDER_TICK_EVENT);
 
     /**
-     * Logs Difference in Render and Pre-render distances
+     * Logs Difference in Render and Pre-getRenderKey distances
      */
     private static void logRenderDistanceDifference() {
         if (!getPreRenderRadius().equals(getPreRenderRadius(true)))
             log("Pre-rendering radius changed to "
                     + getPreRenderRadius() + " from " + getPreRenderRadius(true)
-                    + " to protect from chunks not loading past your given render distance. " +
-                    "To resolve this, please adjust your render distance accordingly");
+                    + " to protect from chunks not loading past your given getRenderKey distance. " +
+                    "To resolve this, please adjust your getRenderKey distance accordingly");
     }
 
     /**
@@ -221,7 +221,7 @@ public final class FLClientHandler {
 
         //More magic
         RENDER_TICK_EVENT.registerThreadUnsafe(10, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            // Logs render distance
+            // Logs getRenderKey distance
             if (showRDDOnce) {
                 logRenderDistanceDifference();
                 showRDDOnce = false;

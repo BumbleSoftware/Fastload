@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FLConfigScreenButtons119 {
@@ -70,11 +70,11 @@ public class FLConfigScreenButtons119 {
      * Designed to be iterable
      */
     protected static final SimpleOption<?>[] buttons = {
-            getNewBoolButton(debug(), isDebugEnabled()),
-            getNewBoolButton(unsafeClose(), isForceCloseEnabled()),
-            getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
-            getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
-            getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
+            getNewBoolButton(DEBUG_KEY, isDebugEnabled()),
+            getNewBoolButton(FORCE_CLOSE_KEY, isForceCloseEnabled()),
+            getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(), getPreRenderRadius()),
+            getNewSlider(PREGEN_RADIUS_KEY,getRadiusBound(), getPregenRadius(true)),
+            getNewSlider(TRY_LIMIT_KEY, FLMath.getChunkTryLimitBound(), getChunkTryLimit())
     };
 
     /**

@@ -3,59 +3,20 @@ package io.github.bumblesoftware.fastload.config.init;
 
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 
-public class DefaultConfig {
-    //Get Strings
-    public static class propertyKeys {
-        public static String pregen() {
-            return pregen(true) + "_radius";
-        }
-        public static String pregen(boolean raw) {
-            if (raw) {
-                return "pregen_chunk";
-            } else return pregen();
-        }
-        public static String render() {
-            return render(true) + "_radius";
-        }
-        public static String render(boolean raw) {
-            if (raw) {
-                return "pre_render";
-            } else return render();
-        }
-        public static String tryLimit() {
-            return "chunk_try_limit";
-        }
-        public static String unsafeClose() {
-            return "close_loading_screen_unsafely";
-        }
-        public static String debug() {
-            return "debug";
-        }
-    }
+public interface DefaultConfig {
+    String TRY_LIMIT_KEY = "chunk_try_limit";
+    String FORCE_CLOSE_KEY = "close_loading_screen_unsafely";
+    String DEBUG_KEY = "debug";
+    String PREGEN_RADIUS_KEY = "pregen_chunk_radius";
+    String PREGEN_AREA_KEY = "pregen_chunk_area";
+    String RENDER_RADIUS_KEY = "render_chunk_radius";
+    String RENDER_AREA_KEY = "render_chunk_area";
 
-
-    //Get Bounds
-    protected static MinMaxHolder getRawRadiusBound() {
-        return new MinMaxHolder(32, 0);
-    }
-    protected static MinMaxHolder getTryLimitBound() {
-        return new MinMaxHolder(1000, 1);
-    }
-
-    //Get Vars
-    protected static int getRenderRadius() {
-        return 0;
-    }
-    protected static int getPregenRadius() {
-        return 5;
-    }
-    protected static int getTryLimit() {
-        return 100;
-    }
-    protected static boolean getCloseUnsafely() {
-        return false;
-    }
-    protected static boolean getDebug() {
-        return false;
-    }
+    MinMaxHolder CHUNK_RADIUS_BOUND = new MinMaxHolder(32, 0);
+    MinMaxHolder TRY_LIMIT_BOUND = new MinMaxHolder(1000, 1);
+    int DEF_RENDER_RADIUS_VALUE = 0;
+    int DEF_PREGEN_RADIUS_VALUE = 5;
+    int DEF_TRY_LIMIT_VALUE = 100;
+    boolean DEF_FORCE_CLOSE_VALUE = false;
+    boolean DEF_DEBUG_VALUE = false;
 }

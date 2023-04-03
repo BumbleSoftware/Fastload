@@ -7,17 +7,14 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class Fastload implements ModInitializer {
 	public static final String NAMESPACE = "Fastload";
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
-	private static String loggableString(String key) {
+	private static String logKey(String key) {
 		return key.toUpperCase() + ": ";
-	}
-	private static String loggableString(String key, String extra) {
-		return key.toUpperCase() + "_" + extra.toUpperCase() + ": ";
 	}
 
 	/**
@@ -27,13 +24,13 @@ public class Fastload implements ModInitializer {
 	public void onInitialize() {
 		FLConfig.init();
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-			LOGGER.info(loggableString(tryLimit()) + getChunkTryLimit());
-			LOGGER.info(loggableString(unsafeClose()) + isForceCloseEnabled().toString().toUpperCase());
-			LOGGER.info(loggableString(render(true), "radius") + getPreRenderRadius());
-			LOGGER.info(loggableString(render(true), "area") + getPreRenderArea());
+			LOGGER.info(logKey(TRY_LIMIT_KEY) + getChunkTryLimit());
+			LOGGER.info(logKey(FORCE_CLOSE_KEY) + isForceCloseEnabled().toString().toUpperCase());
+			LOGGER.info(logKey(RENDER_RADIUS_KEY) + getPreRenderRadius());
+			LOGGER.info(logKey(RENDER_AREA_KEY) + getPreRenderArea());
 		}
-		LOGGER.info(loggableString(debug()) + isDebugEnabled().toString().toUpperCase());
-		LOGGER.info(loggableString(pregen(true), "radius") + getPregenRadius(true));
-		LOGGER.info(loggableString(pregen(true), "area") + getPregenArea());
+		LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
+		LOGGER.info(logKey(PREGEN_RADIUS_KEY) + getPregenRadius(true));
+		LOGGER.info(logKey(PREGEN_AREA_KEY) + getPregenArea());
 	}
 }

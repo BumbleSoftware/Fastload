@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.mixins.local;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
@@ -12,13 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 /**
  * Fixes the chunkMap so that 32 getPregenKey getRenderKey distance can work
  */
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = {
-        "1.18.2",
-        "1.19",
-        "1.19.1",
-        "1.19.2",
-        "1.19.3"
-}))
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = "=>1.19.4"))
 @Mixin(LevelLoadingScreen.class)
 public class LevelLoadingScreenMixin {
 
@@ -34,7 +28,7 @@ public class LevelLoadingScreenMixin {
         return 0;
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 4)
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"), index = 4)
     private int drawCorrectedText(int y) {
         if (FLMath.isDebugEnabled()) Fastload.LOGGER.info("Corrected LLS Text");
         return y - 60;

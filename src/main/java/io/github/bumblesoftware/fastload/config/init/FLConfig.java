@@ -14,7 +14,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
 public class FLConfig {
     public static void init() {}
@@ -25,19 +25,19 @@ public class FLConfig {
 
     //Config Variables
     protected static int getChunkTryLimit() {
-        return getInt(tryLimit(), getTryLimit(), getTryLimitBound());
+        return getInt(TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, TRY_LIMIT_BOUND);
     }
     protected static int getRawChunkPregenRadius() {
-        return getInt(pregen(), getPregenRadius(), getRawRadiusBound());
+        return getInt(PREGEN_RADIUS_KEY, DEF_PREGEN_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
     }
     protected static int getRawPreRenderRadius() {
-        return getInt(render(), getRenderRadius(), getRawRadiusBound());
+        return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
     }
     protected static boolean getCloseLoadingScreenUnsafely() {
-        return getBoolean(unsafeClose(), getCloseUnsafely());
+        return getBoolean(FORCE_CLOSE_KEY, DEF_FORCE_CLOSE_VALUE);
     }
     protected static boolean getRawDebug() {
-        return getBoolean(debug(), getDebug());
+        return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
     }
 
     static {
@@ -74,20 +74,25 @@ public class FLConfig {
         }
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             comment.write("\n# Definitions");
-            comment.write("\n# " + writable(tryLimit()) + " = how many times in a row should the same count of loaded chunks be ignored before we cancel pre-rendering.");
+            comment.write("\n# " + writable(TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
+                    "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(unsafeClose()) + " = should skip 'Joining World', and 'Downloading Terrain'. Potentially can result in joining world before chunks are properly loaded");
+            comment.write("\n# " + writable(FORCE_CLOSE_KEY) + " = should skip 'Joining World', and 'Downloading Terrain'. " +
+                    "Potentially can result in joining world before chunks are properly loaded");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# " + writable(debug()) + " = debug (log) all things happening in fastload to aid in diagnosing issues.");
+            comment.write("\n# " + writable(DEBUG_KEY) + " = debug (log) all things happening in fastload to aid in " +
+                    "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# " + writable(render()) + " = how many chunks are loaded until 'building terrain' is completed. Adjusts with FOV to decide how many chunks are visible");
-            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n# " + writable(RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
+                    "completed.");
+            comment.write("\n# Min = 0, Max = 32 or your getRenderKey distance, Whichever is smaller. Set 0 to disable.");
             comment.write("\n#");
-            comment.write("\n# " + writable(pregen()) + " = how many chunks (from 441 Loading) are pre-generated until the server starts");
-            comment.write("\n# Min = 0, Max = 32. Set 0 to only pregen 1 chunk.");
+            comment.write("\n# " + writable(PREGEN_RADIUS_KEY) + " = how many chunks (from 441 Loading) are pre-generated until " +
+                    "the server starts");
+            comment.write("\n# Min = 0, Max = 32. Set 0 to only getPregenKey 1 chunk.");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -98,7 +103,7 @@ public class FLConfig {
     }
     private static int getInt(String key, int def, MinMaxHolder holder) {
         try {
-            int i = FLMath.parseMinMax(Integer.parseInt(properties.getProperty(key)), holder);
+            int i = parseMinMax(Integer.parseInt(properties.getProperty(key)), holder);
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
@@ -126,8 +131,8 @@ public class FLConfig {
         }
     }
     public static void storeProperty(String key, String value) {
+        if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
         properties.setProperty(key, value);
-        System.out.println(key + ":" + value);
     }
     public static void writeToDisk() {
         write();

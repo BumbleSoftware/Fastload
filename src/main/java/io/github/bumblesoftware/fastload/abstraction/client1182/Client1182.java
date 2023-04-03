@@ -73,7 +73,7 @@ public class Client1182 implements AbstractClientCalls {
 
     @Override
     public boolean isWindowFocused() {
-        return getClientInstance().windowFocused;
+        return getClientInstance().isWindowFocused();
     }
 
     @Override

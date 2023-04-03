@@ -99,7 +99,7 @@ subprojects {
 	dependencies {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 		modImplementation 'com.github.Fallen-Breath:conditional-mixin:v0.3.2'
-		implementation project(path: ':')
+		implementation project(path: ':', configuration: "namedElements")
 	}
 
 	version = rootProject.version

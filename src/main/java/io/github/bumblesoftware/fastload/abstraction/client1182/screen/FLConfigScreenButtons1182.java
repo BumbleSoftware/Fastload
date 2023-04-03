@@ -3,19 +3,20 @@ package io.github.bumblesoftware.fastload.abstraction.client1182.screen;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
+import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
 import net.minecraft.client.option.Option;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.TranslatableText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.propertyKeys.*;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLConfig.storeProperty;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
@@ -24,7 +25,7 @@ public class FLConfigScreenButtons1182 {
      *  This just stores the .properties address in order by method call. This is done in order
      *  to make it safe to onElement through the values in order to write it to disk.
      */
-    private static final Map<String, String> ADDRESS_STORAGE = new HashMap<>();
+    private static final Object2ObjectArrayMap<String, String> ADDRESS_STORAGE = new Object2ObjectArrayMap<>();
     private static final String FLB = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     private static void putStorage(String address, String value) {
@@ -40,7 +41,6 @@ public class FLConfigScreenButtons1182 {
      * naming convention consistency
      */
     public static Option getNewBoolButton(String type, boolean getConfig) {
-        Fastload.LOGGER.info(type + ":" + getConfig);
         ADDRESS_STORAGE.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
@@ -71,9 +71,11 @@ public class FLConfigScreenButtons1182 {
                 (gameOptions, option) -> {
                     double d = option.get(gameOptions);
                     if (d == min) {
-                        return option.getGenericLabel(new TranslatableText(FLB + type + ".min"));
+                        return ((OptionAccess)option).getGenericLabelProxy(new TranslatableText(FLB + type + ".min"));
                     } else {
-                        return d == option.getMax() ? option.getGenericLabel(new TranslatableText(FLB + type + ".max")) : option.getGenericLabel((int)d);
+                        return d == option.getMax() ?
+                                ((OptionAccess)option).getGenericLabelProxy(new TranslatableText(FLB + type + ".max")) :
+                                ((OptionAccess)option).getGenericLabelProxy(new LiteralText(Integer.toString((int)d)));
                     }
                 },
                 minecraftClient -> minecraftClient.textRenderer.wrapLines(
@@ -87,11 +89,11 @@ public class FLConfigScreenButtons1182 {
      */
     public static Option[] asOptions() {
         Option[] buttons = {
-                getNewBoolButton(debug(), isDebugEnabled()),
-                getNewBoolButton(unsafeClose(), isForceCloseEnabled()),
-                getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
-                getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
-                getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())
+                getNewBoolButton(DEBUG_KEY, isDebugEnabled()),
+                getNewBoolButton(FORCE_CLOSE_KEY, isForceCloseEnabled()),
+                getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(), getPreRenderRadius()),
+                getNewSlider(PREGEN_RADIUS_KEY,getRadiusBound(), getPregenRadius(true)),
+                getNewSlider(TRY_LIMIT_KEY, FLMath.getChunkTryLimitBound(), getChunkTryLimit())
         };
         ArrayList<Option> options = new ArrayList<>(Arrays.asList(buttons));
         return options.toArray(Option[]::new);

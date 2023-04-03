@@ -16,7 +16,8 @@
     "client.FrustumMixin",
     "client.GameRendererMixin",
     "client.LevelLoadingScreenMixin",
-    "client.MinecraftClientMixin"
+    "client.MinecraftClientMixin",
+    "client.OptionAccess"
   ],
   "injectors": {
     "defaultRequire": 1

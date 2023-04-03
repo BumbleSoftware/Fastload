@@ -6,5 +6,5 @@ loom {
 dependencies {
     minecraft "com.mojang:minecraft:1.19.3"
     mappings "net.fabricmc:yarn:1.19.3+build.5:v2"
-    implementation project(path: ':fl119-0-1-2-compat')
+    implementation project(path: ':fl119-0-1-2-compat', configuration: "namedElements")
 }

@@ -5,23 +5,24 @@ import net.minecraft.client.MinecraftClient;
 
 import java.util.function.Supplier;
 
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
 
 public class FLMath {
 
     //Unchanged Constant Getters
     public static int getChunkTryLimit() {
-        return parseMinMax(FLConfig.getChunkTryLimit(), DefaultConfig.getTryLimitBound());
+        return parseMinMax(FLConfig.getChunkTryLimit(), TRY_LIMIT_BOUND);
     }
     public static int getRadiusBoundMax() {
-        return DefaultConfig.getRawRadiusBound().max();
+        return CHUNK_RADIUS_BOUND.max();
     }
     @SuppressWarnings("unused")
     public static MinMaxHolder getRadiusBound() {
-        return DefaultConfig.getRawRadiusBound();
+        return CHUNK_RADIUS_BOUND;
     }
     public static MinMaxHolder getChunkTryLimitBound() {
-        return DefaultConfig.getTryLimitBound();
+        return TRY_LIMIT_BOUND;
     }
 
 
