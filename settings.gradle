@@ -8,5 +8,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-include "fl119compat"
+include "fl119-0-1-2-compat"
 include "fl1193compat"
+include "fl1194compat"

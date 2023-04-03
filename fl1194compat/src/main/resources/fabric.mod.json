@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fl-1193-compat",
+  "id": "fl-1194-compat",
   "version": "${version}",
 
-  "name": "Fastload 1.19.3 Compat",
-  "description": "1.19.3 Compatibility module for fastload.",
+  "name": "Fastload 1.19.4 Compat",
+  "description": "1.19.4 Compatibility module for fastload.",
   "authors": [
     "StockiesLad [Owner]"
   ],
@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {},
   "mixins": [
-    "fl1193compat.mixins.json"
+    "fl1194compat.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.10",
