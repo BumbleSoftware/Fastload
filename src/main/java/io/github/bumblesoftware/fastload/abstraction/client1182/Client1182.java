@@ -38,7 +38,7 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public TranslatableText getNewTranslatableText(String content) {
+    public Text getNewTranslatableText(String content) {
         return new TranslatableText(content);
     }
 

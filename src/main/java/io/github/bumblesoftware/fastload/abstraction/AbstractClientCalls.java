@@ -7,7 +7,6 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 
 /**
@@ -20,7 +19,7 @@ public interface AbstractClientCalls {
     Camera getCamera();
     ClientWorld getClientWorld();
     Screen getFastloadConfigScreen(Screen parent);
-    TranslatableText getNewTranslatableText(String content);
+    Text getNewTranslatableText(String content);
     int getLoadedChunkCount();
     int getCompletedChunkCount();
     float getPlayerYaw();

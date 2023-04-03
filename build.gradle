@@ -1,4 +1,7 @@
 plugins {
+	id 'java'
+	id 'idea'
+	id 'eclipse'
 	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
@@ -6,15 +9,6 @@ loom {
 	accessWidenerPath = file("src/main/resources/fastload.accesswidener")
 }
 
-//noinspection GroovyUnusedAssignment
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
-
-repositories {
-	maven { url = "https://maven.terraformersmc.com/" }
-	maven { url = "https://maven.fabricmc.net/" }
-}
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -22,41 +16,95 @@ dependencies {
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
-	include(modImplementation("net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_version}"))
+	/*include(modImplementation(
+			"net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_version}"
+	))*/
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-}
-
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+	afterEvaluate {
+		subprojects.each {
+			testmodImplementation sourceSets.main.output
+			implementation project(path: "${it.name}", configuration: "namedElements")
+			include project("${it.name}:")
+		}
 	}
+
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
-}
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'eclipse'
+	apply plugin: 'maven-publish'
+	apply plugin: 'fabric-loom'
 
-java {
-	withSourcesJar()
-}
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 
-jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
+	archivesBaseName = project.archives_base_name
+	version = project.mod_version
+	group = project.maven_group
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
+	sourceSets {
+		testmod {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
 		}
 	}
 
 	repositories {
+		maven { url = "https://maven.terraformersmc.com/" }
+		maven { url = "https://maven.fabricmc.net/" }
 	}
+
+	configurations {
+		dev {
+			canBeResolved = false
+			canBeConsumed = true
+		}
+	}
+
+	processResources {
+		inputs.property "version", project.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": project.version
+		}
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = 17
+	}
+
+	java {
+		withSourcesJar()
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${project.archivesBaseName}" }
+		}
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+			}
+		}
+
+		repositories {
+		}
+	}
+}
+
+subprojects {
+	dependencies {
+
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	}
+
+	version = rootProject.version
+	runClient.enabled = false
 }

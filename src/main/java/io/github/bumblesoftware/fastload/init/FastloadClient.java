@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.init;
 
+import io.github.bumblesoftware.fastload.abstraction.client119.Client119;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
@@ -13,7 +14,9 @@ public class FastloadClient implements ClientModInitializer {
     static {
         var version = MinecraftVersion.CURRENT.getName();
         if (version.equals("1.18.2")) {
-           ABSTRACTED_CLIENT = new Client1182();
+            ABSTRACTED_CLIENT = new Client1182();
+        } else if (version.equals("1.19")) {
+            ABSTRACTED_CLIENT = new Client119();
         } else throw new NullPointerException("Method abstraction for MC Client is unsupported for this version");
     }
     @Override

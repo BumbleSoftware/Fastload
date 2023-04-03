@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "fl-119-compat",
+  "version": "${version}",
+
+  "name": "Fastload 1.19 Compat",
+  "description": "1.19 Compatibility module for fastload.",
+  "authors": [
+    "StockiesLad [Owner]"
+  ],
+  "contact": {
+    "sources": "https://github.com/BumbleSoftware/Fastload",
+    "issues": "https://github.com/BumbleSoftware/Fastload/issues"
+  },
+
+  "license": "LGPL-3.0",
+  "icon": "assets/fl-119-compat/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.bumblesoftware.fastload.init.Fastload"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "minecraft": "*",
+    "java": ">=17"
+  }
+}
