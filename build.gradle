@@ -24,8 +24,8 @@ dependencies {
 
 	afterEvaluate {
 		subprojects.each {
-			testmodImplementation sourceSets.main.output
-			implementation project(path: "${it.name}", configuration: "namedElements")
+			//testmodImplementation sourceSets.main.output
+			//implementation project(path: "${it.name}", configuration: "namedElements")
 			include project("${it.name}:")
 		}
 	}
@@ -101,7 +101,6 @@ allprojects {
 
 subprojects {
 	dependencies {
-
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	}
 

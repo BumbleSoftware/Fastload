@@ -21,6 +21,9 @@
       "io.github.bumblesoftware.fastload.init.Fastload"
     ]
   },
+  "mixins": [
+    "fl119compat.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.14.10",
     "minecraft": "*",
