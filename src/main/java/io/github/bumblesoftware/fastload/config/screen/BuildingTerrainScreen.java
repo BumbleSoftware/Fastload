@@ -41,7 +41,7 @@ public class BuildingTerrainScreen extends Screen {
      */
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0);
+        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
         final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea();
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {

@@ -57,7 +57,7 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public void renderScreenBackgroundTexture(Screen screen, int offset) {
+    public void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices) {
         screen.renderBackgroundTexture(0);
     }
 

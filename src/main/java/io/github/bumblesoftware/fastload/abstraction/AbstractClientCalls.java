@@ -23,7 +23,7 @@ public interface AbstractClientCalls {
     int getCompletedChunkCount();
     void setScreen(Screen screen);
     ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress);
-    void renderScreenBackgroundTexture(Screen screen, int offset);
+    void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, String text, int centerX, int y, int color);
     boolean isWindowFocused();
