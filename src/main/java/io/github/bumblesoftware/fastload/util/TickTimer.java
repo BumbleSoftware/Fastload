@@ -4,7 +4,7 @@ import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 
 import static io.github.bumblesoftware.fastload.client.FLClientHandler.log;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.getDebug;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.isDebugEnabled;
 
 /**
  * Simple event-based timer with respect to minecraft ticks.
@@ -25,7 +25,7 @@ public final class TickTimer {
         abstractUnsafeEvent.registerThreadUnsafe(1, (eventContext, abstractParent, closer, eventArgs) -> {
             if (remainingTime > 0) {
                 remainingTime--;
-                if (getDebug()) log("" + remainingTime);
+                if (isDebugEnabled()) log(String.valueOf(remainingTime));
             }
             return null;
         });

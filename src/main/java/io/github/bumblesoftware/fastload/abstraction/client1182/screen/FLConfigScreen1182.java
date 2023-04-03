@@ -1,7 +1,6 @@
-package io.github.bumblesoftware.fastload.config.screen;
+package io.github.bumblesoftware.fastload.abstraction.client1182.screen;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
-import io.github.bumblesoftware.fastload.config.modmenu.button.FLModMenuButtons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -13,18 +12,18 @@ import net.minecraft.text.TranslatableText;
 /**
  * Initialised Fastload's config screen
  */
-public class FLConfigScreen extends SimpleOptionsScreen {
-    private static final Text title = new TranslatableText("fastload.screen.config");
-    private static final MinecraftClient client = MinecraftClient.getInstance();
+public class FLConfigScreen1182 extends SimpleOptionsScreen {
+    private static final Text TITLE = new TranslatableText("fastload.screen.config");
+    private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
 
-    public FLConfigScreen(Screen parent) {
-        super(parent, client.options, title, FLModMenuButtons.asOptions());
+    public FLConfigScreen1182(Screen parent) {
+        super(parent, CLIENT.options, TITLE, FLConfigScreenButtons1182.asOptions());
     }
     @Override
     protected void initFooter() {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 27, 200, 20, ScreenTexts.DONE, (button) -> {
             FLConfig.writeToDisk();
-            client.setScreen(this.parent);
+            CLIENT.setScreen(this.parent);
         }));
     }
 }

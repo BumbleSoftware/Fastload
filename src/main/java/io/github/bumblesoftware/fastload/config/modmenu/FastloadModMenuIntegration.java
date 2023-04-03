@@ -1,16 +1,17 @@
-package io.github.bumblesoftware.fastload.config.modmenu.register;
+package io.github.bumblesoftware.fastload.config.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen;
 import net.minecraft.client.gui.screen.Screen;
 
-public class FLModMenuIntegration implements ModMenuApi {
+import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+
+public class FastloadModMenuIntegration implements ModMenuApi {
     /**
      *  Registers our config screen to modmenu
      */
     @Override
     public ConfigScreenFactory<Screen> getModConfigScreenFactory() {
-        return FLConfigScreen::new;
+        return ABSTRACTED_CLIENT::getFastloadConfigScreen;
     }
 }

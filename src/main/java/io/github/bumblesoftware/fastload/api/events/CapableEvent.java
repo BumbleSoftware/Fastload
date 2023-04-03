@@ -72,6 +72,7 @@ public class CapableEvent<T extends Record, T2> implements AbstractEvent<T, T2> 
         }
     }
 
+    @Override
     public void fireEvent(final T eventContext) {
         iterate(eventsToAdd, this::registerThreadUnsafe);
         allEvents.priorityHolder().sort(Comparator.reverseOrder());

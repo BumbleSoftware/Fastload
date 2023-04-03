@@ -13,9 +13,6 @@ public class FLMath {
     public static int getChunkTryLimit() {
         return parseMinMax(FLConfig.getChunkTryLimit(), DefaultConfig.getTryLimitBound());
     }
-    public static Boolean getDebug() {
-        return getRawDebug();
-    }
     public static int getRadiusBoundMax() {
         return DefaultConfig.getRawRadiusBound().max();
     }
@@ -31,8 +28,10 @@ public class FLMath {
     //Parsing
     private static final Supplier<Double> RENDER_DISTANCE = () ->
             MinecraftClient.getInstance().worldRenderer != null ?
-                    Math.min(MinecraftClient.getInstance().worldRenderer.getViewDistance(), getRadiusBoundMax())
-                    : getRadiusBoundMax();
+                    Math.min(
+                            MinecraftClient.getInstance().worldRenderer.getViewDistance(),
+                            getRadiusBoundMax()
+                    ) : getRadiusBoundMax();
     private static int getRenderDistance() {
         return RENDER_DISTANCE.get().intValue();
     }
@@ -67,17 +66,34 @@ public class FLMath {
 
     //Radii
     public static Integer getPreRenderRadius() {
-        return parseMinMax(getRawPreRenderRadius(), Math.min(getRenderDistance(), getRadiusBoundMax()), 0);
+        return parseMinMax(
+                getRawPreRenderRadius(),
+                Math.min(getRenderDistance(),
+                        getRadiusBoundMax()
+                ),
+                0
+        );
     }
     public static Integer getPreRenderRadius(boolean raw) {
-        if (raw) return Math.max(getRawPreRenderRadius(), getRadiusBound().min());
-        else return getPreRenderRadius();
+        if (raw)
+            return Math.max(
+                    getRawPreRenderRadius(),
+                    getRadiusBound().min()
+            );
+        else
+            return getPreRenderRadius();
     }
     public static int getPregenRadius(boolean raw) {
-        if (raw) {
-            return parseMinMax(getRawChunkPregenRadius(), getRadiusBound());
-        }
-        return parseMinMax(getRawChunkPregenRadius(), getRadiusBound()) + 1;
+        if (raw)
+            return parseMinMax(
+                    getRawChunkPregenRadius(),
+                    getRadiusBound()
+            );
+        else
+            return parseMinMax(
+                    getRawChunkPregenRadius(),
+                    getRadiusBound()
+            ) + 1;
     }
     public static int getPregenRadius() {
         return getPregenRadius(true);
@@ -86,10 +102,26 @@ public class FLMath {
 
     //Areas
     public static int getPregenArea() {
-        return getSquareArea(false, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
+        return getSquareArea(
+                false,
+                parseMinMax(
+                        getPregenRadius(),
+                        getRadiusBound().max(),
+                        getRadiusBound().min()
+                ),
+                false
+        );
    }
     public static int getProgressArea() {
-        return getSquareArea(true, parseMinMax(getPregenRadius(), getRadiusBound().max(), getRadiusBound().min()), false);
+        return getSquareArea(
+                true,
+                parseMinMax(
+                        getPregenRadius(),
+                        getRadiusBound().max(),
+                        getRadiusBound().min()
+                ),
+                false
+        );
     }
     public static Integer getPreRenderArea() {
         return getCircleArea(getPreRenderRadius()).intValue();
@@ -97,13 +129,16 @@ public class FLMath {
 
 
     //Booleans
-    public static Boolean getCloseUnsafe() {
+    public static Boolean isDebugEnabled() {
+        return getRawDebug();
+    }
+    public static Boolean isForceBuildEnabled() {
+        return getChunkTryLimit() >= 1000;
+    }
+    public static Boolean isForceCloseEnabled() {
         return getCloseLoadingScreenUnsafely();
     }
-    public static Boolean getCloseSafe() {
+    public static Boolean isPreRenderEnabled() {
         return getPreRenderRadius() > 0;
-    }
-    public static Boolean getForceBuild() {
-        return getChunkTryLimit() >= 1000;
     }
 }

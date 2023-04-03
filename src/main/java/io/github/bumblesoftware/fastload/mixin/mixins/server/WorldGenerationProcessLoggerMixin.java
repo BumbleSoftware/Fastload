@@ -19,8 +19,8 @@ public class WorldGenerationProcessLoggerMixin {
     }
     @Shadow private int generatedCount;
     /**
-     * @author Fluffy Bumblebee
-     * @reason Cancel C2ME's interference
+     * @author StockiesLad
+     * @reason Fix bug with C2ME
      */
     @Overwrite
     public int getProgressPercentage() {

@@ -6,7 +6,7 @@
   "name": "Fast Load",
   "description": "Load your world at lightning speed!",
   "authors": [
-    "FluffyBumblebees [Owner]",
+    "StockiesLad [Owner]",
     "JoostMSoftware [Co-Owner]",
     "AbdElAziz [Forge]",
     "kennytv [Indirect Contributor]",
@@ -29,7 +29,7 @@
       "io.github.bumblesoftware.fastload.init.FastloadClient"
     ],
     "modmenu": [
-      "io.github.bumblesoftware.fastload.config.modmenu.register.FLModMenuIntegration"
+      "io.github.bumblesoftware.fastload.config.modmenu.FastloadModMenuIntegration"
     ]
   },
   "mixins": [

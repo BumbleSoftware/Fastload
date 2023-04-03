@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config.modmenu.button;
+package io.github.bumblesoftware.fastload.abstraction.client1182.screen;
 
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
@@ -19,19 +19,19 @@ import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.proper
 import static io.github.bumblesoftware.fastload.config.init.FLConfig.storeProperty;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
-public class FLModMenuButtons {
+public class FLConfigScreenButtons1182 {
     /**
      *  This just stores the .properties address in order by method call. This is done in order
      *  to make it safe to onElement through the values in order to write it to disk.
      */
-    private static final Map<String, String> addressStorage = new HashMap<>();
+    private static final Map<String, String> ADDRESS_STORAGE = new HashMap<>();
     private static final String FLB = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     private static void putStorage(String address, String value) {
-        addressStorage.put(address, value);
+        ADDRESS_STORAGE.put(address, value);
     }
     private static String getStorage(String address) {
-        return addressStorage.get(address);
+        return ADDRESS_STORAGE.get(address);
     }
 
 
@@ -40,8 +40,8 @@ public class FLModMenuButtons {
      * naming convention consistency
      */
     public static Option getNewBoolButton(String type, boolean getConfig) {
-        System.out.println(type + ":" + getConfig);
-        addressStorage.putIfAbsent(type, Boolean.toString(getConfig));
+        Fastload.LOGGER.info(type + ":" + getConfig);
+        ADDRESS_STORAGE.putIfAbsent(type, Boolean.toString(getConfig));
         return CyclingOption.create(
                 FLB + type,
                 new TranslatableText(FLB + type + ".tooltip"),
@@ -56,7 +56,7 @@ public class FLModMenuButtons {
     public static Option getNewSlider(String type, MinMaxHolder holder , int defVal) {
         int max = holder.max();
         int min = holder.min();
-        addressStorage.putIfAbsent(type, Integer.toString(defVal));
+        ADDRESS_STORAGE.putIfAbsent(type, Integer.toString(defVal));
         return new DoubleOption(
                 FLB + type,
                 min,
@@ -87,8 +87,8 @@ public class FLModMenuButtons {
      */
     public static Option[] asOptions() {
         Option[] buttons = {
-                getNewBoolButton(debug(), getDebug()),
-                getNewBoolButton(unsafeClose(), getCloseUnsafe()),
+                getNewBoolButton(debug(), isDebugEnabled()),
+                getNewBoolButton(unsafeClose(), isForceCloseEnabled()),
                 getNewSlider(render(), getRadiusBound(), getPreRenderRadius()),
                 getNewSlider(pregen(),getRadiusBound(), getPregenRadius(true)),
                 getNewSlider(tryLimit(), FLMath.getChunkTryLimitBound(), getChunkTryLimit())

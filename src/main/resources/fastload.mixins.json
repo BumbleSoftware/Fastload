@@ -12,6 +12,8 @@
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayNetworkHandlerMixin",
     "client.DownloadingTerrainScreenMixin",
+    "client.FrustumMixin",
+    "client.GameRendererMixin",
     "client.LevelLoadingScreenMixin",
     "client.MinecraftClientMixin"
   ],

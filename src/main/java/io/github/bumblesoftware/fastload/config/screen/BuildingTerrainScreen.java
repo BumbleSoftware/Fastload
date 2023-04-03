@@ -2,15 +2,13 @@ package io.github.bumblesoftware.fastload.config.screen;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
-import static io.github.bumblesoftware.fastload.config.screen.FLColourConstants.white;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
 public class BuildingTerrainScreen extends Screen {
     private final Text SCREEN_NAME;
@@ -20,12 +18,11 @@ public class BuildingTerrainScreen extends Screen {
     private Integer PREPARED_PROGRESS_STORAGE = 0;
     private Integer BUILDING_PROGRESS_STORAGE = 0;
     private static final int heightUpFromCentre = 50;
-    private final MinecraftClient client = MinecraftClient.getInstance();
     private Integer getLoadedChunkCount() {
-        return client.world != null ? client.world.getChunkManager().getLoadedChunkCount() : 0;
+        return ABSTRACTED_CLIENT.getClientWorld() != null ? ABSTRACTED_CLIENT.getLoadedChunkCount() : 0;
     }
     private Integer getBuiltChunkCount() {
-        return client.world != null ? client.worldRenderer.getCompletedChunkCount() : 0;
+        return ABSTRACTED_CLIENT.getClientWorld() != null ? ABSTRACTED_CLIENT.getCompletedChunkCount() : 0;
     }
 
     /**
@@ -33,10 +30,10 @@ public class BuildingTerrainScreen extends Screen {
      */
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        SCREEN_NAME = new TranslatableText("menu.generatingTerrain");
-        SCREEN_TEMPLATE = new TranslatableText("fastload.screen.buildingTerrain.template");
-        BUILDING_CHUNKS = new TranslatableText("fastload.screen.buildingTerrain.building");
-        PREPARING_CHUNKS = new TranslatableText("fastload.screen.buildingTerrain.preparing");
+        SCREEN_NAME = ABSTRACTED_CLIENT.getNewTranslatableText("menu.generatingTerrain");
+        SCREEN_TEMPLATE = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.template");
+        BUILDING_CHUNKS = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.building");
+        PREPARING_CHUNKS = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.preparing");
     }
 
     /**
@@ -44,9 +41,9 @@ public class BuildingTerrainScreen extends Screen {
      */
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackgroundTexture(0);
+        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0);
         final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea() * (int)client.options.fov / 180;
+        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea();
         if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
             Fastload.LOGGER.info("World Chunk Sending: " + loadedChunksString);
         }
@@ -56,37 +53,38 @@ public class BuildingTerrainScreen extends Screen {
         PREPARED_PROGRESS_STORAGE = getLoadedChunkCount();
         BUILDING_PROGRESS_STORAGE = getBuiltChunkCount();
 
-        DrawableHelper.drawCenteredText(
+        ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
                 SCREEN_NAME,
                 this.width / 2,
                 this.height / 2 - heightUpFromCentre,
-                white
+                WHITE
         );
-        DrawableHelper.drawCenteredText(
+        ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
                 SCREEN_TEMPLATE,
                 this.width / 2,
                 this.height / 2 - heightUpFromCentre + 30,
-                white);
+                WHITE
+        );
 
-        DrawableHelper.drawCenteredText(
+        ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
                  PREPARING_CHUNKS.getString() + ": " + loadedChunksString,
                 width / 2,
                 height / 2 - heightUpFromCentre + 45,
-                white);
+                WHITE);
 
-        DrawableHelper.drawCenteredText(
+        ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
                 BUILDING_CHUNKS.getString() + ": " + builtChunksString,
                 width / 2,
                 height / 2 - heightUpFromCentre + 60,
-                white);
+                WHITE);
 
         super.render(matrices, mouseX, mouseY, delta);
     }

@@ -22,8 +22,8 @@ public class DownloadingTerrainScreenMixin {
      */
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
-        if (FLMath.getCloseUnsafe() || FLMath.getCloseSafe()) {
-            if (FLMath.getDebug()) Fastload.LOGGER.info("DTS will now close on next tick");
+        if (FLMath.isForceCloseEnabled() || FLMath.isPreRenderEnabled()) {
+            if (FLMath.isDebugEnabled()) Fastload.LOGGER.info("DTS will now close on next tick");
             closeOnNextTick = true;
         }
     }
