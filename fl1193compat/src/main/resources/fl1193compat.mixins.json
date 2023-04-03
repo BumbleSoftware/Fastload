@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "io.github.bumblesoftware.fastload.mixin.mixins",
+  "plugin": "io.github.bumblesoftware.fastload.mixin.plugin.FLConditionalMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
