@@ -1,10 +1,10 @@
 package io.github.bumblesoftware.fastload.init;
 
+import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.client1182.Client1182;
 import io.github.bumblesoftware.fastload.abstraction.client119.Client119;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
-import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.abstraction.client1182.Client1182;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.MinecraftVersion;
 

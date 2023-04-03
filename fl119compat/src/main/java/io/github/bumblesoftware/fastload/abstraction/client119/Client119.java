@@ -7,12 +7,17 @@ import net.minecraft.text.Text;
 
 public class Client119 extends Client1182 {
     @Override
+    public Screen getFastloadConfigScreen(Screen parent) {
+        return new FLConfigScreen119(parent);
+    }
+
+    @Override
     public Text getNewTranslatableText(String content) {
         return Text.translatable(content);
     }
 
     @Override
-    public Screen getFastloadConfigScreen(Screen parent) {
-        return new FLConfigScreen119(parent);
+    public boolean isWindowFocused() {
+        return getClientInstance().isWindowFocused();
     }
 }

@@ -3,11 +3,9 @@ package io.github.bumblesoftware.fastload.client;
 import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
-import net.minecraft.client.MinecraftClient;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.getPreRenderArea;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 /**
@@ -19,10 +17,6 @@ public final class FLClientHandler {
         registerEvents();
     }
 
-    /**
-     * Local client instance to access
-     */
-    private static final MinecraftClient client = ABSTRACTED_CLIENT.getClientInstance();
 
     /**
      * Boolean whether an object of Player has been initialised
@@ -50,10 +44,6 @@ public final class FLClientHandler {
      * Boolean to let other methods init the process of closing the terrain building
      */
     private static boolean closeBuild = false;
-    /**
-     * Stores the old player camera pitch so that it can be set back to it upon completion of preloading
-     */
-    private static Float oldPitch = null;
     /**
      * Stores the old count to compare values on the next method call to see if the value
      * of loaded chunks is same.
@@ -127,12 +117,6 @@ public final class FLClientHandler {
                 CLIENT_TIMER.setTime(20);
                 if (isDebugEnabled()) log("Temporarily Cancelling Pause Menu to enable Renderer");
             }
-            assert client.player != null;
-            if (oldPitch != null) {
-                ABSTRACTED_CLIENT.setPlayerRotation(ABSTRACTED_CLIENT.getPlayerYaw(), oldPitch);
-                if (ABSTRACTED_CLIENT.getPlayerPitch() != oldPitch) ABSTRACTED_CLIENT.setPlayerPitch(oldPitch);
-                oldPitch = null;
-            }
             playerJoined = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
@@ -166,7 +150,6 @@ public final class FLClientHandler {
                 playerReady = false;
                 justLoaded = false;
                 showRDDOnce = false;
-                oldPitch = null;
             }
             return null;
         });

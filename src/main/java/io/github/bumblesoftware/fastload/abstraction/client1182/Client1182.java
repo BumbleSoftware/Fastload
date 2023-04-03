@@ -9,22 +9,15 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
-@SuppressWarnings("DataFlowIssue")
 public class Client1182 implements AbstractClientCalls {
     @Override
     public MinecraftClient getClientInstance() {
         return MinecraftClient.getInstance();
-    }
-
-    @Override
-    public Camera getCamera() {
-        return getClientInstance().gameRenderer.getCamera();
     }
 
     @Override
@@ -50,26 +43,6 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public int getCompletedChunkCount() {
         return getClientInstance().worldRenderer.getCompletedChunkCount();
-    }
-
-    @Override
-    public float getPlayerYaw() {
-        return getClientInstance().player.getYaw();
-    }
-
-    @Override
-    public float getPlayerPitch() {
-        return getClientInstance().player.getPitch();
-    }
-
-    @Override
-    public void setPlayerPitch(float pitch) {
-        getClientInstance().player.setPitch(pitch);
-    }
-
-    @Override
-    public void setPlayerRotation(float yaw, float pitch) {
-        getCamera().setRotation(yaw, pitch);
     }
 
     @Override
