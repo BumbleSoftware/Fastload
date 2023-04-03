@@ -17,10 +17,6 @@ public class FastloadClient implements ClientModInitializer {
         else throw new NullPointerException("Method abstraction for MC Client is unsupported for this version");
     }
 
-    public void lol() {
-
-    }
-
     @Override
     public void onInitializeClient() {
         FLClientEvents.init();

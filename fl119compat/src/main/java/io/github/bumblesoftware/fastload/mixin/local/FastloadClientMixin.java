@@ -9,11 +9,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(FastloadClient.class)
 public class FastloadClientMixin {
-    @Inject(method = "getAbstractedClient", at = @At("HEAD"), remap = false)
+    @Inject(method = "getAbstractedClient", at = @At("HEAD"), remap = false, cancellable = true)
     private static void compat119(CallbackInfoReturnable<AbstractClientCalls> cir) {
-        if (MinecraftVersion.CURRENT.getName().equals("1.19"))
-            cir.setReturnValue(new Client119());
+        for (String version : List.of(
+                "1.19",
+                "1.19.1",
+                "1.19.2"
+        )) {
+            if (MinecraftVersion.CURRENT.getName().equals(version))
+                cir.setReturnValue(new Client119());
+        }
     }
 }
