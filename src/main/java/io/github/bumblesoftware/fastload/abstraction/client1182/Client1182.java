@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
@@ -48,6 +49,11 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public void setScreen(Screen screen) {
         getClientInstance().setScreen(screen);
+    }
+
+    @Override
+    public ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress) {
+        return new ButtonWidget(x, y, width, height, message, onPress);
     }
 
     @Override

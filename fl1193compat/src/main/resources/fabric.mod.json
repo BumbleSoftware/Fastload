@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "fl-119-0-1-2-compat",
+  "id": "fl-1193-compat",
   "version": "${version}",
 
-  "name": "Fastload 1.19-0-1-2 Compat",
-  "description": "1.19, 1.19.1, 1.19.2 Compatibility module for fastload.",
+  "name": "Fastload 1.19.3 Compat",
+  "description": "1.19.3 Compatibility module for fastload.",
   "authors": [
     "StockiesLad [Owner]"
   ],
@@ -14,11 +14,11 @@
   },
 
   "license": "LGPL-3.0",
-  "icon": "assets/fastload/icon.png",
+  "icon": "assets/fl-119-compat/icon.png",
   "environment": "*",
   "entrypoints": {},
   "mixins": [
-    "fl119compat.mixins.json"
+    "fl1193compat.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.10",

@@ -10,7 +10,7 @@ import net.minecraft.MinecraftVersion;
 public class FastloadClient implements ClientModInitializer {
     public static final AbstractClientCalls ABSTRACTED_CLIENT = getAbstractedClient();
 
-    public static AbstractClientCalls getAbstractedClient() {
+    private static AbstractClientCalls getAbstractedClient() {
         var version = MinecraftVersion.CURRENT.getName();
         if (version.equals("1.18.2"))
             return new Client1182();

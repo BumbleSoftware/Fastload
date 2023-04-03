@@ -9,3 +9,4 @@ pluginManagement {
     }
 }
 include "fl119compat"
+include "fl1193compat"

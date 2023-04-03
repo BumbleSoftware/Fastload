@@ -1,6 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.local;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.client119.Abstraction119Extension;
 import io.github.bumblesoftware.fastload.abstraction.client119.Client119;
 import io.github.bumblesoftware.fastload.init.FastloadClient;
 import net.minecraft.MinecraftVersion;
@@ -22,6 +23,12 @@ public class FastloadClientMixin {
         )) {
             if (MinecraftVersion.CURRENT.getName().equals(version))
                 cir.setReturnValue(new Client119());
+            else {
+                final var extension = Abstraction119Extension.extend119Abstraction();
+                if (extension != null) {
+                    cir.setReturnValue(extension);
+                }
+            }
         }
     }
 }

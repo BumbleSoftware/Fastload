@@ -13,19 +13,14 @@ loom {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
+	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
 
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
-	/*include(modImplementation(
-			"net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_version}"
-	))*/
-
+	modImplementation (include 'com.github.Fallen-Breath:conditional-mixin:v0.3.2')
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
 	afterEvaluate {
 		subprojects.each {
-			//testmodImplementation sourceSets.main.output
-			//implementation project(path: "${it.name}", configuration: "namedElements")
 			include project("${it.name}:")
 		}
 	}
@@ -56,6 +51,7 @@ allprojects {
 	repositories {
 		maven { url = "https://maven.terraformersmc.com/" }
 		maven { url = "https://maven.fabricmc.net/" }
+		maven { url 'https://jitpack.io' }
 	}
 
 	configurations {
@@ -102,6 +98,7 @@ allprojects {
 subprojects {
 	dependencies {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		modImplementation (include 'com.github.Fallen-Breath:conditional-mixin:v0.3.2')
 	}
 
 	version = rootProject.version
