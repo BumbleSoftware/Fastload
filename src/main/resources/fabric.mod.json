@@ -34,7 +34,6 @@
   "mixins": [
     "fastload.mixins.json"
   ],
-  "accessWidener": "fastload.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.10",
     "minecraft": ">=1.18.2",
