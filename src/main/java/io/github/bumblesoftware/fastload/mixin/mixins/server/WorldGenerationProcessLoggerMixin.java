@@ -15,7 +15,7 @@ import net.minecraft.server.WorldGenerationProgressLogger;
 public class WorldGenerationProcessLoggerMixin {
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int setRadius(int radius) {
-        return FLMath.getPregenRadius(false);
+        return FLMath.getPregenChunkRadius(false);
     }
     @Shadow private int generatedCount;
     /**

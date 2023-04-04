@@ -1,20 +1,31 @@
 package io.github.bumblesoftware.fastload.abstraction.client1182;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.abstraction.client1182.screen.FLConfigScreen1182;
+import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenImplementation;
+import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
+import io.github.bumblesoftware.fastload.mixin.mixins.client.ScreenAccess;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.option.CyclingOption;
+import net.minecraft.client.option.DoubleOption;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
+@SuppressWarnings("unchecked")
 public class Client1182 implements AbstractClientCalls {
     @Override
     public MinecraftClient getClientInstance() {
@@ -27,12 +38,12 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public Screen getFastloadConfigScreen(Screen parent) {
-        return new FLConfigScreen1182(parent);
+    public Screen newFastloadConfigScreen(Screen parent) {
+        return new FLConfigScreenImplementation(parent);
     }
 
     @Override
-    public Text getNewTranslatableText(String content) {
+    public Text newTranslatableText(String content) {
         return new TranslatableText(content);
     }
 
@@ -52,9 +63,65 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
+    public <Option> FLConfigScreenButtons<Option> newFLConfigScreenButtons() {
+        return new FLConfigScreenButtons<>();
+    }
+
+    @Override
+    public <T1 extends Element & Drawable> T1 addDrawableChild(Screen screen, T1 drawableElement) {
+        return ((ScreenAccess)screen).addDrawableChildProxy(drawableElement);
+    }
+
+
+    @Override
     public ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress) {
         return new ButtonWidget(x, y, width, height, message, onPress);
     }
+
+    @Override
+    public <Option> Option newCyclingButton(
+            String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
+            StoreValueFunction storeValueFunction
+    ) {
+        return (Option) CyclingOption.create(
+                namespace + identifier,
+                new TranslatableText(namespace + identifier + ".tooltip"),
+                gameOptions -> Boolean.parseBoolean(retrieveValueFunction.getValue(identifier)),
+                (gameOptions, option, value) -> storeValueFunction.setValue(identifier, value.toString())
+        );
+    }
+
+    @Override
+    public <Option> Option newSlider(
+            String namespace, String identifier, MinMaxHolder minMaxValues,
+            RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width
+    ) {
+        return (Option) new DoubleOption(
+                namespace + identifier,
+                minMaxValues.min(),
+                minMaxValues.max(),
+                1.0F,
+                gameOptions -> Double.parseDouble(retrieveValueFunction.getValue(identifier)),
+                (gameOptions, aDouble) ->
+                        storeValueFunction.setValue(identifier, Integer.toString(aDouble.intValue())),
+                (gameOptions, option) -> {
+                    double d = option.get(gameOptions);
+                    if (d == minMaxValues.min()) {
+                        return ((OptionAccess)option).getGenericLabelProxy(new TranslatableText(namespace + identifier +
+                                ".min"));
+                    } else {
+                        return d == minMaxValues.max() ?
+                                ((OptionAccess)option).getGenericLabelProxy(new TranslatableText(namespace + identifier +
+                                        ".max")) :
+                                ((OptionAccess)option).getGenericLabelProxy(new LiteralText(Integer.toString((int)d)));
+                    }
+                },
+                minecraftClient -> minecraftClient.textRenderer.wrapLines(
+                        StringVisitable.plain(new TranslatableText(namespace + identifier + ".tooltip").getString()),
+                        200
+                ));
+    }
+
 
     @Override
     public void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices) {

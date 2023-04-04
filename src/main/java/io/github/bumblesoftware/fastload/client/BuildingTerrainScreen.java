@@ -30,10 +30,10 @@ public class BuildingTerrainScreen extends Screen {
      */
     public BuildingTerrainScreen() {
         super(NarratorManager.EMPTY);
-        SCREEN_NAME = ABSTRACTED_CLIENT.getNewTranslatableText("menu.generatingTerrain");
-        SCREEN_TEMPLATE = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.template");
-        BUILDING_CHUNKS = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.building");
-        PREPARING_CHUNKS = ABSTRACTED_CLIENT.getNewTranslatableText("fastload.screen.buildingTerrain.preparing");
+        SCREEN_NAME = ABSTRACTED_CLIENT.newTranslatableText("menu.generatingTerrain");
+        SCREEN_TEMPLATE = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
+        BUILDING_CHUNKS = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
+        PREPARING_CHUNKS = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.preparing");
     }
 
     /**

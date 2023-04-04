@@ -1,7 +1,13 @@
 package io.github.bumblesoftware.fastload.abstraction;
 
+import io.github.bumblesoftware.fastload.abstraction.client1182.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.client1182.StoreValueFunction;
+import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,12 +23,20 @@ public interface AbstractClientCalls {
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
-    Screen getFastloadConfigScreen(Screen parent);
-    Text getNewTranslatableText(String content);
+    Screen newFastloadConfigScreen(Screen parent);
+    Text newTranslatableText(String content);
     int getLoadedChunkCount();
     int getCompletedChunkCount();
     void setScreen(Screen screen);
+    <Option> FLConfigScreenButtons<Option> newFLConfigScreenButtons();
+    @SuppressWarnings("UnusedReturnValue")
+    <T extends Element & Drawable> T addDrawableChild(Screen screen, T drawableElement);
     ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress);
+    <Option> Option newCyclingButton(
+            String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
+            StoreValueFunction storeValueFunction);
+    <Option> Option newSlider(String namespace, String identifier, MinMaxHolder minMaxValues,
+                     RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width);
     void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, String text, int centerX, int y, int color);

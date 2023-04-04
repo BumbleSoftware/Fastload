@@ -26,11 +26,11 @@ public class Fastload implements ModInitializer {
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
 			LOGGER.info(logKey(TRY_LIMIT_KEY) + getChunkTryLimit());
 			LOGGER.info(logKey(FORCE_CLOSE_KEY) + isForceCloseEnabled().toString().toUpperCase());
-			LOGGER.info(logKey(RENDER_RADIUS_KEY) + getPreRenderRadius());
+			LOGGER.info(logKey(RENDER_RADIUS_KEY) + getRenderChunkRadius());
 			LOGGER.info(logKey(RENDER_AREA_KEY) + getPreRenderArea());
 		}
 		LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
-		LOGGER.info(logKey(PREGEN_RADIUS_KEY) + getPregenRadius(true));
+		LOGGER.info(logKey(PREGEN_RADIUS_KEY) + getPregenChunkRadius(true));
 		LOGGER.info(logKey(PREGEN_AREA_KEY) + getPregenArea());
 	}
 }

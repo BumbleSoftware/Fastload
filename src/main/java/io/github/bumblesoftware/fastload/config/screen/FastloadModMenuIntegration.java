@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config;
+package io.github.bumblesoftware.fastload.config.screen;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -12,6 +12,6 @@ public class FastloadModMenuIntegration implements ModMenuApi {
      */
     @Override
     public ConfigScreenFactory<Screen> getModConfigScreenFactory() {
-        return ABSTRACTED_CLIENT::getFastloadConfigScreen;
+        return ABSTRACTED_CLIENT::newFastloadConfigScreen;
     }
 }

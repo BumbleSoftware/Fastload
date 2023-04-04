@@ -78,9 +78,9 @@ public final class FLClientHandler {
      * Logs Difference in Render and Pre-getRenderKey distances
      */
     private static void logRenderDistanceDifference() {
-        if (!getPreRenderRadius().equals(getPreRenderRadius(true)))
+        if (getRenderChunkRadius() != getRenderChunkRadius(true))
             log("Pre-rendering radius changed to "
-                    + getPreRenderRadius() + " from " + getPreRenderRadius(true)
+                    + getRenderChunkRadius() + " from " + getRenderChunkRadius(true)
                     + " to protect from chunks not loading past your given getRenderKey distance. " +
                     "To resolve this, please adjust your getRenderKey distance accordingly");
     }

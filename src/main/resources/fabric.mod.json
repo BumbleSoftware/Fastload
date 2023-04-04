@@ -29,7 +29,7 @@
       "io.github.bumblesoftware.fastload.init.FastloadClient"
     ],
     "modmenu": [
-      "io.github.bumblesoftware.fastload.config.FastloadModMenuIntegration"
+      "io.github.bumblesoftware.fastload.config.screen.FastloadModMenuIntegration"
     ]
   },
   "mixins": [

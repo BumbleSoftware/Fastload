@@ -72,8 +72,8 @@ public class FLConfigScreenButtons119 {
     protected static final SimpleOption<?>[] buttons = {
             getNewBoolButton(DEBUG_KEY, isDebugEnabled()),
             getNewBoolButton(FORCE_CLOSE_KEY, isForceCloseEnabled()),
-            getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(), getPreRenderRadius()),
-            getNewSlider(PREGEN_RADIUS_KEY,getRadiusBound(), getPregenRadius(true)),
+            getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(), getRenderChunkRadius()),
+            getNewSlider(PREGEN_RADIUS_KEY,getRadiusBound(), getPregenChunkRadius(true)),
             getNewSlider(TRY_LIMIT_KEY, FLMath.getChunkTryLimitBound(), getChunkTryLimit())
     };
 

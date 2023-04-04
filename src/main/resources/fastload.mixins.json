@@ -17,7 +17,8 @@
     "client.GameRendererMixin",
     "client.LevelLoadingScreenMixin",
     "client.MinecraftClientMixin",
-    "client.OptionAccess"
+    "client.OptionAccess",
+    "client.ScreenAccess"
   ],
   "injectors": {
     "defaultRequire": 1
