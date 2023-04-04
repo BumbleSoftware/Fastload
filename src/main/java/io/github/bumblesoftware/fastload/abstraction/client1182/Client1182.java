@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.abstraction.client1182;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenImplementation;
+import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.ScreenAccess;
@@ -40,7 +40,7 @@ public class Client1182 implements AbstractClientCalls {
 
     @Override
     public Screen newFastloadConfigScreen(Screen parent) {
-        return new FLConfigScreenImplementation(parent);
+        return new FLConfigScreen1182(parent);
     }
 
     @Override

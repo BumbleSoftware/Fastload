@@ -6,13 +6,10 @@ import net.minecraft.client.option.Option;
 
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
-public class FLConfigScreenImplementation
-        extends SimpleOptionsScreen
-        implements FLConfigScreenAbstraction
-{
-    public FLConfigScreenImplementation(Screen parent) {
+public class FLConfigScreen1182 extends SimpleOptionsScreen implements FLConfigScreenAbstraction {
+    public FLConfigScreen1182(Screen parent) {
         super(parent, CLIENT.options, TITLE,
-                (Option[]) ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions(new Option[] {}));
+                (Option[]) ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions(new Option[]{}));
     }
 }
 
