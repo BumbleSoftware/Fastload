@@ -11,10 +11,10 @@
   "fastload.button.close_loading_screen_unsafely": "Đóng màn hình loading",
   "fastload.button.close_loading_screen_unsafely.tooltip": "Fastload có nên đóng sớm giao diện địa hình tải mặc dù nó hơi không an toàn?",
 
-  "fastload.button.pre_render_radius": "Bán kính kết xuất trước",
-  "fastload.button.pre_render_radius.tooltip": "Nhiều khối trong một bán kính có nên được chuẩn bị và xây dựng trong quá trình kết xuất trước không? Giới hạn bởi khoảng cách hiển thị",
-  "fastload.button.pre_render_radius.min": "Vô hiệu hóa",
-  "fastload.button.pre_render_radius.max": "Tại sao vậy?",
+  "fastload.button.render_chunk_radius": "Bán kính kết xuất trước",
+  "fastload.button.render_chunk_radius.tooltip": "Nhiều khối trong một bán kính có nên được chuẩn bị và xây dựng trong quá trình kết xuất trước không? Giới hạn bởi khoảng cách hiển thị",
+  "fastload.button.render_chunk_radius.min": "Vô hiệu hóa",
+  "fastload.button.render_chunk_radius.max": "Tại sao vậy?",
 
   "fastload.button.pregen_chunk_radius": "Bán kính được tạo trước",
   "fastload.button.pregen_chunk_radius.tooltip": "Nhiều khối trong một bán kính sẽ được tạo trên máy chủ cho đến khi hoàn thành. Nên tương quan nghịch với bán kính trước khi kết xuất để có hiệu suất tối ưu",

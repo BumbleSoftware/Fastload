@@ -11,10 +11,10 @@
   "fastload.button.close_loading_screen_unsafely": "关闭加载屏幕",
   "fastload.button.close_loading_screen_unsafely.tooltip": "Fastload 应该提前关闭加载地形界面，即使它稍微有点不安全？",
 
-  "fastload.button.pre_render_radius": "预渲染半径",
-  "fastload.button.pre_render_radius.tooltip": "在预渲染过程中，应该在半径范围内准备和构建多少个区块？受渲染距离的限制",
-  "fastload.button.pre_render_radius.min": "关闭",
-  "fastload.button.pre_render_radius.max": "为什么？",
+  "fastload.button.render_chunk_radius": "预渲染半径",
+  "fastload.button.render_chunk_radius.tooltip": "在预渲染过程中，应该在半径范围内准备和构建多少个区块？受渲染距离的限制",
+  "fastload.button.render_chunk_radius.min": "关闭",
+  "fastload.button.render_chunk_radius.max": "为什么？",
 
   "fastload.button.pregen_chunk_radius": "预生成半径",
   "fastload.button.pregen_chunk_radius.tooltip": "半径中的许多区块应该在服务器上生成，直到完成。应与预渲染半径成反比，以获得最佳性能",
