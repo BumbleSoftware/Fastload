@@ -28,15 +28,15 @@ public interface AbstractClientCalls {
     int getLoadedChunkCount();
     int getCompletedChunkCount();
     void setScreen(Screen screen);
-    <Option> FLConfigScreenButtons<Option> newFLConfigScreenButtons();
+    <T> FLConfigScreenButtons<T> newFLConfigScreenButtons();
     @SuppressWarnings("UnusedReturnValue")
     <T extends Element & Drawable> T addDrawableChild(Screen screen, T drawableElement);
     ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress);
-    <Option> Option newCyclingButton(
+    <T> T newCyclingButton(
             String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
             StoreValueFunction storeValueFunction);
-    <Option> Option newSlider(String namespace, String identifier, MinMaxHolder minMaxValues,
-                     RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width);
+    <T> T newSlider(String namespace, String identifier, MinMaxHolder minMaxValues,
+                    RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width);
     void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color);
     void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, String text, int centerX, int y, int color);

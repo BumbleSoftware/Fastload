@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
+import net.minecraft.client.option.Option;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.LiteralText;
@@ -63,8 +64,8 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public <Option> FLConfigScreenButtons<Option> newFLConfigScreenButtons() {
-        return new FLConfigScreenButtons<>();
+    public <T> FLConfigScreenButtons<T> newFLConfigScreenButtons() {
+        return (FLConfigScreenButtons<T>) new FLConfigScreenButtons<Option>();
     }
 
     @Override
@@ -79,11 +80,11 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public <Option> Option newCyclingButton(
+    public <T> T newCyclingButton(
             String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
             StoreValueFunction storeValueFunction
     ) {
-        return (Option) CyclingOption.create(
+        return (T) CyclingOption.create(
                 namespace + identifier,
                 new TranslatableText(namespace + identifier + ".tooltip"),
                 gameOptions -> Boolean.parseBoolean(retrieveValueFunction.getValue(identifier)),
@@ -92,11 +93,11 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public <Option> Option newSlider(
+    public <T> T newSlider(
             String namespace, String identifier, MinMaxHolder minMaxValues,
             RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width
     ) {
-        return (Option) new DoubleOption(
+        return (T) new DoubleOption(
                 namespace + identifier,
                 minMaxValues.min(),
                 minMaxValues.max(),

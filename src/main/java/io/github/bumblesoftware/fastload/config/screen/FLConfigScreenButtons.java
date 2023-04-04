@@ -6,13 +6,14 @@ import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 
+import java.util.List;
+
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 
-@SuppressWarnings("unchecked")
 public class FLConfigScreenButtons<Option> {
 
-    private  final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
+    private final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     public Option getNewBoolButton(String identifier, RetrieveValueFunction getProperty) {
         return FastloadClient.ABSTRACTED_CLIENT.newCyclingButton(
@@ -26,8 +27,8 @@ public class FLConfigScreenButtons<Option> {
         );
     }
 
-    public  Option[] getAllOptions() {
-        return (Option[]) new Object[] {
+    public  Option[] getAllOptions(Option[] array) {
+        return List.of(
                 getNewBoolButton(DEBUG_KEY, (key) -> isDebugEnabled().toString()),
                 getNewBoolButton(FORCE_CLOSE_KEY, (key) -> isForceCloseEnabled().toString()),
                 getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(),
@@ -35,6 +36,6 @@ public class FLConfigScreenButtons<Option> {
                 getNewSlider(PREGEN_RADIUS_KEY, getRadiusBound(), (key) -> Integer.toString(getPregenChunkRadius(true))),
                 getNewSlider(TRY_LIMIT_KEY, getChunkTryLimitBound(),
                         (key) -> Integer.toString(getChunkTryLimit()))
-        };
+        ).toArray(array);
     }
 }

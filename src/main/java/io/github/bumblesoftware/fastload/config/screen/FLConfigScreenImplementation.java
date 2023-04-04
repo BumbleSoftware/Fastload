@@ -11,7 +11,8 @@ public class FLConfigScreenImplementation
         implements FLConfigScreenAbstraction
 {
     public FLConfigScreenImplementation(Screen parent) {
-        super(parent, CLIENT.options, TITLE, (Option[]) ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions());
+        super(parent, CLIENT.options, TITLE,
+                (Option[]) ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions(new Option[] {}));
     }
 }
 
