@@ -7,7 +7,7 @@
   "mixins": [
   ],
   "client": [
-    "FastloadClientMixin"
+    "Hook1192"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
-import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;

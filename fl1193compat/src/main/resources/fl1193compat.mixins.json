@@ -8,7 +8,7 @@
   ],
   "client": [
     "local.FrustumMixin",
-    "local.Hook1193to119"
+    "local.Hook1193"
   ],
   "injectors": {
     "defaultRequire": 1

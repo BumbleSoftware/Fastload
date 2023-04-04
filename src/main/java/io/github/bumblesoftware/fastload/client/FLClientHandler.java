@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.config.screen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 

@@ -7,7 +7,7 @@
   "mixins": [
   ],
   "client": [
-    "local.Hook1194to119",
+    "local.Hook1194",
     "local.LevelLoadingScreenMixin"
   ],
   "injectors": {

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config.modmenu;
+package io.github.bumblesoftware.fastload.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
