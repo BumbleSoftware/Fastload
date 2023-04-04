@@ -11,6 +11,4 @@ dependencies {
     minecraft "com.mojang:minecraft:1.19.4"
     mappings "net.fabricmc:yarn:1.19.4+build.${project.yarn_mappings_1194}:v2"
     implementation project(path: ':fl1193compat', configuration: "namedElements")
-    implementation project(path: ':fl119-0-1-2-compat', configuration: "namedElements")
-    modImplementation(include(fabricApi.module("fabric-resource-loader-v0", "${project.fapi_1194}")))
-}
+    implementation project(path: ':fl119-0-1-2-compat', configuration: "namedElements")}
