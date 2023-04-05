@@ -14,7 +14,7 @@ public class FastloadClient implements ClientModInitializer {
     private static AbstractClientCalls getAbstractedClient() {
         if (FLMath.isDebugEnabled())
             Fastload.LOGGER.info("fastload1182base");
-        if (MinecraftVersionUtil.compareAll("1.18.2"))
+        if (MinecraftVersionUtil.matchesAny("1.18.2"))
             return new Client1182();
         else throw new NullPointerException("Method abstraction for MC Client is unsupported for this version");
     }
@@ -23,5 +23,8 @@ public class FastloadClient implements ClientModInitializer {
     public void onInitializeClient() {
         FLClientEvents.init();
         FLClientHandler.init();
+        MinecraftVersionUtil.getVersion();
+        if (FLMath.isDebugEnabled())
+            Fastload.LOGGER.info("Fastload Internal Mapping Version: " + ABSTRACTED_CLIENT.getVersion());
     }
 }

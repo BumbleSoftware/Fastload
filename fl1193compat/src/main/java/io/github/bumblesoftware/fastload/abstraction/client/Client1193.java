@@ -11,6 +11,10 @@ import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 
 public class Client1193 extends Client119 {
+    @Override
+    public String getVersion() {
+        return "1.19.3";
+    }
 
     @Override
     public ButtonWidget getNewButton(

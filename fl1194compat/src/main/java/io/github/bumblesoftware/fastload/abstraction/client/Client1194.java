@@ -9,6 +9,11 @@ import net.minecraft.text.Text;
 
 public class Client1194 extends Client1193 {
     @Override
+    public String getVersion() {
+        return "1.19.4";
+    }
+
+    @Override
     public void renderScreenBackgroundTexture(
             final Screen screen,
             final int offset,

@@ -12,6 +12,11 @@ import net.minecraft.text.Text;
 
 public class Client119 extends Client1182 {
     @Override
+    public String getVersion() {
+        return "1.19/1.19.1/1.19.2";
+    }
+
+    @Override
     public Screen newFastloadConfigScreen(final Screen parent) {
         return new FLConfigScreen119(parent);
     }

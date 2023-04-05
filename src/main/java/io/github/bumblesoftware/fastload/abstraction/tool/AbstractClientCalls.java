@@ -19,6 +19,9 @@ import net.minecraft.text.Text;
  */
 @SuppressWarnings("UnusedReturnValue")
 public interface AbstractClientCalls {
+    default String getVersion() {
+        return "null-abstract";
+    }
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();

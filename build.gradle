@@ -13,10 +13,11 @@ dependencies {
 	minecraft "com.mojang:minecraft:1.18.2"
 	mappings "net.fabricmc:yarn:1.18.2+build.${project.yarn_mappings_1182}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fapi_1182}+1.18.2"
 
 	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
 	modImplementation(include 'com.github.Fallen-Breath:conditional-mixin:v0.3.2')
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_1182}"
 
 	afterEvaluate {
 		subprojects.each {

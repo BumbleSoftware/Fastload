@@ -10,5 +10,8 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:1.19.3"
     mappings "net.fabricmc:yarn:1.19.3+build.${project.yarn_mappings_1193}:v2"
+    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fapi_1193}+1.19.3"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_1193}"
     implementation project(path: ':fl119-0-1-2-compat', configuration: "namedElements")
+
 }

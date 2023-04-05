@@ -31,6 +31,12 @@ import net.minecraft.text.TranslatableText;
 
 @SuppressWarnings("unchecked")
 public class Client1182 implements AbstractClientCalls {
+
+    @Override
+    public String getVersion() {
+        return "1.18.2";
+    }
+
     @Override
     public MinecraftClient getClientInstance() {
         return MinecraftClient.getInstance();
