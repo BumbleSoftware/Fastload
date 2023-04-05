@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "fastload_fapi_forward",
+  "version": "${version}",
+
+  "name": "Fastload Fabric-api Forwarding",
+  "description": "Fabric-api multi-versioning.",
+  "authors": [
+    "StockiesLad [Owner]"
+  ],
+  "contact": {
+    "sources": "https://github.com/BumbleSoftware/Fastload",
+    "issues": "https://github.com/BumbleSoftware/Fastload/issues"
+  },
+
+  "license": "LGPL-3.0",
+  "icon": "assets/fastload/icon.png",
+  "environment": "*",
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "minecraft": ">=1.19.4",
+    "java": ">=17"
+  }
+}

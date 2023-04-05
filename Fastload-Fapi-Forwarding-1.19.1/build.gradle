@@ -1,0 +1,14 @@
+archivesBaseName = "Fastload-Fapi-Forwarding-1.19.1"
+version = project.fapi_forwarding_version
+loom {
+}
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.19.1"
+    mappings "net.fabricmc:yarn:1.19.1+build.${project.yarn_mappings_1191}:v2"
+    include(modImplementation(fabricApi.module("fabric-resource-loader-v0", "${project.fapi_1191}+1.19.1")))
+}

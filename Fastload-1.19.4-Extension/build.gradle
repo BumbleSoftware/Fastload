@@ -14,5 +14,5 @@ dependencies {
     implementation project(path: ':', configuration: "namedElements")
     implementation project(path: ':Fastload-1.19.0-1-2-Extension', configuration: "namedElements")
     implementation project(path: ':Fastload-1.19.3-Extension', configuration: "namedElements")
-    implementation project(path: ":Fastload-Fabric-api-Forwarding-1.19.4", configuration: "namedElements")
+    implementation project(path: ":Fastload-Fapi-Forwarding-1.19.4", configuration: "namedElements")
 }
