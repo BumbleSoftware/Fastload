@@ -1,50 +1,49 @@
-# What the hell is 441 chunk loading and why is it important?
-441 Chunk loading is essentially a generator for your world that loads 21^2 chunks (or 10 chunk-render-distance), Why does 10 turn into 21? 2 sides plus the one you are standing on, squared for 2 dimensions.
-
 # Short explanation:
-Fastload is a simple mod that reduces world loading time. This serves as an alternative to ksyxis and Forcecloseloadingscreen.
+Fastload is a mod that provides numerous methods of control over world loading. Most of which are intended
+to optimise it; to speed it up.
 
-# Required by:
-- Client
-- Server
-- ...& Will work on one but not the other but some features will be disabled. So use both if you want all the features!
+# Environments:
+- Client (Optional)
+- Server (Optional)
 
-# Credits for mods that are integrated:
-- Ksyxis by VidTu (Incompatible)
-- Forcecloseloadingscreen by kennytv (Incompatible)
+# Credits:
+- StockiesLad (Owner)
+- JoostMSoftware (Co-Owner)
+- AbdElAziz333 (Forge)
+- VidTu (Ksyxis (Idea))
+- kennytv (Forcecloseloadingscreen (Code))
 
-# Here are its features:
-- Reducing 21^2 chunks to 5^2 (Configurable)
-- Cancels 'Loading Terrain' & 'Joining World' for even quicker loading times.
-- Adjusts the visual chunk loading to be smaller and in sync with the smaller radius.
-- Optional Pre-generator screen (Disabled by default)
+# Features:
+- Chunk Pre-generation: Reducing 21^2 chunks to 5^2 (Configurable)
+- Loading Screens: Cancellable (Configurable)
+- Rendering: Pre-rendering Phase (Configurable)
 
-# Speed times: (Default Settings) [All other elements are controlled!]
-- Vanilla: [
-- Create New world: ~32 sec
-- Load World: ~5 sec
-- ]
-- Fastload: [
-- Create New World: ~23 sec
-- Load World: ~3 sec
-- ]
+# Suggested With:
+- C2ME: Optimises chunk generation.
+- Sodium: Optimises chunk rendering.
 
-# How it works (In detail) (In comparison with integrated mods):
-Ksyxis cancels 441 world loading by essentially telling the game "Hey, we're done!", which works on paper. But, it is a very unsafe method of loading and rather inefficient. It does this during chunk loading which is a big no-no in code. Not only does this cause potential crashes, and corruption, but it also makes it take longer to load in comparison to our way. Ksyxis doesn't even initialise at the beginning of 441, it does it after it is initialised! Which is just plain bad. But don't get angry at ksyxis yet! The developer of it issues a firm warning that it isn't stable and really shouldn't be used, which explains everything.
-We do this in a better, safer way by simply dialing down the number of chunks required to load before 441 initialises. This is fairly self-explanatory!
+# Speed times (Default Settings, My system):
+- Vanilla:
+  - Create New world: ~32 sec
+  - Load World: ~5 sec
 
-Furthermore, we integrated yet another, unstable/unsafe mod: "Force Close Loading Screen". By itself, it just cancels the Downloading Terrain Screen, which isn't stable. We improved upon this by a number of metrics, such as:
+- Fastload: 
+  - Create New World: ~23 sec
+  - Load World: ~3 sec
 
-    * Temporarily stop the Pause Menu from appearing too early when the world takes a screenshot for it's icon.
-    * Cancelled 'Joining World' as well.
-    * Added a separate screen to either replace or complement this feature.
-    * Added a number of failsafes, such as:
-        * Only cancel when the player is ready.
-        * Have a number of checkers to ensure that it doesn't interrupt other parts of the game.
-        * Made this toggleable (for very obvious reasons).
+# Explanation:
+The 441 chunk loading engine is pretty much what the name is. The reason for it being 441 chunks is that
+it generates chunks in a 10 chunk radius as a square. So multiply that by 2, add 1 (because you are standing
+on a chunk) and square it. Fastload simply adjusts the radius to be lower by default, whilst also making it
+changeable like every other chunk radius.
 
-Modrinth: https://modrinth.com/mod/fastload
+During world loading, there is also a lot of pretty much unnecessary loading screens. Fastload makes them
+skippable. To replace this, there is a pre-rendering phase that has a customisable radius as well. It allows
+chunks to be generated uniformly around you, unlike vanilla behaviour which only renders visible chunks.
+If you really wanted to, you could skip loading screens & 441 chunk loading directly to this phase. It will
+be faster with 0 downsides.
 
-Curseforge: https://www.curseforge.com/minecraft/mc-mods/fastload
-
-Discord: https://discord.gg/fMSnenNSXM
+# Links
+- Modrinth: https://modrinth.com/mod/fastload
+- Curseforge: https://www.curseforge.com/minecraft/mc-mods/fastload
+- Discord: https://discord.gg/fMSnenNSXM
