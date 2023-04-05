@@ -1,0 +1,18 @@
+archivesBaseName = "Fastload-1.19.4-compat"
+
+loom {
+}
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.19.4"
+    mappings "net.fabricmc:yarn:1.19.4+build.${project.yarn_mappings_1194}:v2"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_1194}"
+    implementation project(path: ':', configuration: "namedElements")
+    implementation project(path: ':Fastload-1.19.0-1-2-compat', configuration: "namedElements")
+    implementation project(path: ':Fastload-1.19.3-compat', configuration: "namedElements")
+    implementation project(path: ":Fastload-Fabric-api-Forwarding-1.19.4", configuration: "namedElements")
+}

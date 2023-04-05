@@ -8,6 +8,14 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-include "fl119-0-1-2-compat"
-include "fl1193compat"
-include "fl1194compat"
+
+include "Fastload-1.19.0-1-2-compat"
+include "Fastload-1.19.3-compat"
+include "Fastload-1.19.4-compat"
+include "Fastload-Fabric-api-Forwarding-1.18.2"
+include "Fastload-Fabric-api-Forwarding-1.19"
+include "Fastload-Fabric-api-Forwarding-1.19.1"
+include "Fastload-Fabric-api-Forwarding-1.19.2"
+include "Fastload-Fabric-api-Forwarding-1.19.3"
+include "Fastload-Fabric-api-Forwarding-1.19.4"
+
