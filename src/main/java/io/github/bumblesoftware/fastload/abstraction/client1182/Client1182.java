@@ -1,6 +1,7 @@
 package io.github.bumblesoftware.fastload.abstraction.client1182;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
@@ -44,8 +45,18 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
+    public Screen newBuildingTerrainScreen() {
+        return new BuildingTerrainScreen();
+    }
+
+    @Override
     public Text newTranslatableText(String content) {
         return new TranslatableText(content);
+    }
+
+    @Override
+    public Text newLiteralText(String content) {
+        return new LiteralText(content);
     }
 
     @Override

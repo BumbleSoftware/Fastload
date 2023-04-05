@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 
@@ -193,7 +194,7 @@ public final class FLClientHandler {
                     if (isDebugEnabled()) log("Goal (Loaded Chunks): " + getPreRenderArea());
                     isBuilding = true;
                     System.gc();
-                    ABSTRACTED_CLIENT.setScreen(new BuildingTerrainScreen());
+                    ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
                 } else if (isForceCloseEnabled()) {
                     playerJoined = false;
                     if (isDebugEnabled()) log("Successfully Skipped Downloading Terrain Screen!");

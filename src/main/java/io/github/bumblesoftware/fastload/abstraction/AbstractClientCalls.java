@@ -24,7 +24,9 @@ public interface AbstractClientCalls {
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
     Screen newFastloadConfigScreen(Screen parent);
+    Screen newBuildingTerrainScreen();
     Text newTranslatableText(String content);
+    Text newLiteralText(String content);
     int getLoadedChunkCount();
     int getCompletedChunkCount();
     void setScreen(Screen screen);

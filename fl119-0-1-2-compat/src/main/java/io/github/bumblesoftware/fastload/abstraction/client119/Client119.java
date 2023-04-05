@@ -19,6 +19,11 @@ public class Client119 extends Client1182 {
     }
 
     @Override
+    public Text newLiteralText(String content) {
+        return Text.literal(content);
+    }
+
+    @Override
     public boolean isWindowFocused() {
         return getClientInstance().isWindowFocused();
     }

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.client;
+package io.github.bumblesoftware.fastload.client.sceen;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
