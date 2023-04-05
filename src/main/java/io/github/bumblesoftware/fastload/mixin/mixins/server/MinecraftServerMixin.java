@@ -1,7 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +33,7 @@ public class MinecraftServerMixin {
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        return FLMath.getPregenChunkRadius(false);
+        return getPregenChunkRadius(false);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

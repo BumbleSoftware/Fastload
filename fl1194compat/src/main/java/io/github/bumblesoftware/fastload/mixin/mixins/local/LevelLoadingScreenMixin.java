@@ -25,31 +25,31 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 @Mixin(LevelLoadingScreen.class)
 public abstract class LevelLoadingScreenMixin {
 
-    @Shadow
-    @Final
-    private WorldGenerationProgressTracker progressProvider;
+
+    @Shadow @Final private WorldGenerationProgressTracker progressProvider;
     private boolean check1 = false;
     private boolean check2 = false;
     private boolean check3 = false;
 
     @Shadow protected abstract String getPercentage();
+    @SuppressWarnings("DataFlowIssue")
     private int getChunkMapHeight() {
         return (((Screen)(Object)this).height * 5/8 - 20);
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V"), index = 3)
-    private int drawCorrectedChunkMap1(int centerY) {
+    private int changeChunkMapYLevel(int centerY) {
         if (FLMath.isDebugEnabled() && !check1) {
-            Fastload.LOGGER.info("drawCorrectedChunkMap1...");
+            Fastload.LOGGER.info("(LevelLoadingScreen) Chunk-map y-level changed.");
             check1 = true;
         }
         return getChunkMapHeight();
     }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V"), index = 5)
-    private int drawCorrectedChunkMap2(int pixelMargin) {
+    private int changeChunkMapPixelMargin(int pixelMargin) {
         if (FLMath.isDebugEnabled() && !check2) {
-            Fastload.LOGGER.info("drawCorrectedChunkMap2...");
+            Fastload.LOGGER.info("(LevelLoadingScreen) pixelMargin changed.");
             check2 = true;
         }
         return 0;
@@ -58,7 +58,7 @@ public abstract class LevelLoadingScreenMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
     private void drawCorrectedText(MatrixStack matrices, TextRenderer textRenderer, String s, int i, int j, int k) {
         if (FLMath.isDebugEnabled() && !check3) {
-            Fastload.LOGGER.info("drawCorrectedText...");
+            Fastload.LOGGER.info("(LevelLoadingScreen) Corrected text y-level");
             check3 = true;
         }
         ABSTRACTED_CLIENT.drawCenteredText(
