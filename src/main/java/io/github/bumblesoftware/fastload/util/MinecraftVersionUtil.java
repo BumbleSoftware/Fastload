@@ -2,12 +2,12 @@ package io.github.bumblesoftware.fastload.util;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import net.minecraft.MinecraftVersion;
+import net.minecraft.SharedConstants;
 
 public class MinecraftVersionUtil {
     public static boolean compareAll(String... versions) {
         for (String version : versions)
-            if (MinecraftVersion.CURRENT.getName().equals(version))
+            if (getVersion().equals(version))
                 return true;
         return false;
     }
@@ -16,7 +16,7 @@ public class MinecraftVersionUtil {
             String operator,
             String version
     ) {
-        var currentVersionNum = Integer.parseInt(MinecraftVersion.CURRENT.getName().replaceAll("\\.", ""));
+        var currentVersionNum = Integer.parseInt(getVersion().replaceAll("\\.", ""));
         var versionNum = Integer.parseInt(version.replaceAll("\\.", ""));
 
         if (FLMath.isDebugEnabled())
@@ -58,5 +58,10 @@ public class MinecraftVersionUtil {
                 return false;
         }
         return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    private static String getVersion() {
+        return SharedConstants.VERSION_NAME;
     }
 }

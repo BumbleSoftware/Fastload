@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.local;
 
-import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.client.Client119;
+import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;
@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FastloadClient.class)
 public class Hook1192 {
+    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "getAbstractedClient", at = @At("HEAD"), remap = false, cancellable = true)
     private static void compat119(CallbackInfoReturnable<AbstractClientCalls> cir) {
         if (FLMath.isDebugEnabled())

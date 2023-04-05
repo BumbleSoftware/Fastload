@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FastloadClient.class)
 public class Hook1193 {
+    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "getAbstractedClient", at = @At("HEAD"), remap = false, cancellable = true)
     private static void compat1193(CallbackInfoReturnable<AbstractClientCalls> cir) {
         if (FLMath.isDebugEnabled())

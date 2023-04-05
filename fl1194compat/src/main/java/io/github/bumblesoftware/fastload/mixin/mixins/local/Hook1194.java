@@ -14,6 +14,7 @@ import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.compar
 
 @Mixin(FastloadClient.class)
 public class Hook1194 {
+    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "getAbstractedClient", at = @At("HEAD"), remap = false, cancellable = true)
     private static void compat1194(CallbackInfoReturnable<AbstractClientCalls> cir) {
         if (FLMath.isDebugEnabled())
