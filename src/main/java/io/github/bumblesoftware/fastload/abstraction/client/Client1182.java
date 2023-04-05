@@ -1,8 +1,8 @@
-package io.github.bumblesoftware.fastload.abstraction.client1182;
+package io.github.bumblesoftware.fastload.abstraction.client;
 
-import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.abstraction.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.StoreValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;

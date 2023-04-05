@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.local;
 
-import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.abstraction.client1193.Client1193;
+import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.client.Client1193;
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;

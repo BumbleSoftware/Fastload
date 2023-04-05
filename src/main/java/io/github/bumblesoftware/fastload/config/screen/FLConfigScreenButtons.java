@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.screen;
 
-import io.github.bumblesoftware.fastload.abstraction.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;

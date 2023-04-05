@@ -1,32 +1,32 @@
-package io.github.bumblesoftware.fastload.abstraction.client1193;
-
+package io.github.bumblesoftware.fastload.abstraction.client;
 
 import com.mojang.serialization.Codec;
-import io.github.bumblesoftware.fastload.abstraction.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.StoreValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.client119.Client119;
+import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
+import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen119;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 
-public class Client1193 extends Client119 {
-
+public class Client119 extends Client1182 {
     @Override
-    public ButtonWidget getNewButton(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final Text message,
-            final ButtonWidget.PressAction onPress
-    ) {
-        return ButtonWidget.builder(message, onPress)
-                .dimensions(x, y, width, height)
-                .build();
+    public Screen newFastloadConfigScreen(final Screen parent) {
+        return new FLConfigScreen119(parent);
     }
 
+    @Override
+    public Text newTranslatableText(final String content) {
+        return Text.translatable(content);
+    }
+
+    @Override
+    public Text newLiteralText(final String content) {
+        return Text.literal(content);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public SimpleOption<Boolean> newCyclingButton(
             final String namespace,
@@ -42,6 +42,7 @@ public class Client1193 extends Client119 {
         );
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public SimpleOption<Integer> newSlider(
             final String namespace,
@@ -70,5 +71,10 @@ public class Client1193 extends Client119 {
                 Integer.parseInt(retrieveValueFunction.getValue(identifier)),
                 value -> storeValueFunction.setValue(identifier, Integer.toString(value))
         );
+    }
+
+    @Override
+    public boolean isWindowFocused() {
+        return getClientInstance().isWindowFocused();
     }
 }

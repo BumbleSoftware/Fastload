@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.abstraction.client1182.Client1182;
+import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.client.Client1182;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.init.FLMath;

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.abstraction;
+package io.github.bumblesoftware.fastload.abstraction.tool;
 
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
