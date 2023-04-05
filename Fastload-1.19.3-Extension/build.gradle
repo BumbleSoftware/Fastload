@@ -1,4 +1,4 @@
-archivesBaseName = "Fastload-1.19.3-compat"
+archivesBaseName = "Fastload-1.19.3-Extension"
 
 loom {
 }
@@ -12,5 +12,5 @@ dependencies {
     mappings "net.fabricmc:yarn:1.19.3+build.${project.yarn_mappings_1193}:v2"
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_1193}"
     implementation project(path: ':', configuration: "namedElements")
-    implementation project(path: ':Fastload-1.19.0-1-2-compat', configuration: "namedElements")
+    implementation project(path: ':Fastload-1.19.0-1-2-Extension', configuration: "namedElements")
 }

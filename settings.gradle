@@ -9,9 +9,9 @@ pluginManagement {
     }
 }
 
-include "Fastload-1.19.0-1-2-compat"
-include "Fastload-1.19.3-compat"
-include "Fastload-1.19.4-compat"
+include "Fastload-1.19.0-1-2-Extension"
+include "Fastload-1.19.3-Extension"
+include "Fastload-1.19.4-Extension"
 include "Fastload-Fabric-api-Forwarding-1.18.2"
 include "Fastload-Fabric-api-Forwarding-1.19"
 include "Fastload-Fabric-api-Forwarding-1.19.1"

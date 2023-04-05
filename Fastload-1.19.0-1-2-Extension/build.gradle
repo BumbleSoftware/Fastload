@@ -1,4 +1,4 @@
-archivesBaseName = "Fastload-1.19.0-1-2-compat"
+archivesBaseName = "Fastload-1.19.0-1-2-Extension"
 
 loom {
 }
