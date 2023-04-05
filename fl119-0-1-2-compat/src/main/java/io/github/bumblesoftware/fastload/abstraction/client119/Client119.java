@@ -37,7 +37,7 @@ public class Client119 extends Client1182 {
     ) {
         return SimpleOption.ofBoolean(
                 namespace + identifier,
-                SimpleOption.constantTooltip(Text.translatable(namespace + identifier + ".tooltip")),
+                SimpleOption.constantTooltip(newTranslatableText(namespace + identifier + ".tooltip")),
                 Boolean.parseBoolean(retrieveValueFunction.getValue(identifier)),
                 aBoolean -> storeValueFunction.setValue(identifier, Boolean.toString(aBoolean))
         );
@@ -57,7 +57,7 @@ public class Client119 extends Client1182 {
         int min = minMaxValues.min();
         return new SimpleOption<>(
                 namespace + identifier,
-                SimpleOption.constantTooltip(Text.translatable(namespace + identifier + ".tooltip")),
+                SimpleOption.constantTooltip(newTranslatableText(namespace + identifier + ".tooltip")),
                 (optionText, value) -> {
                     if (value.equals(min)) {
                         return GameOptions.getGenericValueText(optionText, Text.translatable(namespace + identifier + ".min"));
