@@ -1,7 +1,5 @@
 package io.github.bumblesoftware.fastload.abstraction;
 
-import io.github.bumblesoftware.fastload.abstraction.client1182.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.client1182.StoreValueFunction;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
@@ -19,31 +17,69 @@ import net.minecraft.text.Text;
  * All client method calls are in this interface to be implemented differently for each version in order to allow
  * compat.
  */
+@SuppressWarnings("UnusedReturnValue")
 public interface AbstractClientCalls {
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
-    Screen newFastloadConfigScreen(Screen parent);
+    Screen newFastloadConfigScreen(final Screen parent);
     Screen newBuildingTerrainScreen();
-    Text newTranslatableText(String content);
-    Text newLiteralText(String content);
+    Text newTranslatableText(final String content);
+    Text newLiteralText(final String content);
+    <T extends Element & Drawable> T addDrawableChild(final Screen screen, final T drawableElement);
+    <T> FLConfigScreenButtons<T> newFLConfigScreenButtons();
+    ButtonWidget getNewButton(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final Text message,
+            final ButtonWidget.PressAction onPress
+    );
+    <T> T newCyclingButton(
+            final String namespace,
+            final String identifier,
+            final RetrieveValueFunction retrieveValueFunction,
+            final StoreValueFunction storeValueFunction
+    );
+    <T> T newSlider(
+            final String namespace,
+            final String identifier,
+            final RetrieveValueFunction retrieveValueFunction,
+            final StoreValueFunction storeValueFunction,
+            final MinMaxHolder minMaxValues,
+            final int width
+    );
+
+
+    void setScreen(final Screen screen);
+    void renderScreenBackgroundTexture(
+            final Screen screen,
+            final int offset,
+            final MatrixStack matrices
+    );
+    void drawCenteredText(
+            final MatrixStack matrices,
+            final TextRenderer textRenderer,
+            final Text text,
+            final int centerX,
+            final int y,
+            final int color
+    );
+    void drawCenteredText(
+            final MatrixStack matrices,
+            final TextRenderer textRenderer,
+            final String text,
+            final int centerX,
+            final int y,
+            final int color
+    );
+
     int getLoadedChunkCount();
     int getCompletedChunkCount();
-    void setScreen(Screen screen);
-    <T> FLConfigScreenButtons<T> newFLConfigScreenButtons();
-    @SuppressWarnings("UnusedReturnValue")
-    <T extends Element & Drawable> T addDrawableChild(Screen screen, T drawableElement);
-    ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress);
-    <T> T newCyclingButton(
-            String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
-            StoreValueFunction storeValueFunction);
-    <T> T newSlider(String namespace, String identifier, MinMaxHolder minMaxValues,
-                    RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width);
-    void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices);
-    void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color);
-    void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, String text, int centerX, int y, int color);
+
     boolean isWindowFocused();
-    boolean isGameMenuScreen(Screen screen);
-    boolean isProgressScreen(Screen screen);
-    boolean isDownloadingTerrainScreen(Screen screen);
+    boolean isGameMenuScreen(final Screen screen);
+    boolean isProgressScreen(final Screen screen);
+    boolean isDownloadingTerrainScreen(final Screen screen);
 }

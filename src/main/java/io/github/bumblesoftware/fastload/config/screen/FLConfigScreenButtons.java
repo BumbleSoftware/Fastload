@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config.screen;
 
-import io.github.bumblesoftware.fastload.abstraction.client1182.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;
@@ -21,9 +21,9 @@ public class FLConfigScreenButtons<Option> {
         );
     }
 
-    public  Option getNewSlider(String identifier, MinMaxHolder holder, RetrieveValueFunction getProperty) {
+    public  Option getNewSlider(String identifier, RetrieveValueFunction getProperty, MinMaxHolder minMaxValues) {
         return FastloadClient.ABSTRACTED_CLIENT.newSlider(
-                NAMESPACE_BUTTON, identifier, holder,  getProperty, FLConfig::storeProperty, 200
+                NAMESPACE_BUTTON, identifier,  getProperty, FLConfig::storeProperty, minMaxValues, 200
         );
     }
 
@@ -31,11 +31,21 @@ public class FLConfigScreenButtons<Option> {
         return List.of(
                 getNewBoolButton(DEBUG_KEY, (key) -> isDebugEnabled().toString()),
                 getNewBoolButton(FORCE_CLOSE_KEY, (key) -> isForceCloseEnabled().toString()),
-                getNewSlider(RENDER_RADIUS_KEY, getRadiusBound(),
-                        (key) -> Integer.toString(getRenderChunkRadius(true))),
-                getNewSlider(PREGEN_RADIUS_KEY, getRadiusBound(), (key) -> Integer.toString(getPregenChunkRadius(true))),
-                getNewSlider(TRY_LIMIT_KEY, getChunkTryLimitBound(),
-                        (key) -> Integer.toString(getChunkTryLimit()))
+                getNewSlider(
+                        RENDER_RADIUS_KEY,
+                        (key) -> Integer.toString(getRenderChunkRadius(true)),
+                        getRadiusBound()
+                ),
+                getNewSlider(
+                        PREGEN_RADIUS_KEY,
+                        (key) -> Integer.toString(getPregenChunkRadius(true)),
+                        getRadiusBound()
+                ),
+                getNewSlider(
+                        TRY_LIMIT_KEY,
+                        (key) -> Integer.toString(getChunkTryLimit()),
+                        getChunkTryLimitBound()
+                )
         ).toArray(array);
     }
 }

@@ -7,7 +7,14 @@ import net.minecraft.text.Text;
 
 public class Client1193 extends Client119 {
     @Override
-    public ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress) {
+    public ButtonWidget getNewButton(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final Text message,
+            final ButtonWidget.PressAction onPress
+    ) {
         return ButtonWidget.builder(message, onPress)
                 .dimensions(x, y, width, height)
                 .build();

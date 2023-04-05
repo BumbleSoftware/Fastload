@@ -1,6 +1,8 @@
 package io.github.bumblesoftware.fastload.abstraction.client1182;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
@@ -40,7 +42,7 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public Screen newFastloadConfigScreen(Screen parent) {
+    public Screen newFastloadConfigScreen(final Screen parent) {
         return new FLConfigScreen1182(parent);
     }
 
@@ -50,28 +52,21 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public Text newTranslatableText(String content) {
+    public Text newTranslatableText(final String content) {
         return new TranslatableText(content);
     }
 
     @Override
-    public Text newLiteralText(String content) {
+    public Text newLiteralText(final String content) {
         return new LiteralText(content);
     }
 
     @Override
-    public int getLoadedChunkCount() {
-        return getClientWorld().getChunkManager().getLoadedChunkCount();
-    }
-
-    @Override
-    public int getCompletedChunkCount() {
-        return getClientInstance().worldRenderer.getCompletedChunkCount();
-    }
-
-    @Override
-    public void setScreen(Screen screen) {
-        getClientInstance().setScreen(screen);
+    public <T1 extends Element & Drawable> T1 addDrawableChild(
+            final Screen screen,
+            final T1 drawableElement
+    ) {
+        return ((ScreenAccess)screen).addDrawableChildProxy(drawableElement);
     }
 
     @Override
@@ -79,21 +74,25 @@ public class Client1182 implements AbstractClientCalls {
         return (FLConfigScreenButtons<T>) new FLConfigScreenButtons<Option>();
     }
 
-    @Override
-    public <T1 extends Element & Drawable> T1 addDrawableChild(Screen screen, T1 drawableElement) {
-        return ((ScreenAccess)screen).addDrawableChildProxy(drawableElement);
-    }
-
 
     @Override
-    public ButtonWidget getNewButton(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress) {
+    public ButtonWidget getNewButton(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final Text message,
+            final ButtonWidget.PressAction onPress
+    ) {
         return new ButtonWidget(x, y, width, height, message, onPress);
     }
 
     @Override
     public <T> T newCyclingButton(
-            String namespace, String identifier, RetrieveValueFunction retrieveValueFunction,
-            StoreValueFunction storeValueFunction
+            final String namespace,
+            final String identifier,
+            final RetrieveValueFunction retrieveValueFunction,
+            final StoreValueFunction storeValueFunction
     ) {
         return (T) CyclingOption.create(
                 namespace + identifier,
@@ -105,8 +104,12 @@ public class Client1182 implements AbstractClientCalls {
 
     @Override
     public <T> T newSlider(
-            String namespace, String identifier, MinMaxHolder minMaxValues,
-            RetrieveValueFunction retrieveValueFunction, StoreValueFunction storeValueFunction, int width
+            final String namespace,
+            final String identifier,
+            final RetrieveValueFunction retrieveValueFunction,
+            final StoreValueFunction storeValueFunction,
+            final MinMaxHolder minMaxValues,
+            final int width
     ) {
         return (T) new DoubleOption(
                 namespace + identifier,
@@ -136,18 +139,50 @@ public class Client1182 implements AbstractClientCalls {
 
 
     @Override
-    public void renderScreenBackgroundTexture(Screen screen, int offset, MatrixStack matrices) {
+    public void setScreen(final Screen screen) {
+        getClientInstance().setScreen(screen);
+    }
+    @Override
+    public void renderScreenBackgroundTexture(
+            final Screen screen,
+            final int offset,
+            final MatrixStack matrices
+    ) {
         screen.renderBackgroundTexture(0);
     }
 
     @Override
-    public void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color) {
+    public void drawCenteredText(
+            final MatrixStack matrices,
+            final TextRenderer textRenderer,
+            final Text text,
+            final int centerX,
+            final int y,
+            final int color
+    ) {
         DrawableHelper.drawCenteredText(matrices, textRenderer, text, centerX, y, color);
     }
 
     @Override
-    public void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, String text, int centerX, int y, int color) {
+    public void drawCenteredText(
+            final MatrixStack matrices,
+            final TextRenderer textRenderer,
+            final String text,
+            final int centerX,
+            final int y,
+            final int color
+    ) {
         DrawableHelper.drawCenteredText(matrices, textRenderer, text, centerX, y, color);
+    }
+
+    @Override
+    public int getLoadedChunkCount() {
+        return getClientWorld().getChunkManager().getLoadedChunkCount();
+    }
+
+    @Override
+    public int getCompletedChunkCount() {
+        return getClientInstance().worldRenderer.getCompletedChunkCount();
     }
 
     @Override
@@ -156,17 +191,17 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public boolean isGameMenuScreen(Screen screen) {
+    public boolean isGameMenuScreen(final Screen screen) {
         return screen instanceof GameMenuScreen;
     }
 
     @Override
-    public boolean isProgressScreen(Screen screen) {
+    public boolean isProgressScreen(final Screen screen) {
         return screen instanceof ProgressScreen;
     }
 
     @Override
-    public boolean isDownloadingTerrainScreen(Screen screen) {
+    public boolean isDownloadingTerrainScreen(final Screen screen) {
         return screen instanceof DownloadingTerrainScreen;
     }
 }
