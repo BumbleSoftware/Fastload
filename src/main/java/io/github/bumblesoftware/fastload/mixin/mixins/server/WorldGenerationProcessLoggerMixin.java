@@ -7,17 +7,20 @@ import org.spongepowered.asm.mixin.injection.*;
 
 import net.minecraft.server.WorldGenerationProgressLogger;
 
+import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenChunkRadius;
+
 
 /**
  * Fixes the progress logger to watch the new amount of chunks to be pregenerated
  */
 @Mixin(value = WorldGenerationProgressLogger.class, priority = 1200)
 public class WorldGenerationProcessLoggerMixin {
+    @Shadow private int generatedCount;
+
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static int setRadius(int radius) {
-        return FLMath.getPregenRadius(false);
+        return getPregenChunkRadius(false);
     }
-    @Shadow private int generatedCount;
     /**
      * @author StockiesLad
      * @reason Fix bug with C2ME

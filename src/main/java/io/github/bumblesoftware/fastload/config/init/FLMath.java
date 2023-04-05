@@ -60,13 +60,13 @@ public class FLMath {
         }
         return i * i;
     }
-    public static Double getCircleArea(int radius) {
+    public static double getCircleArea(int radius) {
         return Math.PI * radius * radius;
     }
 
 
     //Radii
-    public static Integer getPreRenderRadius() {
+    public static int getRenderChunkRadius() {
         return parseMinMax(
                 getRawPreRenderRadius(),
                 Math.min(getRenderDistance(),
@@ -75,16 +75,16 @@ public class FLMath {
                 0
         );
     }
-    public static Integer getPreRenderRadius(boolean raw) {
+    public static int getRenderChunkRadius(boolean raw) {
         if (raw)
             return Math.max(
                     getRawPreRenderRadius(),
                     getRadiusBound().min()
             );
         else
-            return getPreRenderRadius();
+            return getRenderChunkRadius();
     }
-    public static int getPregenRadius(boolean raw) {
+    public static int getPregenChunkRadius(boolean raw) {
         if (raw)
             return parseMinMax(
                     getRawChunkPregenRadius(),
@@ -96,8 +96,8 @@ public class FLMath {
                     getRadiusBound()
             ) + 1;
     }
-    public static int getPregenRadius() {
-        return getPregenRadius(true);
+    public static int getPregenChunkRadius() {
+        return getPregenChunkRadius(true);
     }
 
 
@@ -106,7 +106,7 @@ public class FLMath {
         return getSquareArea(
                 false,
                 parseMinMax(
-                        getPregenRadius(),
+                        getPregenChunkRadius(),
                         getRadiusBound().max(),
                         getRadiusBound().min()
                 ),
@@ -117,15 +117,15 @@ public class FLMath {
         return getSquareArea(
                 true,
                 parseMinMax(
-                        getPregenRadius(),
+                        getPregenChunkRadius(),
                         getRadiusBound().max(),
                         getRadiusBound().min()
                 ),
                 false
         );
     }
-    public static Integer getPreRenderArea() {
-        return getCircleArea(getPreRenderRadius()).intValue();
+    public static int getPreRenderArea() {
+        return (int)getCircleArea(getRenderChunkRadius());
     }
 
 
@@ -140,6 +140,6 @@ public class FLMath {
         return getCloseLoadingScreenUnsafely();
     }
     public static Boolean isPreRenderEnabled() {
-        return getPreRenderRadius() > 0;
+        return getRenderChunkRadius() > 0;
     }
 }

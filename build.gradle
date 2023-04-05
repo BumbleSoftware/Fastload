@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 plugins {
 	id 'java'
 	id 'idea'
@@ -6,7 +7,6 @@ plugins {
 	id 'maven-publish'
 }
 loom {
-	accessWidenerPath = file("src/main/resources/fastload.accesswidener")
 }
 
 
@@ -15,12 +15,14 @@ dependencies {
 	mappings "net.fabricmc:yarn:1.18.2+build.${project.yarn_mappings_1182}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+	implementation project(path: ':Fastload-Fabric-api-Forwarding-1.18.2', configuration: "namedElements")
 	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
 	modImplementation(include 'com.github.Fallen-Breath:conditional-mixin:v0.3.2')
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_1182}"
 
 	afterEvaluate {
 		subprojects.each {
+			//noinspection ForeignDelegate
 			include project("${it.name}:")
 		}
 	}
@@ -70,6 +72,8 @@ allprojects {
 	}
 
 	tasks.withType(JavaCompile).configureEach {
+		//noinspection GroovyAssignabilityCheck
+		//noinspection GroovyAccessibility
 		it.options.release = 17
 	}
 
@@ -85,6 +89,7 @@ allprojects {
 
 	publishing {
 		publications {
+			//noinspection GroovyAssignabilityCheck
 			mavenJava(MavenPublication) {
 				from components.java
 			}
@@ -99,7 +104,6 @@ subprojects {
 	dependencies {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 		modImplementation 'com.github.Fallen-Breath:conditional-mixin:v0.3.2'
-		implementation project(path: ':', configuration: "namedElements")
 	}
 
 	version = rootProject.version

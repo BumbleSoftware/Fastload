@@ -13,7 +13,7 @@ import java.util.function.BooleanSupplier;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SERVER_TICK_EVENT;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenArea;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenRadius;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenChunkRadius;
 
 
 /*
@@ -33,7 +33,7 @@ public class MinecraftServerMixin {
     }
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
     private int setRadius(int value) {
-        return getPregenRadius(false);
+        return getPregenChunkRadius(false);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
