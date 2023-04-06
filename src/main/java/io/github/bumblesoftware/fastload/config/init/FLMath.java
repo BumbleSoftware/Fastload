@@ -1,13 +1,12 @@
 package io.github.bumblesoftware.fastload.config.init;
 
-import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
-import net.minecraft.client.MinecraftClient;
 
-import java.util.function.Supplier;
-
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.CHUNK_RADIUS_BOUND;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.TRY_LIMIT_BOUND;
+import static io.github.bumblesoftware.fastload.config.init.FLConfig.getRawDebug;
+import static io.github.bumblesoftware.fastload.config.init.FLConfig.getRawPreRenderRadius;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public class FLMath {
 
@@ -24,17 +23,6 @@ public class FLMath {
     public static MinMaxHolder getChunkTryLimitBound() {
         return TRY_LIMIT_BOUND;
     }
-
-
-    private static final Supplier<Double> RENDER_DISTANCE = () ->
-            MinecraftClient.getInstance().worldRenderer != null ?
-                    Math.min(
-                            MinecraftClient.getInstance().worldRenderer.getViewDistance(),
-                            getRadiusBoundMax()
-                    ) : getRadiusBoundMax();
-    private static int getRenderDistance() {
-        return RENDER_DISTANCE.get().intValue();
-    }
     protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
@@ -46,11 +34,10 @@ public class FLMath {
         return Math.PI * radius * radius;
     }
 
-
     public static int getRenderChunkRadius() {
         return parseMinMax(
                 getRawPreRenderRadius(),
-                Math.min(getRenderDistance(),
+                Math.min(ABSTRACTED_CLIENT.getRenderDistance(),
                         getRadiusBoundMax()
                 ),
                 0
@@ -76,9 +63,6 @@ public class FLMath {
         return getChunkTryLimit() >= 1000;
     }
     public static Boolean isPreRenderEnabled() {
-        var renderChunkRadius = getRenderChunkRadius();
-        if (isDebugEnabled())
-            Fastload.LOGGER.info("renderChunkRadius = " + renderChunkRadius);
-        return renderChunkRadius > 0;
+        return getRenderChunkRadius() > 0;
     }
 }

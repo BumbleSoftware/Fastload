@@ -21,7 +21,7 @@ public final class TickTimer {
     /**
      * Registers a client event for the timer to use
      */
-    public TickTimer(AbstractEvent<TickEventContext, Void> abstractUnsafeEvent) {
+    public TickTimer(AbstractEvent<TickEventContext> abstractUnsafeEvent) {
         abstractUnsafeEvent.registerThreadUnsafe(1, (eventContext, abstractParent, closer, eventArgs) -> {
             if (remainingTime > 0) {
                 remainingTime--;

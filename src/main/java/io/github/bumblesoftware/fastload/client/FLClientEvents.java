@@ -15,12 +15,12 @@ public class FLClientEvents {
     public static void init() {}
 
     public interface Events {
-        AbstractEvent<Empty, Void> CLIENT_PLAYER_INIT_EVENT =  new CapableEvent<>();
-        AbstractEvent<SetScreenEventContext, Void> SET_SCREEN_EVENT = new CapableEvent<>();
-        AbstractEvent<TickEventContext, Void> RENDER_TICK_EVENT = new CapableEvent<>();
-        AbstractEvent<TickEventContext, Void> SERVER_TICK_EVENT = new CapableEvent<>();
-        AbstractEvent<PauseMenuEventContext, Void> PAUSE_MENU_EVENT = new CapableEvent<>();
-        AbstractEvent<PlayerJoinEventContext, Void> PLAYER_JOIN_EVENT = new CapableEvent<>();
+        AbstractEvent<Empty> CLIENT_PLAYER_INIT_EVENT =  new CapableEvent<>();
+        AbstractEvent<SetScreenEventContext> SET_SCREEN_EVENT = new CapableEvent<>();
+        AbstractEvent<TickEventContext> RENDER_TICK_EVENT = new CapableEvent<>();
+        AbstractEvent<TickEventContext> SERVER_TICK_EVENT = new CapableEvent<>();
+        AbstractEvent<PauseMenuEventContext> PAUSE_MENU_EVENT = new CapableEvent<>();
+        AbstractEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new CapableEvent<>();
     }
 
     /**

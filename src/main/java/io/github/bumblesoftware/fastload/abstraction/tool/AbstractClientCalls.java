@@ -81,6 +81,7 @@ public interface AbstractClientCalls {
 
     int getLoadedChunkCount();
     int getCompletedChunkCount();
+    int getRenderDistance();
 
     boolean isWindowFocused();
     boolean isCurrentScreen(final ScreenProvider screenProvider);

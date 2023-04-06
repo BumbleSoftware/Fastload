@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.init.Fastload;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 @Mixin(MinecraftClient.class)
@@ -20,13 +21,16 @@ public class MinecraftClientMixin {
             "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
         var isPreRenderEnabled = isPreRenderEnabled();
-        if (isDebugEnabled())
-            Fastload.LOGGER.info("isPreRenderEnabled: " + isPreRenderEnabled);
+        if (isDebugEnabled()) {
+            LOGGER.info("isPreRenderEnabled: " + isPreRenderEnabled);
+            LOGGER.info("renderChunkRadius: " + FLMath.getRenderChunkRadius());
+            LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getRenderDistance());
+        }
         if (isPreRenderEnabled) {
             client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
             if (isDebugEnabled()) {
-                Fastload.LOGGER.info("DownloadingTerrainScreen -> BuildingTerrainScreen");
-                Fastload.LOGGER.info("Goal (Loaded Chunks): " + getPreRenderArea());
+                LOGGER.info("DownloadingTerrainScreen -> BuildingTerrainScreen");
+                LOGGER.info("Goal (Loaded Chunks): " + getPreRenderArea());
             }
         }
         else client.setScreenAndRender(new DownloadingTerrainScreen());
@@ -39,6 +43,5 @@ public class MinecraftClientMixin {
     }
 
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))
-    private void removeProgressScreen(MinecraftClient client, Screen screen) {
-    }
+    private void removeProgressScreen(MinecraftClient client, Screen screen) {}
 }

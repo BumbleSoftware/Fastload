@@ -5,6 +5,7 @@ import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.config.init.DefaultConfig;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
@@ -195,6 +196,13 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public int getCompletedChunkCount() {
         return getClientInstance().worldRenderer.getCompletedChunkCount();
+    }
+
+    @Override
+    public int getRenderDistance() {
+        if (getClientInstance().options == null) {
+            return DefaultConfig.CHUNK_RADIUS_BOUND.max();
+        } else return getClientInstance().options.viewDistance;
     }
 
     @Override
