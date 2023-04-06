@@ -25,5 +25,5 @@
   "fastload.button.chunk_try_limit": "Chunk Try Limit",
   "fastload.button.chunk_try_limit.tooltip": "How many times would the same chunk count be allowed to be returned in a row before bailing on pre-rendering",
   "fastload.button.chunk_try_limit.min": "NASA PC",
-  "fastload.button.chunk_try_limit.max": "Infinity"
+  "fastload.button.chunk_try_limit.max": "Snail"
 }

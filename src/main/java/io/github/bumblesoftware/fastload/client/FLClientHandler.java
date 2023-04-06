@@ -1,7 +1,9 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
+import net.minecraft.client.gui.screen.Screen;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
@@ -12,11 +14,15 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
  * CapableEvent}.
  */
 public final class FLClientHandler {
-    private static boolean accessedDownloadingTerrainScreen = false;
 
     public static void init() {
         registerEvents();
     }
+
+    private static Screen oldCurrentScreen = null;
+
+    private static boolean accessedDownloadingTerrainScreen = false;
+
 
     /**
      * Boolean whether an object of Player has been initialised
@@ -187,7 +193,7 @@ public final class FLClientHandler {
                         if (oldChunkBuildCountStorage == chunkBuildCount)
                             buildingWarnings++;
 
-                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit()) && !isForceBuildEnabled()) {
+                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit())) {
                             buildingWarnings = 0;
                             preparationWarnings = 0;
                             log("Rendering is taking too long! Stopping...");
@@ -199,9 +205,7 @@ public final class FLClientHandler {
                         if (preparationWarnings > 0) {
                             if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
                                 log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
-                                if (!isForceBuildEnabled()) {
-                                    log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
-                                }
+                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                 if (isDebugEnabled()) logRendering(chunkLoadedCount);
                             }
                             if (chunkLoadedCount > oldChunkLoadedCountStorage) {
@@ -211,9 +215,7 @@ public final class FLClientHandler {
                         if (buildingWarnings > 0) {
                             if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
                                 log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
-                                if (!isForceBuildEnabled()) {
-                                    log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
-                                }
+                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                 if (isDebugEnabled()) logRendering(chunkLoadedCount);
                             }
                             if (chunkBuildCount > oldChunkBuildCountStorage) {
@@ -235,10 +237,15 @@ public final class FLClientHandler {
         });
 
         RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
-                System.out.println(screen);
-                return false;
-            });
+            if (FLMath.isDebugEnabled()) {
+                ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
+                    if (oldCurrentScreen != screen) {
+                        oldCurrentScreen = screen;
+                        Fastload.LOGGER.info(screen.getTitle().getString() + "--" + screen);
+                    }
+                    return false;
+                });
+            }
             return null;
         });
     }
