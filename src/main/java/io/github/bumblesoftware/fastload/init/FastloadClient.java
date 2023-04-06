@@ -18,7 +18,7 @@ public class FastloadClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BuiltinAbstractMappings.register();
+        BuiltinAbstractionMappings.register();
         ABSTRACTED_CLIENT = getAbstractedClient();
         FLConfig.init();
         FLClientEvents.init();

@@ -36,7 +36,7 @@ public class MinecraftClientMixin {
                 LOGGER.info("Goal (Loaded Chunks): " + getPreRenderArea());
             }
         }
-        else client.setScreenAndRender(new DownloadingTerrainScreen());
+        else client.setScreen(new DownloadingTerrainScreen());
     }
 
     @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +

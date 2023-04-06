@@ -54,8 +54,9 @@ public class FLConfig {
         write();
 
     }
-    private static void logError(String key) {
-        Fastload.LOGGER.error("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, generating a new one!");
+    private static void logWarn(String key) {
+        Fastload.LOGGER.warn("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, " +
+                "generating a new one!");
     }
 
     private static void write() {
@@ -70,7 +71,7 @@ public class FLConfig {
                     "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(DEBUG_KEY) + " = debug (log) all things happening in fastload to aid in " +
+            comment.write("\n# " + writable(DEBUG_KEY) + " = debug (logWarn) all things happening in fastload to aid in " +
                     "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
@@ -92,7 +93,7 @@ public class FLConfig {
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
-            logError(key);
+            logWarn(key);
             properties.setProperty(key, String.valueOf(def));
             return def;
         }
@@ -111,7 +112,7 @@ public class FLConfig {
             properties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {
-            logError(key);
+            logWarn(key);
             properties.setProperty(key, String.valueOf(def));
             return def;
         }

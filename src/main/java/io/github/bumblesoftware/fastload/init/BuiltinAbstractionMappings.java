@@ -6,7 +6,7 @@ import io.github.bumblesoftware.fastload.util.MinecraftVersionUtil;
 
 import static io.github.bumblesoftware.fastload.abstraction.tool.AbstractionEvents.CLIENT_ABSTRACTION_EVENT;
 
-public class BuiltinAbstractMappings {
+public class BuiltinAbstractionMappings {
     public static void register() {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(0, (eventContext, event, closer, eventArgs) -> {
             if (MinecraftVersionUtil.matchesAny("1.18.2")) {

@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.PLAYER_JOIN_EVENT;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 /**
  * Sets setPlayerJoined to true when the player joins the game
@@ -24,7 +25,8 @@ public class ClientPlayNetworkHandlerMixin {
     }
 
     @Redirect(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
-    private void cancelDownloadingTerrainScreen(MinecraftClient instance, Screen screen) {
-
+    private void cancelDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
+        if (!ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
+            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
     }
 }

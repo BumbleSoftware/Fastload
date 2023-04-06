@@ -164,20 +164,6 @@ public final class FLClientHandler {
             return null;
         });
 
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (ABSTRACTED_CLIENT.isProgressScreen(eventContext.screen()) && ((playerReady && playerJoined) || (accessedDownloadingTerrainScreen))) {
-                if (accessedDownloadingTerrainScreen)
-                    accessedDownloadingTerrainScreen = false;
-                else {
-                    playerReady = false;
-                    playerJoined = false;
-                }
-                eventContext.ci().cancel();
-                ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
-            }
-            return null;
-        });
-
         RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (hasNotShownRenderDifference) {
                 logRenderDistanceDifference();
@@ -245,6 +231,14 @@ public final class FLClientHandler {
                     }
                 }
             }
+            return null;
+        });
+
+        RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
+            ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
+                System.out.println(screen);
+                return false;
+            });
             return null;
         });
     }
