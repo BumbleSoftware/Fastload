@@ -8,7 +8,8 @@
   ],
   "client": [
     "local.FrustumMixin",
-    "local.Hook1193"
+    "local.Hook1193",
+    "local1.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

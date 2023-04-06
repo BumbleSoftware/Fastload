@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.local;
+package io.github.bumblesoftware.fastload.mixin.mixins.local1;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
@@ -16,11 +16,7 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = {
-        "1.19",
-        "1.19.1",
-        "1.19.2"
-}))
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.19.3"))
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))

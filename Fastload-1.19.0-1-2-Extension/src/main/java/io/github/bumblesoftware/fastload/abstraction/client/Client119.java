@@ -3,6 +3,7 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 import com.mojang.serialization.Codec;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
+import io.github.bumblesoftware.fastload.config.init.DefaultConfig;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen119;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,6 +15,13 @@ public class Client119 extends Client1182 {
     @Override
     public String getVersion() {
         return "1.19/1.19.1/1.19.2";
+    }
+
+    @Override
+    public int getRenderDistance() {
+        if (getClientInstance().options == null) {
+            return DefaultConfig.CHUNK_RADIUS_BOUND.max();
+        } else return getClientInstance().options.getViewDistance().getValue();
     }
 
     @Override
