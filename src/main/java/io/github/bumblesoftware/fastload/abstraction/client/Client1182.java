@@ -211,7 +211,7 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public boolean isCurrentScreen(final ScreenProvider screenProvider) {
+    public boolean forCurrentScreen(final ScreenProvider screenProvider) {
         return screenProvider.getCurrent(getCurrentScreen());
     }
 

@@ -7,7 +7,6 @@
   "mixins": [
   ],
   "client": [
-    "Hook1192",
     "MinecraftClientMixin"
   ],
   "injectors": {

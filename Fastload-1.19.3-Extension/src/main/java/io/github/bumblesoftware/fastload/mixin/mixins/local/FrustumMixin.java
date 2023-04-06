@@ -16,7 +16,7 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 public class FrustumMixin {
     @Inject(method = "isVisible(DDDDDD)Z", at = @At("HEAD"), cancellable = true)
     private void setVisible(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, CallbackInfoReturnable<Boolean> cir) {
-        if (ABSTRACTED_CLIENT.isCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) &&
+        if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) &&
                 FLMath.isPreRenderEnabled())
             cir.setReturnValue(true);
     }

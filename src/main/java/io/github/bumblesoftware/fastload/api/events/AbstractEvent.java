@@ -10,15 +10,15 @@ import java.util.List;
 /**
  * A basic event system that's able to dynamically & statically register/remove,
  * has a builtin priority system & is easy to understand.
- * @param <Ctx> used for custom event params. Refer to {@link FLClientEvents}
+ * @param <Context> used for custom event params. Refer to {@link FLClientEvents}
  *           for examples.
  */
-public interface AbstractEvent<Ctx extends Record> {
+public interface AbstractEvent<Context> {
 
     /**
      * @return a new {@link EventHolder EventHolder}
      */
-    default EventHolder<Ctx> getNewHolder() {
+    default EventHolder<Context> getNewHolder() {
         return new EventHolder<>(new Long2ObjectLinkedOpenHashMap<>(), new ArrayList<>());
     }
 
@@ -28,12 +28,12 @@ public interface AbstractEvent<Ctx extends Record> {
      * @return multiple holders to manage dynamic events
      */
     @SuppressWarnings("unused")
-    EventHolder<Ctx> getMultipleArgsHolders(final String identifier);
+    EventHolder<Context> getMultipleArgsHolders(final String identifier);
 
     /**
      * @return The current {@link EventHolder argsHolder} for usage in {@link #removeThreadUnsafe(long, EventArgs)}
      */
-    EventHolder<Ctx> getHolder();
+    EventHolder<Context> getHolder();
 
     /**
      * Thread safe method to remove events. Typically used inside of events to remove after fire.
@@ -41,7 +41,7 @@ public interface AbstractEvent<Ctx extends Record> {
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
     @SuppressWarnings("unused")
-    void removeThreadSafe(final long priority, final EventArgs<Ctx> eventArgs);
+    void removeThreadSafe(final long priority, final EventArgs<Context> eventArgs);
 
     /**
      * Thread unsafe method of removing events. It's faster but will cause CME's if you aren't careful.
@@ -49,7 +49,7 @@ public interface AbstractEvent<Ctx extends Record> {
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
     @SuppressWarnings("unused")
-    default void removeThreadUnsafe(final long priority, final EventArgs<Ctx> eventArgs) {
+    default void removeThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
             getHolder().argsHolder().get(priority).remove(eventArgs);
     }
 
@@ -60,21 +60,21 @@ public interface AbstractEvent<Ctx extends Record> {
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
     @SuppressWarnings("unused")
-    void registerThreadsafe(final long priority, final EventArgs<Ctx> eventArgs);
+    void registerThreadsafe(final long priority, final EventArgs<Context> eventArgs);
 
     /**
      * Registers a lambda to a map. It's not thread safe so do it at startup to avoid CME's.
      * @param eventArgs Args that are to be called upon the eventArgs getting fired.
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
-    void registerThreadUnsafe(final long priority, final EventArgs<Ctx> eventArgs);
+    void registerThreadUnsafe(final long priority, final EventArgs<Context> eventArgs);
 
     /**
      * To set up an event listener, just mixin to your target, call this method with a new event context.
      * See {@link AbstractEvent} for what an actual implementation looks like.
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    void fireEvent(final Ctx eventContext);
+    void fireEvent(final Context eventContext);
 
     /**
      * Common storage type for {@link AbstractEvent}
@@ -83,7 +83,7 @@ public interface AbstractEvent<Ctx extends Record> {
      * @param <Ctx> used for custom event params. Refer to {@link FLClientEvents FLEvents}
      *           for examples.
      */
-    record EventHolder<Ctx extends Record> (
+    record EventHolder<Ctx> (
             Long2ObjectMap<List<EventArgs<Ctx>>> argsHolder,
             ArrayList<Long> priorityHolder
     ) {}
@@ -91,11 +91,11 @@ public interface AbstractEvent<Ctx extends Record> {
     /**
      * Event args holds a specific implementation that is added to the main registry for {@link AbstractEvent}
      * to onElement through upon firing.
-     * @param <T> used for custom event params. Refer to {@link FLClientEvents FLEvents}
+     * @param <Ctx> used for custom event params. Refer to {@link FLClientEvents FLEvents}
      *           for examples.
      */
     @FunctionalInterface
-    interface EventArgs<T extends Record> {
+    interface EventArgs<Ctx> {
 
         /**
          * @param eventContext The events params.
@@ -105,11 +105,11 @@ public interface AbstractEvent<Ctx extends Record> {
          * @return The current instance.
          */
         @SuppressWarnings("UnusedReturnValue")
-        EventArgs<T> onEvent(
-                final T eventContext,
-                final AbstractEvent<T> event,
+        EventArgs<Ctx> onEvent(
+                final Ctx eventContext,
+                final AbstractEvent<Ctx> event,
                 final Object closer,
-                final EventArgs<T> eventArgs
+                final EventArgs<Ctx> eventArgs
         );
     }
 }

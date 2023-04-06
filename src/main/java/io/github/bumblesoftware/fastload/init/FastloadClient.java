@@ -1,22 +1,25 @@
 package io.github.bumblesoftware.fastload.init;
 
 import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.tool.AbstractedClientHolder;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.init.FLConfig;
 import io.github.bumblesoftware.fastload.util.MinecraftVersionUtil;
 import net.fabricmc.api.ClientModInitializer;
 
+import static io.github.bumblesoftware.fastload.abstraction.tool.AbstractionEvents.CLIENT_ABSTRACTION_EVENT;
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.init.FastloadHookable.getAbstractedClient;
 
 public class FastloadClient implements ClientModInitializer {
-    public static final AbstractClientCalls ABSTRACTED_CLIENT = getAbstractedClient();
+    public static AbstractClientCalls ABSTRACTED_CLIENT;
 
     @Override
     public void onInitializeClient() {
+        BuiltinAbstractMappings.register();
+        ABSTRACTED_CLIENT = getAbstractedClient();
         FLConfig.init();
         FLClientEvents.init();
         FLClientHandler.init();
@@ -27,6 +30,14 @@ public class FastloadClient implements ClientModInitializer {
         LOGGER.info(logKey(TRY_LIMIT_KEY) + getChunkTryLimit());
         LOGGER.info(logKey(RENDER_RADIUS_KEY) + getRenderChunkRadius());
         LOGGER.info(logKey(RENDER_AREA_KEY) + getPreRenderArea());
+    }
+
+    private static AbstractClientCalls getAbstractedClient() {
+        AbstractedClientHolder clientHolder = new AbstractedClientHolder(null);
+        CLIENT_ABSTRACTION_EVENT.fireEvent(clientHolder);
+        if (clientHolder.clientCalls != null)
+            return clientHolder.clientCalls;
+        else throw new NullPointerException("Method abstraction for MC Client is unsupported for this version");
     }
 
     private static String logKey(String key) {

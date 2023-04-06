@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 
@@ -138,7 +137,7 @@ public final class FLClientHandler {
         });
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-                if (eventContext.screen() instanceof BuildingTerrainScreen) {
+                if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
                     hasNotShownRenderDifference = true;
                     if (isDebugEnabled())
                         log("setScreen(new BuildingTerrain)");
@@ -150,6 +149,8 @@ public final class FLClientHandler {
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen()) && playerReady && playerJoined) {
                 if (isDebugEnabled()) log("setScreen(new DownloadingTerrainScreen)");
+                playerReady = false;
+                playerJoined = false;
                 accessedDownloadingTerrainScreen = true;
             }
             return null;
@@ -163,12 +164,26 @@ public final class FLClientHandler {
             return null;
         });
 
-        RENDER_TICK_EVENT.registerThreadUnsafe(10, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
+            if (ABSTRACTED_CLIENT.isProgressScreen(eventContext.screen()) && ((playerReady && playerJoined) || (accessedDownloadingTerrainScreen))) {
+                if (accessedDownloadingTerrainScreen)
+                    accessedDownloadingTerrainScreen = false;
+                else {
+                    playerReady = false;
+                    playerJoined = false;
+                }
+                eventContext.ci().cancel();
+                ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
+            }
+            return null;
+        });
+
+        RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (hasNotShownRenderDifference) {
                 logRenderDistanceDifference();
                 hasNotShownRenderDifference = false;
             }
-            if (ABSTRACTED_CLIENT.isCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
+            if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
                 if (ABSTRACTED_CLIENT.getClientWorld() != null) {
                     final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
                     final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();

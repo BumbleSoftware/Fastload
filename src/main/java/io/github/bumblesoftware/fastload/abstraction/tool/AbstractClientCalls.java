@@ -84,7 +84,7 @@ public interface AbstractClientCalls {
     int getRenderDistance();
 
     boolean isWindowFocused();
-    boolean isCurrentScreen(final ScreenProvider screenProvider);
+    boolean forCurrentScreen(final ScreenProvider screenProvider);
     boolean isBuildingTerrainScreen(final Screen screen);
     boolean isGameMenuScreen(final Screen screen);
     boolean isProgressScreen(final Screen screen);

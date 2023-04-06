@@ -9,18 +9,18 @@ import java.util.Comparator;
 
 /**
  * A fully capable event with all the tools
- * @param <T> used for custom event params. Refer to {@link FLClientEvents FLClientEvents}
+ * @param <Context> used for custom event params. Refer to {@link FLClientEvents FLClientEvents}
  *           for examples.
  */
-public class CapableEvent<T extends Record> implements AbstractEvent<T> {
-    public final EventHolder<T>
+public class CapableEvent<Context> implements AbstractEvent<Context> {
+    public final EventHolder<Context>
             allEvents = getNewHolder(),
             eventsToAdd = getNewHolder(),
             eventsToRemove = getNewHolder();
 
-    public final @Nullable SwitchHelper<T> switchHelper;
+    public final @Nullable SwitchHelper<Context> switchHelper;
 
-    public CapableEvent(@Nullable SwitchHelper<T> switchHelper) {
+    public CapableEvent(@Nullable SwitchHelper<Context> switchHelper) {
         this.switchHelper = switchHelper;
     }
 
@@ -29,24 +29,24 @@ public class CapableEvent<T extends Record> implements AbstractEvent<T> {
     }
 
     @Override
-    public EventHolder<T> getHolder() {
+    public EventHolder<Context> getHolder() {
         return allEvents;
     }
 
     @Override
-    public void removeThreadSafe(final long priority, final EventArgs<T> eventArgs) {
+    public void removeThreadSafe(final long priority, final EventArgs<Context> eventArgs) {
         eventsToRemove.priorityHolder().add(priority);
         eventsToRemove.argsHolder().get(priority).add(eventArgs);
     }
 
     @Override
-    public void registerThreadsafe(long priority, EventArgs<T> eventArgs) {
+    public void registerThreadsafe(long priority, EventArgs<Context> eventArgs) {
         eventsToAdd.priorityHolder().add(priority);
         eventsToAdd.argsHolder().get(priority).add(eventArgs);
     }
 
     @Override
-    public void registerThreadUnsafe(final long priority, final EventArgs<T> eventArgs) {
+    public void registerThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
         var priHol = allEvents.priorityHolder();
         if (!priHol.contains(priority))
             priHol.add(priority);
@@ -56,15 +56,15 @@ public class CapableEvent<T extends Record> implements AbstractEvent<T> {
     }
 
     @Override
-    public EventHolder<T> getMultipleArgsHolders(String identifier) {
+    public EventHolder<Context> getMultipleArgsHolders(String identifier) {
         if (switchHelper == null) {
             throw new UnsupportedOperationException();
         } else return switchHelper.switchWith(identifier);
     }
 
-    private void iterate(EventHolder<T> holder, ArgsIterator<T> argsIterator) {
+    private void iterate(EventHolder<Context> holder, ArgsIterator<Context> argsIterator) {
         for (long priority : holder.priorityHolder()) {
-            for (EventArgs<T> arg : holder.argsHolder().get(priority)) {
+            for (EventArgs<Context> arg : holder.argsHolder().get(priority)) {
                 if (arg != null) {
                     argsIterator.onElement(priority, arg);
                 }
@@ -73,7 +73,7 @@ public class CapableEvent<T extends Record> implements AbstractEvent<T> {
     }
 
     @Override
-    public void fireEvent(final T eventContext) {
+    public void fireEvent(final Context eventContext) {
         iterate(eventsToAdd, this::registerThreadUnsafe);
         allEvents.priorityHolder().sort(Comparator.reverseOrder());
         iterate(allEvents, (priority, arg) -> arg.onEvent(eventContext, this, 0, arg));
@@ -84,11 +84,11 @@ public class CapableEvent<T extends Record> implements AbstractEvent<T> {
         eventsToRemove.argsHolder().clear();
     }
 
-    private interface ArgsIterator<T extends Record> {
-        void onElement(final long priority, final EventArgs<T> arg);
+    private interface ArgsIterator<Ctx> {
+        void onElement(final long priority, final EventArgs<Ctx> arg);
     }
 
-    private interface SwitchHelper<T extends Record> {
-        EventHolder<T> switchWith(final String identifier);
+    private interface SwitchHelper<Ctx> {
+        EventHolder<Ctx> switchWith(final String identifier);
     }
 }
