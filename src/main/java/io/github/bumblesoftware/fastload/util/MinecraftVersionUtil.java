@@ -62,10 +62,6 @@ public class MinecraftVersionUtil {
     }
 
     public static String getVersion() {
-        String version =
-                FabricLoader.getInstance().getModContainer("minecraft").orElseThrow().getMetadata().getVersion().getFriendlyString();
-        if (FLMath.isDebugEnabled())
-            Fastload.LOGGER.info("Fastload Perceived Version: " + version);
-        return version;
+        return FabricLoader.getInstance().getModContainer("minecraft").orElseThrow().getMetadata().getVersion().getFriendlyString();
     }
 }

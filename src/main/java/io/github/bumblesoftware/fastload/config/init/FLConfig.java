@@ -27,14 +27,8 @@ public class FLConfig {
     protected static int getChunkTryLimit() {
         return getInt(TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, TRY_LIMIT_BOUND);
     }
-    protected static int getRawChunkPregenRadius() {
-        return getInt(PREGEN_RADIUS_KEY, DEF_PREGEN_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
-    }
     protected static int getRawPreRenderRadius() {
         return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
-    }
-    protected static boolean getCloseLoadingScreenUnsafely() {
-        return getBoolean(FORCE_CLOSE_KEY, DEF_FORCE_CLOSE_VALUE);
     }
     protected static boolean getRawDebug() {
         return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
@@ -54,9 +48,7 @@ public class FLConfig {
 
         //Don't forget that these variables are sorted alphabetically in .properties files!
         getChunkTryLimit();
-        getRawChunkPregenRadius();
         getRawPreRenderRadius();
-        getCloseLoadingScreenUnsafely();
         getRawDebug();
 
         write();
@@ -78,21 +70,14 @@ public class FLConfig {
                     "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(FORCE_CLOSE_KEY) + " = should skip 'Joining World', and 'Downloading Terrain'. " +
-                    "Potentially can result in joining world before chunks are properly loaded");
-            comment.write("\n# Enabled = true, Disabled = false");
-            comment.write("\n#");
             comment.write("\n# " + writable(DEBUG_KEY) + " = debug (log) all things happening in fastload to aid in " +
                     "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
             comment.write("\n# " + writable(RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
                     "completed.");
-            comment.write("\n# Min = 0, Max = 32 or your getRenderKey distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
             comment.write("\n#");
-            comment.write("\n# " + writable(PREGEN_RADIUS_KEY) + " = how many chunks (from 441 Loading) are pre-generated until " +
-                    "the server starts");
-            comment.write("\n# Min = 0, Max = 32. Set 0 to only getPregenKey 1 chunk.");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -119,6 +104,7 @@ public class FLConfig {
         if (string.trim().equalsIgnoreCase("false")) return false;
         throw new NumberFormatException(string);
     }
+    @SuppressWarnings("SameParameterValue")
     private static boolean getBoolean(String key, boolean def) {
         try {
             final boolean b = parseBoolean(properties.getProperty(key));

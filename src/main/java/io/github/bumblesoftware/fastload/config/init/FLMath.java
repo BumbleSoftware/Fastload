@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.config.init;
 
+import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 import net.minecraft.client.MinecraftClient;
 
@@ -10,7 +11,6 @@ import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
 
 public class FLMath {
 
-    //Unchanged Constant Getters
     public static int getChunkTryLimit() {
         return parseMinMax(FLConfig.getChunkTryLimit(), TRY_LIMIT_BOUND);
     }
@@ -26,7 +26,6 @@ public class FLMath {
     }
 
 
-    //Parsing
     private static final Supplier<Double> RENDER_DISTANCE = () ->
             MinecraftClient.getInstance().worldRenderer != null ?
                     Math.min(
@@ -43,29 +42,11 @@ public class FLMath {
         return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
     }
 
-
-    //Calculations
-    @SuppressWarnings("SameParameterValue")
-    private static int getSquareArea(boolean worldProgressTracker, int toCalc, boolean raw) {
-        int i = toCalc * 2;
-        if (!raw) {
-            i++;
-        }
-        if (worldProgressTracker) {
-            i ++;
-            i ++;
-        }
-        if (i == 0) {
-            i = 1;
-        }
-        return i * i;
-    }
     public static double getCircleArea(int radius) {
         return Math.PI * radius * radius;
     }
 
 
-    //Radii
     public static int getRenderChunkRadius() {
         return parseMinMax(
                 getRawPreRenderRadius(),
@@ -84,62 +65,20 @@ public class FLMath {
         else
             return getRenderChunkRadius();
     }
-    public static int getPregenChunkRadius(boolean raw) {
-        if (raw)
-            return parseMinMax(
-                    getRawChunkPregenRadius(),
-                    getRadiusBound()
-            );
-        else
-            return parseMinMax(
-                    getRawChunkPregenRadius(),
-                    getRadiusBound()
-            ) + 1;
-    }
-    public static int getPregenChunkRadius() {
-        return getPregenChunkRadius(true);
-    }
-
-
-    //Areas
-    public static int getPregenArea() {
-        return getSquareArea(
-                false,
-                parseMinMax(
-                        getPregenChunkRadius(),
-                        getRadiusBound().max(),
-                        getRadiusBound().min()
-                ),
-                false
-        );
-   }
-    public static int getProgressArea() {
-        return getSquareArea(
-                true,
-                parseMinMax(
-                        getPregenChunkRadius(),
-                        getRadiusBound().max(),
-                        getRadiusBound().min()
-                ),
-                false
-        );
-    }
     public static int getPreRenderArea() {
         return (int)getCircleArea(getRenderChunkRadius());
     }
 
-
-    //Booleans
     public static Boolean isDebugEnabled() {
         return getRawDebug();
     }
     public static Boolean isForceBuildEnabled() {
         return getChunkTryLimit() >= 1000;
     }
-    public static Boolean isForceCloseEnabled() {
-        return getCloseLoadingScreenUnsafely();
-    }
     public static Boolean isPreRenderEnabled() {
-        return getRenderChunkRadius() > 0;
+        var renderChunkRadius = getRenderChunkRadius();
+        if (isDebugEnabled())
+            Fastload.LOGGER.info("renderChunkRadius = " + renderChunkRadius);
+        return renderChunkRadius > 0;
     }
 }

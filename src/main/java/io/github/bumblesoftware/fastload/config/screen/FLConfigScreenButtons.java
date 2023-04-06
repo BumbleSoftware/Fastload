@@ -29,23 +29,17 @@ public class FLConfigScreenButtons<Option> {
 
     public  Option[] getAllOptions(Option[] array) {
         return List.of(
-                getNewBoolButton(DEBUG_KEY, (key) -> isDebugEnabled().toString()),
-                getNewBoolButton(FORCE_CLOSE_KEY, (key) -> isForceCloseEnabled().toString()),
                 getNewSlider(
                         RENDER_RADIUS_KEY,
                         (key) -> Integer.toString(getRenderChunkRadius(true)),
                         getRadiusBound()
                 ),
                 getNewSlider(
-                        PREGEN_RADIUS_KEY,
-                        (key) -> Integer.toString(getPregenChunkRadius(true)),
-                        getRadiusBound()
-                ),
-                getNewSlider(
                         TRY_LIMIT_KEY,
                         (key) -> Integer.toString(getChunkTryLimit()),
                         getChunkTryLimitBound()
-                )
+                ),
+                getNewBoolButton(DEBUG_KEY, (key) -> isDebugEnabled().toString())
         ).toArray(array);
     }
 }

@@ -2,6 +2,7 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 
 import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
@@ -55,6 +56,11 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public Screen newBuildingTerrainScreen() {
         return new BuildingTerrainScreen();
+    }
+
+    @Override
+    public Screen getCurrentScreen() {
+        return getClientInstance().currentScreen;
     }
 
     @Override
@@ -194,6 +200,16 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public boolean isWindowFocused() {
         return getClientInstance().isWindowFocused();
+    }
+
+    @Override
+    public boolean isCurrentScreen(final ScreenProvider screenProvider) {
+        return screenProvider.getCurrent(getCurrentScreen());
+    }
+
+    @Override
+    public boolean isBuildingTerrainScreen(final Screen screen) {
+        return screen instanceof BuildingTerrainScreen;
     }
 
     @Override

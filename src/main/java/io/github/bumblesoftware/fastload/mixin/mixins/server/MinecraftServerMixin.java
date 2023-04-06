@@ -29,6 +29,5 @@ public abstract class MinecraftServerMixin {
     @Redirect(method = "prepareStartRegion", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V"))
     private void finishEarly(WorldGenerationProgressListener worldGenerationProgressListener, ChunkPos chunkPos) {
         worldGenerationProgressListener.stop();
-        updateMobSpawnOptions();
     }
 }

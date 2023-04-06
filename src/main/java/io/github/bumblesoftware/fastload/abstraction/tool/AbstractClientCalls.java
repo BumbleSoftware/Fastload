@@ -27,6 +27,7 @@ public interface AbstractClientCalls {
     ClientWorld getClientWorld();
     Screen newFastloadConfigScreen(final Screen parent);
     Screen newBuildingTerrainScreen();
+    Screen getCurrentScreen();
     Text newTranslatableText(final String content);
     Text newLiteralText(final String content);
     <T extends Element & Drawable> T addDrawableChild(final Screen screen, final T drawableElement);
@@ -82,6 +83,8 @@ public interface AbstractClientCalls {
     int getCompletedChunkCount();
 
     boolean isWindowFocused();
+    boolean isCurrentScreen(final ScreenProvider screenProvider);
+    boolean isBuildingTerrainScreen(final Screen screen);
     boolean isGameMenuScreen(final Screen screen);
     boolean isProgressScreen(final Screen screen);
     boolean isDownloadingTerrainScreen(final Screen screen);

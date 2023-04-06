@@ -13,6 +13,8 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
  * CapableEvent}.
  */
 public final class FLClientHandler {
+    private static boolean accessedDownloadingTerrainScreen = false;
+
     public static void init() {
         registerEvents();
     }
@@ -25,24 +27,12 @@ public final class FLClientHandler {
      * Boolean whether player has joined ClientWorld
      */
     private static boolean playerJoined = false;
-    /**
-     * Checks true when the DownloadingTerrainScreen instanceof setScreen() event has been fired.
-     */
-    private static boolean justLoaded = false;
 
     /**
      * Shows getRenderKey-distance difference between set value & fastload's one if there is a difference.
      * Used to send a debug message.
      */
-    private static boolean hasNotShownRenderDistanceDifference = false;
-    /**
-     * Boolean for when BuildingTerrainScreen is active
-     */
-    private static boolean isBuilding = false;
-    /**
-     * Boolean to let other methods init the process of closing the terrain building
-     */
-    private static boolean closeBuild = false;
+    private static boolean hasNotShownRenderDifference = false;
     /**
      * Stores the old count to compare values on the next method call to see if the value
      * of loaded chunks is same.
@@ -106,12 +96,11 @@ public final class FLClientHandler {
      */
     private static void stopBuilding(int chunkLoadedCount, int chunkBuildCount) {
         if (playerJoined) {
-            closeBuild = true;
+            System.gc();
             if (isDebugEnabled()) {
                 logBuilding(chunkBuildCount);
                 logRendering(chunkLoadedCount);
             }
-            isBuilding = false;
             if (!ABSTRACTED_CLIENT.isWindowFocused()) {
                 CLIENT_TIMER.setTime(20);
                 if (isDebugEnabled()) log("Delaying PauseMenu until worldRendering initiates.");
@@ -119,7 +108,6 @@ public final class FLClientHandler {
             playerJoined = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
-            System.gc();
             ABSTRACTED_CLIENT.setScreen(null);
         }
     }
@@ -128,8 +116,6 @@ public final class FLClientHandler {
      * Event Registration for fastload
      */
     private static void registerEvents() {
-
-        //Player is ready when it initialises
         CLIENT_PLAYER_INIT_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (isDebugEnabled()) Fastload.LOGGER.info("shouldLoad = true");
             playerReady = true;
@@ -138,22 +124,10 @@ public final class FLClientHandler {
 
         PLAYER_JOIN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (isDebugEnabled()) Fastload.LOGGER.info("playerJoined = true");
-            FLClientHandler.playerJoined = true;
+            playerJoined = true;
             return null;
         });
 
-        //Null Screen
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (eventContext.screen() == null) {
-                isBuilding = false;
-                playerReady = false;
-                justLoaded = false;
-                hasNotShownRenderDistanceDifference = false;
-            }
-            return null;
-        });
-
-        // Game Menu Event to stop it from interfering with Fastload's stuff
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (CLIENT_TIMER.isReady() && ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) && !ABSTRACTED_CLIENT.isWindowFocused()) {
                 if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
@@ -163,69 +137,38 @@ public final class FLClientHandler {
             return null;
         });
 
-        //Debug when BuildingTerrainScreen is initiated
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (eventContext.screen() instanceof BuildingTerrainScreen && isDebugEnabled()) {
-                log("setScreen(new BuildingTerrain)");
-                isBuilding = true;
-            }
+                if (eventContext.screen() instanceof BuildingTerrainScreen) {
+                    hasNotShownRenderDifference = true;
+                    if (isDebugEnabled())
+                        log("setScreen(new BuildingTerrain)");
+                }
             return null;
         });
 
-        //Cancels Progress screen when FORCE_CLOSE_LOADING_SCREEN is true. Makes things slightly faster
-        SET_SCREEN_EVENT.registerThreadUnsafe(2, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (ABSTRACTED_CLIENT.isProgressScreen(eventContext.screen()) && isForceCloseEnabled()) {
-                eventContext.ci().cancel();
-                if (isDebugEnabled()) log("(ProgressScreen) ci.cancel() ");
-            }
-            return null;
-        });
 
-        //It's just magic
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen()) && playerReady && playerJoined) {
                 if (isDebugEnabled()) log("setScreen(new DownloadingTerrainScreen)");
-                playerReady = false;
-                justLoaded = true;
-                hasNotShownRenderDistanceDifference = true;
-                if (isPreRenderEnabled()) {
-                    eventContext.ci().cancel();
-                    if (isDebugEnabled()) log("DownloadingTerrainScreen -> BuildingTerrainScreen");
-                    if (isDebugEnabled()) log("Goal (Loaded Chunks): " + getPreRenderArea());
-                    isBuilding = true;
-                    System.gc();
-                    ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
-                } else if (isForceCloseEnabled()) {
-                    playerJoined = false;
-                    if (isDebugEnabled()) log("(DownloadingTerrainScreen) ci.cancel()");
-                    eventContext.ci().cancel();
-                    ABSTRACTED_CLIENT.setScreen(null);
-                    CLIENT_TIMER.setTime(20);
-                }
+                accessedDownloadingTerrainScreen = true;
             }
             return null;
         });
 
-        //Redundancy impl for pause menu cancellation as it this shit's unpredictable
-        PAUSE_MENU_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (justLoaded) {
-                if (ABSTRACTED_CLIENT.isWindowFocused()) justLoaded = false;
-                else {
-                    justLoaded = false;
-                    eventContext.ci().cancel();
-                    if (isDebugEnabled()) log("(PauseMenu) ci.cancel()");
-                }
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
+            if (eventContext.screen() == null && accessedDownloadingTerrainScreen) {
+                CLIENT_TIMER.setTime(20);
+                accessedDownloadingTerrainScreen = false;
             }
             return null;
         });
 
-        //More magic
         RENDER_TICK_EVENT.registerThreadUnsafe(10, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (hasNotShownRenderDistanceDifference) {
+            if (hasNotShownRenderDifference) {
                 logRenderDistanceDifference();
-                hasNotShownRenderDistanceDifference = false;
+                hasNotShownRenderDifference = false;
             }
-            if (isBuilding) {
+            if (ABSTRACTED_CLIENT.isCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
                 if (ABSTRACTED_CLIENT.getClientWorld() != null) {
                     final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
                     final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();
@@ -250,32 +193,30 @@ public final class FLClientHandler {
                             stopBuilding(chunkLoadedCount, chunkBuildCount);
                         }
 
-                        if (!closeBuild) {
-                            //Log Warnings
-                            final int spamLimit = 2;
-                            if (preparationWarnings > 0) {
-                                if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                                    log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
-                                    if (!isForceBuildEnabled()) {
-                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
-                                    }
-                                    if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                        //Log Warnings
+                        final int spamLimit = 2;
+                        if (preparationWarnings > 0) {
+                            if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
+                                if (!isForceBuildEnabled()) {
+                                    log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                 }
-                                if (chunkLoadedCount > oldChunkLoadedCountStorage) {
-                                    preparationWarnings = 0;
-                                }
+                                if (isDebugEnabled()) logRendering(chunkLoadedCount);
                             }
-                            if (buildingWarnings > 0) {
-                                if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                                    log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
-                                    if (!isForceBuildEnabled()) {
-                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
-                                    }
-                                    if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                            if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                                preparationWarnings = 0;
+                            }
+                        }
+                        if (buildingWarnings > 0) {
+                            if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
+                                if (!isForceBuildEnabled()) {
+                                    log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
                                 }
-                                if (chunkBuildCount > oldChunkBuildCountStorage) {
-                                    buildingWarnings = 0;
-                                }
+                                if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                            }
+                            if (chunkBuildCount > oldChunkBuildCountStorage) {
+                                buildingWarnings = 0;
                             }
                         }
                     }
