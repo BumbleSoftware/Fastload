@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.local;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
@@ -16,12 +16,10 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = "1.18.2"))
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.19"))
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
-    @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
-            "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet" +
-            "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
         var isPreRenderEnabled = isPreRenderEnabled();
         if (isDebugEnabled()) {
@@ -39,8 +37,8 @@ public class MinecraftClientMixin {
         else client.setScreenAndRender(new DownloadingTerrainScreen());
     }
 
-    @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
-            "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated" +
+            "/IntegratedServer;isLoading()Z"))
     private boolean removeWait(IntegratedServer integratedServer) {
         return true;
     }

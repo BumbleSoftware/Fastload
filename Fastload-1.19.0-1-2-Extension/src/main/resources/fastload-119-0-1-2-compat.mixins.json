@@ -7,7 +7,8 @@
   "mixins": [
   ],
   "client": [
-    "Hook1192"
+    "Hook1192",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
