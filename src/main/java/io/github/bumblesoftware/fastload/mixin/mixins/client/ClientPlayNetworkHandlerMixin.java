@@ -1,6 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
+import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -25,8 +26,10 @@ public class ClientPlayNetworkHandlerMixin {
     }
 
     @Redirect(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
-    private void cancelDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
+    private void modifyDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
         if (!ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
-            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
+            if (FLMath.isServerRenderEnabled())
+                client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
+            else client.setScreen(screen);
     }
 }

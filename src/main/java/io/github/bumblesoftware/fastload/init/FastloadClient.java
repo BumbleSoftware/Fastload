@@ -27,7 +27,7 @@ public class FastloadClient implements ClientModInitializer {
         LOGGER.info("Fastload Perceived Version: " + MinecraftVersionUtil.getVersion());
         LOGGER.info("Fastload Internal Mapping Version: " + ABSTRACTED_CLIENT.getVersion());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
-        LOGGER.info(logKey(TRY_LIMIT_KEY) + getChunkTryLimit());
+        LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
         LOGGER.info(logKey(RENDER_RADIUS_KEY) + getRenderChunkRadius());
         LOGGER.info(logKey(RENDER_AREA_KEY) + getPreRenderArea());
     }

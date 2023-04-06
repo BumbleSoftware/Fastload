@@ -3,15 +3,14 @@ package io.github.bumblesoftware.fastload.config.init;
 import io.github.bumblesoftware.fastload.util.MinMaxHolder;
 
 import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.CHUNK_RADIUS_BOUND;
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.TRY_LIMIT_BOUND;
-import static io.github.bumblesoftware.fastload.config.init.FLConfig.getRawDebug;
-import static io.github.bumblesoftware.fastload.config.init.FLConfig.getRawPreRenderRadius;
+import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.CHUNK_TRY_LIMIT_BOUND;
+import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public class FLMath {
 
     public static int getChunkTryLimit() {
-        return parseMinMax(FLConfig.getChunkTryLimit(), TRY_LIMIT_BOUND);
+        return parseMinMax(FLConfig.getRawChunkTryLimit(), CHUNK_TRY_LIMIT_BOUND);
     }
     public static int getRadiusBoundMax() {
         return CHUNK_RADIUS_BOUND.max();
@@ -21,7 +20,7 @@ public class FLMath {
         return CHUNK_RADIUS_BOUND;
     }
     public static MinMaxHolder getChunkTryLimitBound() {
-        return TRY_LIMIT_BOUND;
+        return CHUNK_TRY_LIMIT_BOUND;
     }
     protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
         return Math.max(Math.min(toProcess, max), min);
@@ -36,7 +35,7 @@ public class FLMath {
 
     public static int getRenderChunkRadius() {
         return parseMinMax(
-                getRawPreRenderRadius(),
+                getRawRenderRadius(),
                 Math.min(ABSTRACTED_CLIENT.getRenderDistance(),
                         getRadiusBoundMax()
                 ),
@@ -46,7 +45,7 @@ public class FLMath {
     public static int getRenderChunkRadius(boolean raw) {
         if (raw)
             return Math.max(
-                    getRawPreRenderRadius(),
+                    getRawRenderRadius(),
                     getRadiusBound().min()
             );
         else
@@ -59,8 +58,8 @@ public class FLMath {
     public static Boolean isDebugEnabled() {
         return getRawDebug();
     }
-    public static Boolean isForceBuildEnabled() {
-        return getChunkTryLimit() >= 1000;
+    public static Boolean isServerRenderEnabled() {
+        return getRawServerRender();
     }
     public static Boolean isPreRenderEnabled() {
         return getRenderChunkRadius() > 0;

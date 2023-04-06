@@ -24,14 +24,17 @@ public class FLConfig {
     private static final Path path;
 
     //Config Variables
-    protected static int getChunkTryLimit() {
-        return getInt(TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, TRY_LIMIT_BOUND);
-    }
-    protected static int getRawPreRenderRadius() {
-        return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
-    }
     protected static boolean getRawDebug() {
         return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
+    }
+    protected static boolean getRawServerRender() {
+        return getBoolean(SERVER_RENDER_KEY, DEF_SERVER_RENDER);
+    }
+    protected static int getRawChunkTryLimit() {
+        return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
+    }
+    protected static int getRawRenderRadius() {
+        return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
     }
 
     static {
@@ -47,11 +50,12 @@ public class FLConfig {
         }
 
         //Don't forget that these variables are sorted alphabetically in .properties files!
-        getChunkTryLimit();
-        getRawPreRenderRadius();
+        getRawChunkTryLimit();
         getRawDebug();
+        getRawRenderRadius();
+        getRawServerRender();
 
-        write();
+        writeToDisk();
 
     }
     private static void logWarn(String key) {
@@ -59,7 +63,7 @@ public class FLConfig {
                 "generating a new one!");
     }
 
-    private static void write() {
+    public static void writeToDisk() {
         try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             properties.store(out,  Fastload.NAMESPACE +  " Configuration File");
         } catch (IOException e) {
@@ -67,10 +71,6 @@ public class FLConfig {
         }
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             comment.write("\n# Definitions");
-            comment.write("\n# " + writable(TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
-                    "be ignored before we cancel pre-rendering.");
-            comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
-            comment.write("\n#");
             comment.write("\n# " + writable(DEBUG_KEY) + " = debug (logWarn) all things happening in fastload to aid in " +
                     "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
@@ -78,6 +78,14 @@ public class FLConfig {
             comment.write("\n# " + writable(RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
                     "completed.");
             comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n#");
+            comment.write("\n# " + writable(CHUNK_TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
+                    "be ignored before we cancel pre-rendering.");
+            comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
+            comment.write("\n#");
+            comment.write("\n# " + writable(SERVER_RENDER_KEY) + " = should fastload's rendering apply for servers as " +
+                    "well?");
+            comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
 
         } catch (IOException e) {
@@ -120,8 +128,5 @@ public class FLConfig {
     public static void storeProperty(String key, String value) {
         if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
         properties.setProperty(key, value);
-    }
-    public static void writeToDisk() {
-        write();
     }
 }

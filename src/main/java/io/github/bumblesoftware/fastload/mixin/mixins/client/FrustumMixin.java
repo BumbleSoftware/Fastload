@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.Frustum;
@@ -21,8 +20,9 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 public class FrustumMixin {
     @Inject(method = "isAnyCornerVisible", at = @At("HEAD"), cancellable = true)
     private void setVisible(float x1, float y1, float z1, float x2, float y2, float z2, CallbackInfoReturnable<Boolean> cir) {
-        if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) &&
-                FLMath.isPreRenderEnabled())
+        if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) ||
+            ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isDownloadingTerrainScreen)
+        )
             cir.setReturnValue(true);
     }
 }

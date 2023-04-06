@@ -196,7 +196,8 @@ public final class FLClientHandler {
                         if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit())) {
                             buildingWarnings = 0;
                             preparationWarnings = 0;
-                            log("Rendering is taking too long! Stopping...");
+                            log("Rendering is either taking too long or hit a roadblock. If you are in a server, this" +
+                                    " is potentially a limitation of the servers render distance and can be ignored.");
                             stopBuilding(chunkLoadedCount, chunkBuildCount);
                         }
 
@@ -204,8 +205,9 @@ public final class FLClientHandler {
                         final int spamLimit = 2;
                         if (preparationWarnings > 0) {
                             if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                                log("FL_WARN# Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
-                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
+                                log("Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
+                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
+                                        "stopped");
                                 if (isDebugEnabled()) logRendering(chunkLoadedCount);
                             }
                             if (chunkLoadedCount > oldChunkLoadedCountStorage) {
@@ -214,8 +216,9 @@ public final class FLClientHandler {
                         }
                         if (buildingWarnings > 0) {
                             if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                                log("FL_WARN# Same built chunk count returned " + buildingWarnings + " time(s) in a row");
-                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, pre-loading would've stopped");
+                                log("Same built chunk count returned " + buildingWarnings + " time(s) in a row!");
+                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
+                                        "stopped");
                                 if (isDebugEnabled()) logRendering(chunkLoadedCount);
                             }
                             if (chunkBuildCount > oldChunkBuildCountStorage) {
@@ -229,7 +232,7 @@ public final class FLClientHandler {
 
                     if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= getPreRenderArea()) {
                         stopBuilding(chunkLoadedCount, chunkBuildCount);
-                        log("Successfully pre-loaded the world! Stopping...");
+                        log("Successfully pre-loaded the world!");
                     }
                 }
             }
