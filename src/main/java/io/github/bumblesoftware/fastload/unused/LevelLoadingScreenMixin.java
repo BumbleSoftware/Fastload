@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.local;
+package io.github.bumblesoftware.fastload.unused;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
@@ -21,10 +21,16 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 /**
  * Fixes the chunkMap so that 32 getPregenKey getRenderKey distance can work
  */
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.19.4"))
+@SuppressWarnings("UnusedMixin")
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = {
+        "1.18.2",
+        "1.19",
+        "1.19.1",
+        "1.19.2",
+        "1.19.3"
+}))
 @Mixin(LevelLoadingScreen.class)
 public abstract class LevelLoadingScreenMixin {
-
 
     @Shadow @Final private WorldGenerationProgressTracker progressProvider;
     private boolean check1 = false;
@@ -32,7 +38,6 @@ public abstract class LevelLoadingScreenMixin {
     private boolean check3 = false;
 
     @Shadow protected abstract String getPercentage();
-    @SuppressWarnings("DataFlowIssue")
     private int getChunkMapHeight() {
         return (((Screen)(Object)this).height * 5/8 - 20);
     }
@@ -55,7 +60,9 @@ public abstract class LevelLoadingScreenMixin {
         return 0;
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen" +
+            "/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;" +
+            "Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"))
     private void drawCorrectedText(MatrixStack matrices, TextRenderer textRenderer, String s, int i, int j, int k) {
         if (FLMath.isDebugEnabled() && !check3) {
             Fastload.LOGGER.info("(LevelLoadingScreen) Corrected text y-level");

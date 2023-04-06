@@ -2,38 +2,40 @@ package io.github.bumblesoftware.fastload.mixin.mixins.server;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.WorldGenerationProgressListener;
+import net.minecraft.util.math.ChunkPos;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SERVER_TICK_EVENT;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenArea;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.getPregenChunkRadius;
 
 
 /*
 * This code is inspired by: https://github.com/VidTu/Ksyxis of which it's under the MIT License.
-* The BumbleSoftware team modified the code to make this possible.
+* The BumbleSoftware team modified the code.
 */
 
 /**
  * Used to change how many chunks should load at 441.
  */
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
+
+    @Shadow protected abstract void updateMobSpawnOptions();
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        return getPregenArea();
+        return 0;
     }
-    @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 11))
-    private int setRadius(int value) {
-        return getPregenChunkRadius(false);
+
+    @Redirect(method = "prepareStartRegion", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V"))
+    private void finishEarly(WorldGenerationProgressListener worldGenerationProgressListener, ChunkPos chunkPos) {
+        worldGenerationProgressListener.stop();
+        updateMobSpawnOptions();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

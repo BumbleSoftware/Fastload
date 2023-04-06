@@ -167,6 +167,7 @@ public final class FLClientHandler {
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
             if (eventContext.screen() instanceof BuildingTerrainScreen && isDebugEnabled()) {
                 log("setScreen(new BuildingTerrain)");
+                isBuilding = true;
             }
             return null;
         });

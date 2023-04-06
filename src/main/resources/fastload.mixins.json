@@ -15,7 +15,6 @@
     "client.DownloadingTerrainScreenMixin",
     "client.FrustumMixin",
     "client.GameRendererMixin",
-    "client.LevelLoadingScreenMixin",
     "client.MinecraftClientMixin",
     "client.OptionAccess",
     "client.ScreenAccess"
