@@ -4,7 +4,7 @@ import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
-import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.config.init.DefaultConfig;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
@@ -35,7 +35,7 @@ import net.minecraft.text.TranslatableText;
 public class Client1182 implements AbstractClientCalls {
 
     @Override
-    public String getVersion() {
+    public String getCompatibleVersions() {
         return "1.18.2";
     }
 
@@ -57,6 +57,11 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public Screen newBuildingTerrainScreen() {
         return new BuildingTerrainScreen();
+    }
+
+    @Override
+    public Screen newBuildingTerrainScreen(final int goalMultiplier) {
+        return new BuildingTerrainScreen(goalMultiplier);
     }
 
     @Override

@@ -8,14 +8,15 @@ public interface DefaultConfig {
     String DEBUG_KEY = "debug";
     String RENDER_RADIUS_KEY = "render_chunk_radius";
     String RENDER_AREA_KEY = "render_chunk_area";
-    String SERVER_RENDER_KEY = "server_render";
+    String SERVER_RENDER_DIVISOR_KEY = "server_render_divisor";
 
 
     MinMaxHolder CHUNK_RADIUS_BOUND = new MinMaxHolder(32, 0);
     MinMaxHolder CHUNK_TRY_LIMIT_BOUND = new MinMaxHolder(1000, 1);
+    MinMaxHolder SERVER_RENDER_DIVISOR_BOUND = new MinMaxHolder(10, 0);
 
+    boolean DEF_DEBUG_VALUE = false;
+    int DEF_SERVER_RENDER_DIVISOR = 1;
     int DEF_RENDER_RADIUS_VALUE = 10;
     int DEF_TRY_LIMIT_VALUE = 100;
-    boolean DEF_DEBUG_VALUE = false;
-    boolean DEF_SERVER_RENDER = false;
 }

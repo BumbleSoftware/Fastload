@@ -9,18 +9,15 @@
   "fastload.button.debug": "Debug Mode",
   "fastload.button.debug.tooltip": "Should debugs be printed in the logs?",
 
-  "fastload.button.close_loading_screen_unsafely": "Close Loading Screen",
-  "fastload.button.close_loading_screen_unsafely.tooltip": "Should fastload close the DownloadingTerrainScreen earlier, even if it's slightly unsafe?",
-
   "fastload.button.render_chunk_radius": "Render Chunk Radius",
   "fastload.button.render_chunk_radius.tooltip": "Many many chunks in a radius should be prepared and built during pre-rendering? Limited by render distance",
   "fastload.button.render_chunk_radius.min": "Disabled",
   "fastload.button.render_chunk_radius.max": "Why?",
 
-  "fastload.button.pregen_chunk_radius": "Pregen Chunk Radius",
-  "fastload.button.pregen_chunk_radius.tooltip": "Many many chunks in a radius should be generated on the server until completed. Should inversely correlate with pre-render radius for optimal performance",
-  "fastload.button.pregen_chunk_radius.min": "Ksyxis",
-  "fastload.button.pregen_chunk_radius.max": "Chunky",
+  "fastload.button.server_render_divisor": "Server Render Divisor",
+  "fastload.button.server_render_divisor.tooltip": "Modify how much the render chunk radius is divided by in servers. Use this when servers are slower than singleplayer worlds.",
+  "fastload.button.server_render_divisor.min": "Disabled",
+  "fastload.button.server_render_divisor.max": "Toaster",
 
   "fastload.button.chunk_try_limit": "Chunk Try Limit",
   "fastload.button.chunk_try_limit.tooltip": "How many times would the same chunk count be allowed to be returned in a row before bailing on pre-rendering",

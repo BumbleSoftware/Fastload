@@ -1,7 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -13,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.PLAYER_JOIN_EVENT;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.getServerRenderDivisor;
+import static io.github.bumblesoftware.fastload.config.init.FLMath.isServerRenderEnabled;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 /**
@@ -28,8 +29,8 @@ public class ClientPlayNetworkHandlerMixin {
     @Redirect(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void modifyDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
         if (!ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
-            if (FLMath.isServerRenderEnabled())
-                client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
+            if (isServerRenderEnabled())
+                client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getServerRenderDivisor()));
             else client.setScreen(screen);
     }
 }

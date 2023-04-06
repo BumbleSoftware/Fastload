@@ -27,8 +27,8 @@ public class FLConfig {
     protected static boolean getRawDebug() {
         return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
     }
-    protected static boolean getRawServerRender() {
-        return getBoolean(SERVER_RENDER_KEY, DEF_SERVER_RENDER);
+    protected static int getRawServerRenderDivisor() {
+        return getInt(SERVER_RENDER_DIVISOR_KEY, DEF_SERVER_RENDER_DIVISOR, SERVER_RENDER_DIVISOR_BOUND);
     }
     protected static int getRawChunkTryLimit() {
         return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
@@ -53,7 +53,7 @@ public class FLConfig {
         getRawChunkTryLimit();
         getRawDebug();
         getRawRenderRadius();
-        getRawServerRender();
+        getRawServerRenderDivisor();
 
         writeToDisk();
 
@@ -83,7 +83,7 @@ public class FLConfig {
                     "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(SERVER_RENDER_KEY) + " = should fastload's rendering apply for servers as " +
+            comment.write("\n# " + writable(SERVER_RENDER_DIVISOR_KEY) + " = should fastload's rendering apply for servers as " +
                     "well?");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
@@ -95,9 +95,10 @@ public class FLConfig {
     private static String writable(String key) {
         return "'" + key.toLowerCase() + "'";
     }
-    private static int getInt(String key, int def, MinMaxHolder holder) {
+
+    private static int getInt(String key, int def, MinMaxHolder minMaxHolder) {
         try {
-            int i = parseMinMax(Integer.parseInt(properties.getProperty(key)), holder);
+            int i = parseMinMax(Integer.parseInt(properties.getProperty(key)), minMaxHolder);
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
@@ -113,6 +114,7 @@ public class FLConfig {
         if (string.trim().equalsIgnoreCase("false")) return false;
         throw new NumberFormatException(string);
     }
+
     @SuppressWarnings("SameParameterValue")
     private static boolean getBoolean(String key, boolean def) {
         try {
@@ -125,6 +127,7 @@ public class FLConfig {
             return def;
         }
     }
+
     public static void storeProperty(String key, String value) {
         if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
         properties.setProperty(key, value);

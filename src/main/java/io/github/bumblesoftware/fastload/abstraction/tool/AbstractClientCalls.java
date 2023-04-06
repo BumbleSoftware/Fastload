@@ -17,16 +17,18 @@ import net.minecraft.text.Text;
  * All client method calls are in this interface to be implemented differently for each version in order to allow
  * compat.
  */
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 public interface AbstractClientCalls {
-    default String getVersion() {
-        return "null-abstract";
+    default String getCompatibleVersions() {
+        return "null";
     }
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
     Screen newFastloadConfigScreen(final Screen parent);
     Screen newBuildingTerrainScreen();
+    Screen newBuildingTerrainScreen(final int goalMultiplier);
+
     Screen getCurrentScreen();
     Text newTranslatableText(final String content);
     Text newLiteralText(final String content);

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.client.sceen;
+package io.github.bumblesoftware.fastload.client;
 
 import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
@@ -18,6 +18,8 @@ public class BuildingTerrainScreen extends Screen {
     private Integer preparedProgressStorage = 0;
     private Integer buildingProgressStorage = 0;
     private static final int heightUpFromCentre = 50;
+    public final double goalMultiplier;
+
     private Integer getLoadedChunkCount() {
         return ABSTRACTED_CLIENT.getClientWorld() != null ? ABSTRACTED_CLIENT.getLoadedChunkCount() : 0;
     }
@@ -28,12 +30,17 @@ public class BuildingTerrainScreen extends Screen {
     /**
      * Texts to draw
      */
-    public BuildingTerrainScreen() {
+    public BuildingTerrainScreen(int goalDivisor) {
         super(NarratorManager.EMPTY);
+        this.goalMultiplier = 1.0/(double)goalDivisor;
         screenName = ABSTRACTED_CLIENT.newTranslatableText("menu.generatingTerrain");
         screenTemplate = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
         buildingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
         preparingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.preparing");
+    }
+
+    public BuildingTerrainScreen() {
+        this(1);
     }
 
     /**
@@ -42,8 +49,10 @@ public class BuildingTerrainScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
-        final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea();
+        final String loadedChunksString =
+                getLoadedChunkCount() + "/"  + (int)(FLMath.getPreRenderArea() * goalMultiplier);
+        final String builtChunksString =
+                getBuiltChunkCount() + "/"  + (int)(FLMath.getPreRenderArea() * goalMultiplier);
         if (preparedProgressStorage < getLoadedChunkCount()) {
             Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
         }

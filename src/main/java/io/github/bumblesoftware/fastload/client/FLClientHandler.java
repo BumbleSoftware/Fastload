@@ -181,6 +181,7 @@ public final class FLClientHandler {
                     final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();
                     final int oldPreparationWarningCache = preparationWarnings;
                     final int oldBuildingWarningCache = buildingWarnings;
+                    final double goalMultiplier = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).goalMultiplier;
 
                     if (isDebugEnabled()) {
                         logRendering(chunkLoadedCount);
@@ -229,8 +230,9 @@ public final class FLClientHandler {
 
                     oldChunkLoadedCountStorage = chunkLoadedCount;
                     oldChunkBuildCountStorage = chunkBuildCount;
+                    int goal = (int) (getPreRenderArea() * goalMultiplier);
 
-                    if (chunkLoadedCount >= getPreRenderArea() && chunkBuildCount >= getPreRenderArea()) {
+                    if (chunkLoadedCount >= goal && chunkBuildCount >= goal) {
                         stopBuilding(chunkLoadedCount, chunkBuildCount);
                         log("Successfully pre-loaded the world!");
                     }

@@ -15,32 +15,51 @@ public class FLConfigScreenButtons<Option> {
 
     private final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
-    public Option getNewBoolButton(String identifier, RetrieveValueFunction getProperty) {
+    public Option getNewBoolButton(
+            final String identifier,
+            final RetrieveValueFunction getProperty
+    ) {
         return ABSTRACTED_CLIENT.newCyclingButton(
-                NAMESPACE_BUTTON, identifier, getProperty, FLConfig::storeProperty
+                NAMESPACE_BUTTON,
+                identifier,
+                getProperty,
+                FLConfig::storeProperty
         );
     }
 
-    public  Option getNewSlider(String identifier, RetrieveValueFunction getProperty, MinMaxHolder minMaxValues) {
+    public Option getNewSlider(
+            final String identifier,
+            final RetrieveValueFunction getProperty,
+            final MinMaxHolder minMaxValues
+    ) {
         return ABSTRACTED_CLIENT.newSlider(
-                NAMESPACE_BUTTON, identifier,  getProperty, FLConfig::storeProperty, minMaxValues, 200
+                NAMESPACE_BUTTON,
+                identifier,
+                getProperty,
+                FLConfig::storeProperty,
+                minMaxValues,
+                200
         );
     }
 
     public  Option[] getAllOptions(Option[] array) {
         return List.of(
+                getNewBoolButton(DEBUG_KEY, key -> isDebugEnabled().toString()),
                 getNewSlider(
                         RENDER_RADIUS_KEY,
                         key -> Integer.toString(getRenderChunkRadius(true)),
-                        getRadiusBound()
+                        CHUNK_RADIUS_BOUND
                 ),
                 getNewSlider(
                         CHUNK_TRY_LIMIT_KEY,
                         key -> Integer.toString(getChunkTryLimit()),
-                        getChunkTryLimitBound()
+                        CHUNK_TRY_LIMIT_BOUND
                 ),
-                getNewBoolButton(DEBUG_KEY, key -> isDebugEnabled().toString()),
-                getNewBoolButton(SERVER_RENDER_KEY, key -> isServerRenderEnabled().toString())
+                getNewSlider(
+                        SERVER_RENDER_DIVISOR_KEY,
+                        key -> Integer.toString(getServerRenderDivisor()),
+                        SERVER_RENDER_DIVISOR_BOUND
+                )
         ).toArray(array);
     }
 }

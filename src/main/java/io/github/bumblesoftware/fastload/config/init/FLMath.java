@@ -12,21 +12,14 @@ public class FLMath {
     public static int getChunkTryLimit() {
         return parseMinMax(FLConfig.getRawChunkTryLimit(), CHUNK_TRY_LIMIT_BOUND);
     }
-    public static int getRadiusBoundMax() {
-        return CHUNK_RADIUS_BOUND.max();
-    }
-    @SuppressWarnings("unused")
-    public static MinMaxHolder getRadiusBound() {
-        return CHUNK_RADIUS_BOUND;
-    }
-    public static MinMaxHolder getChunkTryLimitBound() {
-        return CHUNK_TRY_LIMIT_BOUND;
-    }
-    protected static int parseMinMax(int toProcess, int max, @SuppressWarnings("SameParameterValue") int min) {
+
+
+    protected static int parseMinMax(int toProcess, int max, int min) {
         return Math.max(Math.min(toProcess, max), min);
     }
-    protected static int parseMinMax(int toProcess, MinMaxHolder maxMin) {
-        return Math.max(Math.min(toProcess, maxMin.max()), maxMin.min());
+
+    protected static int parseMinMax(int toProcess, MinMaxHolder minMaxHolder) {
+        return parseMinMax(toProcess, minMaxHolder.max(), minMaxHolder.min());
     }
 
     public static double getCircleArea(int radius) {
@@ -37,7 +30,7 @@ public class FLMath {
         return parseMinMax(
                 getRawRenderRadius(),
                 Math.min(ABSTRACTED_CLIENT.getRenderDistance(),
-                        getRadiusBoundMax()
+                        CHUNK_RADIUS_BOUND.max()
                 ),
                 0
         );
@@ -46,7 +39,7 @@ public class FLMath {
         if (raw)
             return Math.max(
                     getRawRenderRadius(),
-                    getRadiusBound().min()
+                    CHUNK_RADIUS_BOUND.min()
             );
         else
             return getRenderChunkRadius();
@@ -54,12 +47,14 @@ public class FLMath {
     public static int getPreRenderArea() {
         return (int)getCircleArea(getRenderChunkRadius());
     }
-
+    public static int getServerRenderDivisor() {
+        return getRawServerRenderDivisor();
+    }
     public static Boolean isDebugEnabled() {
         return getRawDebug();
     }
     public static Boolean isServerRenderEnabled() {
-        return getRawServerRender();
+        return getServerRenderDivisor() > 0;
     }
     public static Boolean isPreRenderEnabled() {
         return getRenderChunkRadius() > 0;
