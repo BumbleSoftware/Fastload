@@ -1,7 +1,7 @@
-package io.github.bumblesoftware.fastload.config.init;
+package io.github.bumblesoftware.fastload.config;
 
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.Bound;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.BufferedWriter;
@@ -13,31 +13,30 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
+import static io.github.bumblesoftware.fastload.config.FLMath.*;
 
 public class FLConfig {
     public static void init() {}
 
-    //Init Vars
     private static final Properties properties;
     private static final Path path;
 
-    //Config Variables
-    protected static int getChunkTryLimit() {
-        return getInt(TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, TRY_LIMIT_BOUND);
-    }
-    protected static int getRawChunkPregenRadius() {
-        return getInt(PREGEN_RADIUS_KEY, DEF_PREGEN_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
-    }
-    protected static int getRawPreRenderRadius() {
-        return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
-    }
-    protected static boolean getCloseLoadingScreenUnsafely() {
-        return getBoolean(FORCE_CLOSE_KEY, DEF_FORCE_CLOSE_VALUE);
-    }
+
     protected static boolean getRawDebug() {
         return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
+    }
+    protected static boolean getRawInstantLoad() {
+        return getBoolean(INSTANT_LOAD_KEY, DEF_INSTANT_LOAD_VALUE);
+    }
+    protected static int getRawChunkTryLimit() {
+        return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
+    }
+    protected static int getRawLocalRenderChunkRadius() {
+        return getInt(LOCAL_RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, LOCAL_CHUNK_RADIUS_BOUND);
+    }
+    protected static int getRawServerRenderChunkRadius() {
+        return getInt(SERVER_RENDER_RADIUS_KEY, DEF_SERVER_RENDER_RADIUS_VALUE, SERVER_CHUNK_RADIUS_BOUND);
     }
 
     static {
@@ -52,21 +51,21 @@ public class FLConfig {
             }
         }
 
-        //Don't forget that these variables are sorted alphabetically in .properties files!
-        getChunkTryLimit();
-        getRawChunkPregenRadius();
-        getRawPreRenderRadius();
-        getCloseLoadingScreenUnsafely();
+        getRawChunkTryLimit();
         getRawDebug();
+        getRawInstantLoad();
+        getRawLocalRenderChunkRadius();
+        getRawServerRenderChunkRadius();
 
-        write();
+        writeToDisk();
 
     }
-    private static void logError(String key) {
-        Fastload.LOGGER.error("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, generating a new one!");
+    private static void logWarn(String key) {
+        Fastload.LOGGER.warn("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, " +
+                "generating a new one!");
     }
 
-    private static void write() {
+    public static void writeToDisk() {
         try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             properties.store(out,  Fastload.NAMESPACE +  " Configuration File");
         } catch (IOException e) {
@@ -74,25 +73,22 @@ public class FLConfig {
         }
         try (BufferedWriter comment = Files.newBufferedWriter(path, StandardOpenOption.APPEND, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             comment.write("\n# Definitions");
-            comment.write("\n# " + writable(TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
-                    "be ignored before we cancel pre-rendering.");
-            comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
-            comment.write("\n#");
-            comment.write("\n# " + writable(FORCE_CLOSE_KEY) + " = should skip 'Joining World', and 'Downloading Terrain'. " +
-                    "Potentially can result in joining world before chunks are properly loaded");
-            comment.write("\n# Enabled = true, Disabled = false");
-            comment.write("\n#");
-            comment.write("\n# " + writable(DEBUG_KEY) + " = debug (log) all things happening in fastload to aid in " +
+            comment.write("\n# " + writable(DEBUG_KEY) + " = debug (logWarn) all things happening in fastload to aid in " +
                     "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# " + writable(RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
-                    "completed.");
-            comment.write("\n# Min = 0, Max = 32 or your getRenderKey distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n# " + writable(CHUNK_TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
+                    "be ignored before we cancel pre-rendering.");
+            comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(PREGEN_RADIUS_KEY) + " = how many chunks (from 441 Loading) are pre-generated until " +
-                    "the server starts");
-            comment.write("\n# Min = 0, Max = 32. Set 0 to only getPregenKey 1 chunk.");
+            comment.write("\n# " + writable(LOCAL_RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
+                    "completed.");
+            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n#");
+            comment.write("\n# " + writable(SERVER_RENDER_RADIUS_KEY) + " = should fastload's rendering apply for servers as " +
+                    "well?");
+            comment.write("\n# Enabled = true, Disabled = false");
+            comment.write("\n#");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -101,13 +97,14 @@ public class FLConfig {
     private static String writable(String key) {
         return "'" + key.toLowerCase() + "'";
     }
-    private static int getInt(String key, int def, MinMaxHolder holder) {
+
+    private static int getInt(String key, int def, Bound bound) {
         try {
-            int i = parseMinMax(Integer.parseInt(properties.getProperty(key)), holder);
+            final int i = bound.minMax(Integer.parseInt(properties.getProperty(key)));
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
-            logError(key);
+            logWarn(key);
             properties.setProperty(key, String.valueOf(def));
             return def;
         }
@@ -119,22 +116,26 @@ public class FLConfig {
         if (string.trim().equalsIgnoreCase("false")) return false;
         throw new NumberFormatException(string);
     }
+
+    @SuppressWarnings("SameParameterValue")
     private static boolean getBoolean(String key, boolean def) {
         try {
             final boolean b = parseBoolean(properties.getProperty(key));
             properties.setProperty(key, String.valueOf(b));
             return b;
         } catch (NumberFormatException e) {
-            logError(key);
+            logWarn(key);
             properties.setProperty(key, String.valueOf(def));
             return def;
         }
     }
+
     public static void storeProperty(String key, String value) {
         if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
         properties.setProperty(key, value);
     }
-    public static void writeToDisk() {
-        write();
+
+    public static String retrieveProperty(String key) {
+        return properties.get(key).toString();
     }
 }

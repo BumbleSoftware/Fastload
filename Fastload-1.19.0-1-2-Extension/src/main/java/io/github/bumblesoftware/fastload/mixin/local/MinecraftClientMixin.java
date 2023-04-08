@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.local;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
@@ -15,14 +15,16 @@ import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = "1.18.2"))
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = {
+        "1.19",
+        "1.19.1",
+        "1.19.2"
+}))
 @Mixin(MinecraftClient.class)
-public abstract class MinecraftClientMixin {
-    @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
-            "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet" +
-            "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
+public class MinecraftClientMixin {
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        final var isPreRenderEnabled = isLocalRenderEnabled();
+        var isPreRenderEnabled = isLocalRenderEnabled();
         if (isDebugEnabled()) {
             LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
             LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
@@ -31,14 +33,14 @@ public abstract class MinecraftClientMixin {
         if (isPreRenderEnabled) {
             client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
             if (isDebugEnabled()) {
-                LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
+                LOGGER.info("DownloadingTerrainScreen -> BuildingTerrainScreen");
                 LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
             }
-        } else client.setScreen(new DownloadingTerrainScreen());
+        }
+        else client.setScreen(new DownloadingTerrainScreen());
     }
 
-    @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
-            "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
     private boolean removeWait(IntegratedServer integratedServer) {
         return true;
     }

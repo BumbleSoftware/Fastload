@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.client.sceen;
+package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
@@ -11,13 +11,16 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
 public class BuildingTerrainScreen extends Screen {
-    private final Text SCREEN_NAME;
-    private final Text SCREEN_TEMPLATE;
-    private final Text BUILDING_CHUNKS;
-    private final Text PREPARING_CHUNKS;
-    private Integer PREPARED_PROGRESS_STORAGE = 0;
-    private Integer BUILDING_PROGRESS_STORAGE = 0;
+    private final Text screenName;
+    private final Text screenTemplate;
+    private final Text buildingChunks;
+    private final Text preparingChunks;
+    private Integer preparedProgressStorage = 0;
+    private Integer buildingProgressStorage = 0;
     private static final int heightUpFromCentre = 50;
+    public final int loadingAreaGoal;
+    private Runnable runnable;
+
     private Integer getLoadedChunkCount() {
         return ABSTRACTED_CLIENT.getClientWorld() != null ? ABSTRACTED_CLIENT.getLoadedChunkCount() : 0;
     }
@@ -28,12 +31,17 @@ public class BuildingTerrainScreen extends Screen {
     /**
      * Texts to draw
      */
-    public BuildingTerrainScreen() {
+    public BuildingTerrainScreen(final int loadingAreaGoal) {
         super(NarratorManager.EMPTY);
-        SCREEN_NAME = ABSTRACTED_CLIENT.newTranslatableText("menu.generatingTerrain");
-        SCREEN_TEMPLATE = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
-        BUILDING_CHUNKS = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
-        PREPARING_CHUNKS = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.preparing");
+        this.loadingAreaGoal = loadingAreaGoal;
+        screenName = ABSTRACTED_CLIENT.newTranslatableText("menu.generatingTerrain");
+        screenTemplate = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
+        buildingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
+        preparingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.preparing");
+    }
+
+    public BuildingTerrainScreen() {
+        this(FLMath.getLocalRenderChunkArea());
     }
 
     /**
@@ -42,29 +50,44 @@ public class BuildingTerrainScreen extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
-        final String loadedChunksString = getLoadedChunkCount() + "/"  + FLMath.getPreRenderArea();
-        final String builtChunksString = getBuiltChunkCount() + "/"  + FLMath.getPreRenderArea();
-        if (PREPARED_PROGRESS_STORAGE < getLoadedChunkCount()) {
+        final String loadedChunksString =
+                getLoadedChunkCount() + "/"  + loadingAreaGoal;
+        final String builtChunksString =
+                getBuiltChunkCount() + "/"  + loadingAreaGoal;
+        if (preparedProgressStorage < getLoadedChunkCount()) {
             Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
         }
-        if (BUILDING_PROGRESS_STORAGE < getBuiltChunkCount()) {
+        if (buildingProgressStorage < getBuiltChunkCount()) {
             Fastload.LOGGER.info("World Chunk Building: " + builtChunksString);
         }
-        PREPARED_PROGRESS_STORAGE = getLoadedChunkCount();
-        BUILDING_PROGRESS_STORAGE = getBuiltChunkCount();
+        preparedProgressStorage = getLoadedChunkCount();
+        buildingProgressStorage = getBuiltChunkCount();
+
+        if (getLoadedChunkCount() == 0 && getBuiltChunkCount() == 0) {
+            ABSTRACTED_CLIENT.drawCenteredText(
+                    matrices,
+                    this.textRenderer,
+                    ABSTRACTED_CLIENT.newTranslatableText("fastload.buildingTerrain.starting"),
+                    this.width / 2,
+                    this.height / 2 - heightUpFromCentre,
+                    WHITE
+            );
+            return;
+        }
 
         ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                SCREEN_NAME,
+                screenName,
                 this.width / 2,
                 this.height / 2 - heightUpFromCentre,
                 WHITE
         );
+
         ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                SCREEN_TEMPLATE,
+                screenTemplate,
                 this.width / 2,
                 this.height / 2 - heightUpFromCentre + 30,
                 WHITE
@@ -73,7 +96,7 @@ public class BuildingTerrainScreen extends Screen {
         ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                 PREPARING_CHUNKS.getString() + ": " + loadedChunksString,
+                 preparingChunks.getString() + ": " + loadedChunksString,
                 width / 2,
                 height / 2 - heightUpFromCentre + 45,
                 WHITE);
@@ -81,7 +104,7 @@ public class BuildingTerrainScreen extends Screen {
         ABSTRACTED_CLIENT.drawCenteredText(
                 matrices,
                 this.textRenderer,
-                BUILDING_CHUNKS.getString() + ": " + builtChunksString,
+                buildingChunks.getString() + ": " + builtChunksString,
                 width / 2,
                 height / 2 - heightUpFromCentre + 60,
                 WHITE);
@@ -89,19 +112,23 @@ public class BuildingTerrainScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    /**
-     * Fastload determines when to bail, not the user
-     */
+    @Override
+    public void close() {
+        if (runnable != null) runnable.run();
+        else super.close();
+    }
+
     @Override
     public boolean shouldCloseOnEsc() {
         return false;
     }
 
-    /**
-     * Permits the server to keep ticking
-     */
     @Override
     public boolean shouldPause() {
         return false;
+    }
+
+    public void setClose(Runnable runnable) {
+        this.runnable = runnable;
     }
 }

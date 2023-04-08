@@ -1,14 +1,15 @@
 package io.github.bumblesoftware.fastload.abstraction.client;
 
-import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
-import io.github.bumblesoftware.fastload.client.sceen.BuildingTerrainScreen;
-import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen1182;
-import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
+import io.github.bumblesoftware.fastload.config.DefaultConfig;
+import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreen1182;
+import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.OptionAccess;
 import io.github.bumblesoftware.fastload.mixin.mixins.client.ScreenAccess;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
@@ -29,11 +30,13 @@ import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
+import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+
 @SuppressWarnings("unchecked")
 public class Client1182 implements AbstractClientCalls {
 
     @Override
-    public String getVersion() {
+    public String getCompatibleVersions() {
         return "1.18.2";
     }
 
@@ -55,6 +58,16 @@ public class Client1182 implements AbstractClientCalls {
     @Override
     public Screen newBuildingTerrainScreen() {
         return new BuildingTerrainScreen();
+    }
+
+    @Override
+    public Screen newBuildingTerrainScreen(final int loadingAreaGoal) {
+        return new BuildingTerrainScreen(loadingAreaGoal);
+    }
+
+    @Override
+    public Screen getCurrentScreen() {
+        return getClientInstance().currentScreen;
     }
 
     @Override
@@ -114,7 +127,7 @@ public class Client1182 implements AbstractClientCalls {
             final String identifier,
             final RetrieveValueFunction retrieveValueFunction,
             final StoreValueFunction storeValueFunction,
-            final MinMaxHolder minMaxValues,
+            final Bound minMaxValues,
             final int width
     ) {
         return (T) new DoubleOption(
@@ -123,8 +136,8 @@ public class Client1182 implements AbstractClientCalls {
                 minMaxValues.max(),
                 1.0F,
                 gameOptions -> Double.parseDouble(retrieveValueFunction.getValue(identifier)),
-                (gameOptions, aDouble) ->
-                        storeValueFunction.setValue(identifier, Integer.toString(aDouble.intValue())),
+                (gameOptions, value) ->
+                        storeValueFunction.setValue(identifier, Integer.toString(value.intValue())),
                 (gameOptions, option) -> {
                     double d = option.get(gameOptions);
                     if (d == minMaxValues.min()) {
@@ -192,8 +205,30 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
+    public int getViewDistance() {
+        if (getClientInstance().options == null) {
+            return DefaultConfig.LOCAL_CHUNK_RADIUS_BOUND.max();
+        } else return getClientInstance().options.getViewDistance();
+    }
+
+    @Override
     public boolean isWindowFocused() {
         return getClientInstance().isWindowFocused();
+    }
+
+    @Override
+    public boolean isSingleplayer() {
+        return ABSTRACTED_CLIENT.getClientInstance().isInSingleplayer();
+    }
+
+    @Override
+    public boolean forCurrentScreen(final ScreenProvider screenProvider) {
+        return screenProvider.getCurrent(getCurrentScreen());
+    }
+
+    @Override
+    public boolean isBuildingTerrainScreen(final Screen screen) {
+        return screen instanceof BuildingTerrainScreen;
     }
 
     @Override

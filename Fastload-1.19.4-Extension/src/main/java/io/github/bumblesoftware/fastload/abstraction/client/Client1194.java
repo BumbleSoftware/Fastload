@@ -9,7 +9,7 @@ import net.minecraft.text.Text;
 
 public class Client1194 extends Client1193 {
     @Override
-    public String getVersion() {
+    public String getCompatibleVersions() {
         return "1.19.4";
     }
 

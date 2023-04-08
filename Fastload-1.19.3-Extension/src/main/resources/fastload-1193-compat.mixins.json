@@ -5,10 +5,11 @@
   "plugin": "io.github.bumblesoftware.fastload.mixin.plugin.FLConditionalMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "local.HookClient1193"
   ],
   "client": [
     "local.FrustumMixin",
-    "local.Hook1193"
+    "local1.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

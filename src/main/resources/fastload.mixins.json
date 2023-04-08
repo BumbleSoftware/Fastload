@@ -5,9 +5,8 @@
   "plugin": "io.github.bumblesoftware.fastload.mixin.plugin.FLConditionalMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "server.MinecraftServerMixin",
-    "server.WorldGenerationProcessLoggerMixin",
-    "server.WorldGenerationProgressTrackerMixin"
+    "server.MinecraftServerEvents",
+    "server.MinecraftServerMixin"
   ],
   "client": [
     "client.ClientPlayerEntityMixin",
@@ -15,7 +14,7 @@
     "client.DownloadingTerrainScreenMixin",
     "client.FrustumMixin",
     "client.GameRendererMixin",
-    "client.LevelLoadingScreenMixin",
+    "client.MinecraftClientEvents",
     "client.MinecraftClientMixin",
     "client.OptionAccess",
     "client.ScreenAccess"

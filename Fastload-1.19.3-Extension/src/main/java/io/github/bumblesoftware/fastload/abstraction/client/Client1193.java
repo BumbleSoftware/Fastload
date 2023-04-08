@@ -4,7 +4,7 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 import com.mojang.serialization.Codec;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 
 public class Client1193 extends Client119 {
     @Override
-    public String getVersion() {
+    public String getCompatibleVersions() {
         return "1.19.3";
     }
 
@@ -51,7 +51,7 @@ public class Client1193 extends Client119 {
             final String identifier,
             final RetrieveValueFunction retrieveValueFunction,
             final StoreValueFunction storeValueFunction,
-            final MinMaxHolder minMaxValues,
+            final Bound minMaxValues,
             final int width
     ) {
         int max = minMaxValues.max();

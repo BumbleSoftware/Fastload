@@ -1,28 +1,29 @@
 {
-  "fastload.screen.buildingTerrain.template": "Completed / Goal",
   "fastload.screen.buildingTerrain.building": "Building Visible Chunks",
   "fastload.screen.buildingTerrain.preparing": "Preparing All Chunks",
+  "fastload.buildingTerrain.starting": "Starting Session",
+  "fastload.screen.buildingTerrain.template": "Completed / Goal",
 
   "fastload.screen.config": "Fastload Configuration",
 
   "fastload.button.debug": "Debug Mode",
   "fastload.button.debug.tooltip": "Should debugs be printed in the logs?",
 
-  "fastload.button.close_loading_screen_unsafely": "Close Loading Screen",
-  "fastload.button.close_loading_screen_unsafely.tooltip": "Should fastload close the DownloadingTerrainScreen earlier, even if it's slightly unsafe?",
+  "fastload.button.instant_load": "Instant Load",
+  "fastload.button.instant_load.tooltip": "Are you impatient? Do you hate loading screens? Just switch it on, load a world, and you will regret it. -_-",
 
-  "fastload.button.render_chunk_radius": "Render Chunk Radius",
-  "fastload.button.render_chunk_radius.tooltip": "Many many chunks in a radius should be prepared and built during pre-rendering? Limited by render distance",
-  "fastload.button.render_chunk_radius.min": "Disabled",
-  "fastload.button.render_chunk_radius.max": "Why?",
+  "fastload.button.local_render_chunk_radius": "Local Radius",
+  "fastload.button.local_render_chunk_radius.tooltip": "Radius for how many chunks in a circle should render in Fastload's Building Terrain for Singleplayer.",
+  "fastload.button.local_render_chunk_radius.min": "Disabled",
+  "fastload.button.local_render_chunk_radius.max": "Wtf",
 
-  "fastload.button.pregen_chunk_radius": "Pregen Chunk Radius",
-  "fastload.button.pregen_chunk_radius.tooltip": "Many many chunks in a radius should be generated on the server until completed. Should inversely correlate with pre-render radius for optimal performance",
-  "fastload.button.pregen_chunk_radius.min": "Ksyxis",
-  "fastload.button.pregen_chunk_radius.max": "Chunky",
+  "fastload.button.server_render_chunk_radius": "Server Radius",
+  "fastload.button.server_render_chunk_radius.tooltip": "Radius for how many chunks in a circle should render in Fastload's Building Terrain for Servers.",
+  "fastload.button.server_render_chunk_radius.min": "Disabled",
+  "fastload.button.server_render_chunk_radius.max": "Wtf",
 
   "fastload.button.chunk_try_limit": "Chunk Try Limit",
   "fastload.button.chunk_try_limit.tooltip": "How many times would the same chunk count be allowed to be returned in a row before bailing on pre-rendering",
   "fastload.button.chunk_try_limit.min": "NASA PC",
-  "fastload.button.chunk_try_limit.max": "Infinity"
+  "fastload.button.chunk_try_limit.max": "Snail"
 }
