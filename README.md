@@ -1,47 +1,34 @@
-# Short explanation:
-Fastload is a mod that provides numerous methods of control over world loading. Most of which are intended
-to optimise it; to speed it up.
+# Short explanation
+Fastload is a *relatively* simple mod that changes some crucial parts of world loading to speed it up.
 
-# Environments:
+# Environments
 - Client (Optional)
 - Server (Optional)
 
-# Credits:
+# Credits
 - StockiesLad (Owner)
 - JoostMSoftware (Co-Owner)
 - AbdElAziz333 (Forge)
 - VidTu (Ksyxis (Idea))
 - kennytv (Forcecloseloadingscreen (Code))
 
-# Features:
-- Chunk Pre-generation: Reducing 21^2 chunks to 5^2 (Configurable)
+# Features
+- 441 Pre-generator: Entirely yanks it to sync chunk generation with chunk rendering.
 - Loading Screens: Cancellable (Configurable)
 - Rendering: Pre-rendering Phase (Configurable)
 
-# Suggested With:
+# Suggested With
 - C2ME: Optimises chunk generation.
 - Sodium: Optimises chunk rendering.
 
-# Speed times (Default Settings, My system):
-- Vanilla:
-  - Create New world: ~32 sec
-  - Load World: ~5 sec
-
-- Fastload: 
-  - Create New World: ~23 sec
-  - Load World: ~3 sec
-
-# Explanation:
+# Explanation
 The 441 chunk loading engine is pretty much what the name is. The reason for it being 441 chunks is that
 it generates chunks in a 10 chunk radius as a square. So multiply that by 2, add 1 (because you are standing
-on a chunk) and square it. Fastload simply adjusts the radius to be lower by default, whilst also making it
-changeable like every other chunk radius.
+on a chunk) and square it. Fastload removes this *feature* as it is a huge waste of time. Instead, it will
+only load 1 chunk (the spawn chunk) and loads the rest of the spawn region during early rendering.
 
-During world loading, there is also a lot of pretty much unnecessary loading screens. Fastload makes them
-skippable. To replace this, there is a pre-rendering phase that has a customisable radius as well. It allows
-chunks to be generated uniformly around you, unlike vanilla behaviour which only renders visible chunks.
-If you really wanted to, you could skip loading screens & 441 chunk loading directly to this phase. It will
-be faster with 0 downsides.
+Along with that, it also replaces some of the loading screens with its own implementation. This pretty much
+allows rendering to begin immediately instead of it being halted until the player spawn packet is received.
 
 # Links
 - Modrinth: https://modrinth.com/mod/fastload
