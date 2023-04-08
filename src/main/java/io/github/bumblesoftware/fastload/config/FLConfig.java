@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config.init;
+package io.github.bumblesoftware.fastload.config;
 
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.Bound;
@@ -13,8 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
+import static io.github.bumblesoftware.fastload.config.FLMath.*;
 
 public class FLConfig {
     public static void init() {}

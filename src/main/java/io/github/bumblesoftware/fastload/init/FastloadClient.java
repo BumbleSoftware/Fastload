@@ -4,13 +4,13 @@ import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.tool.AbstractedClientHolder;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
-import io.github.bumblesoftware.fastload.config.init.FLConfig;
+import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.util.MinecraftVersionUtil;
 import net.fabricmc.api.ClientModInitializer;
 
 import static io.github.bumblesoftware.fastload.abstraction.tool.AbstractionEvents.CLIENT_ABSTRACTION_EVENT;
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
+import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 
 public class FastloadClient implements ClientModInitializer {

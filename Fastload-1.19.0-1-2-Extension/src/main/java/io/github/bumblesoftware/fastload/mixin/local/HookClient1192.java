@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.local;
 
 import io.github.bumblesoftware.fastload.abstraction.client.Client119;
-import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.BuiltinAbstractionMappings;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import org.spongepowered.asm.mixin.Mixin;

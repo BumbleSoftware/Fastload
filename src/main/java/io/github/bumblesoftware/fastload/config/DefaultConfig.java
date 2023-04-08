@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config.init;
+package io.github.bumblesoftware.fastload.config;
 
 
 import io.github.bumblesoftware.fastload.util.Bound;

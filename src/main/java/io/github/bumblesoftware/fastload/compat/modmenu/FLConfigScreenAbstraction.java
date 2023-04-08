@@ -1,11 +1,11 @@
-package io.github.bumblesoftware.fastload.config.screen;
+package io.github.bumblesoftware.fastload.compat.modmenu;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.config.init.FLConfig.writeToDisk;
+import static io.github.bumblesoftware.fastload.config.FLConfig.writeToDisk;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public interface FLConfigScreenAbstraction {

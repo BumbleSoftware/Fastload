@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.util;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.fabricmc.loader.api.FabricLoader;
 

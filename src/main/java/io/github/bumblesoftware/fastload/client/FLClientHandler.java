@@ -5,7 +5,7 @@ import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.Screen;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 /**

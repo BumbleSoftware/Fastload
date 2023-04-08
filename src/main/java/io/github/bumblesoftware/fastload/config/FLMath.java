@@ -1,9 +1,9 @@
-package io.github.bumblesoftware.fastload.config.init;
+package io.github.bumblesoftware.fastload.config;
 
 import io.github.bumblesoftware.fastload.util.Bound;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.init.FLConfig.*;
+import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
+import static io.github.bumblesoftware.fastload.config.FLConfig.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public class FLMath {

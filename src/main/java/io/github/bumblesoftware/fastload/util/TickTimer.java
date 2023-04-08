@@ -4,7 +4,7 @@ import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 
 import static io.github.bumblesoftware.fastload.client.FLClientHandler.log;
-import static io.github.bumblesoftware.fastload.config.init.FLMath.isDebugEnabled;
+import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
 
 /**
  * Simple event-based timer with respect to minecraft ticks.

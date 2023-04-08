@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.init;
 
 import io.github.bumblesoftware.fastload.abstraction.client.Client1182;
-import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.util.MinecraftVersionUtil;
 
 import static io.github.bumblesoftware.fastload.abstraction.tool.AbstractionEvents.CLIENT_ABSTRACTION_EVENT;

@@ -1,12 +1,12 @@
-package io.github.bumblesoftware.fastload.config.screen;
+package io.github.bumblesoftware.fastload.compat.modmenu;
 
-import io.github.bumblesoftware.fastload.config.init.FLConfig;
+import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.Bound;
 
 import java.util.List;
 
-import static io.github.bumblesoftware.fastload.config.init.DefaultConfig.*;
+import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public class FLConfigScreenButtons<Option> {

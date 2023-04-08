@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.local;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
+import io.github.bumblesoftware.fastload.config.FLMath;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.render.Frustum;

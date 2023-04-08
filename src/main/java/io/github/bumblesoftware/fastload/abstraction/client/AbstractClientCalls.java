@@ -3,7 +3,7 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
-import io.github.bumblesoftware.fastload.config.screen.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;

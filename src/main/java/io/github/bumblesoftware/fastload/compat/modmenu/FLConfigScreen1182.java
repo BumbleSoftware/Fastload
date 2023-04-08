@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.config.screen;
+package io.github.bumblesoftware.fastload.compat.modmenu;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.SimpleOptionsScreen;
