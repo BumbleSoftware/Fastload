@@ -12,4 +12,9 @@ public class FLConfigScreen119 extends SimpleOptionsScreen implements FLConfigSc
                 (SimpleOption<?>[]) ABSTRACTED_CLIENT.newFLConfigScreenButtons()
                         .getAllOptions(new SimpleOption<?>[]{}));
     }
+
+    @Override
+    protected void initFooter() {
+        FLConfigScreenAbstraction.super.initFooter(this, parent);
+    }
 }

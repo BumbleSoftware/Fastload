@@ -18,7 +18,8 @@ public class BuildingTerrainScreen extends Screen {
     private Integer preparedProgressStorage = 0;
     private Integer buildingProgressStorage = 0;
     private static final int heightUpFromCentre = 50;
-    public final double goalMultiplier;
+    public final int loadingAreaGoal;
+    private Runnable runnable;
 
     private Integer getLoadedChunkCount() {
         return ABSTRACTED_CLIENT.getClientWorld() != null ? ABSTRACTED_CLIENT.getLoadedChunkCount() : 0;
@@ -30,9 +31,9 @@ public class BuildingTerrainScreen extends Screen {
     /**
      * Texts to draw
      */
-    public BuildingTerrainScreen(int goalDivisor) {
+    public BuildingTerrainScreen(final int loadingAreaGoal) {
         super(NarratorManager.EMPTY);
-        this.goalMultiplier = 1.0/(double)goalDivisor;
+        this.loadingAreaGoal = loadingAreaGoal;
         screenName = ABSTRACTED_CLIENT.newTranslatableText("menu.generatingTerrain");
         screenTemplate = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
         buildingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
@@ -40,7 +41,7 @@ public class BuildingTerrainScreen extends Screen {
     }
 
     public BuildingTerrainScreen() {
-        this(1);
+        this(FLMath.getLocalRenderChunkArea());
     }
 
     /**
@@ -50,9 +51,9 @@ public class BuildingTerrainScreen extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
         final String loadedChunksString =
-                getLoadedChunkCount() + "/"  + (int)(FLMath.getPreRenderArea() * goalMultiplier);
+                getLoadedChunkCount() + "/"  + loadingAreaGoal;
         final String builtChunksString =
-                getBuiltChunkCount() + "/"  + (int)(FLMath.getPreRenderArea() * goalMultiplier);
+                getBuiltChunkCount() + "/"  + loadingAreaGoal;
         if (preparedProgressStorage < getLoadedChunkCount()) {
             Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
         }
@@ -111,19 +112,23 @@ public class BuildingTerrainScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    /**
-     * Fastload determines when to bail, not the user
-     */
+    @Override
+    public void close() {
+        if (runnable != null) runnable.run();
+        else super.close();
+    }
+
     @Override
     public boolean shouldCloseOnEsc() {
         return false;
     }
 
-    /**
-     * Permits the server to keep ticking
-     */
     @Override
     public boolean shouldPause() {
         return false;
+    }
+
+    public void setClose(Runnable runnable) {
+        this.runnable = runnable;
     }
 }

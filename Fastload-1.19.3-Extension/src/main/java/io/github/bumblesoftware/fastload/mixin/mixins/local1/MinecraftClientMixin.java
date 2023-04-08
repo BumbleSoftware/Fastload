@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.local1;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;
@@ -21,24 +20,23 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 public class MinecraftClientMixin {
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        var isPreRenderEnabled = isPreRenderEnabled();
+        var isPreRenderEnabled = isLocalRenderEnabled();
         if (isDebugEnabled()) {
-            LOGGER.info("isPreRenderEnabled: " + isPreRenderEnabled);
-            LOGGER.info("renderChunkRadius: " + FLMath.getRenderChunkRadius());
-            LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getRenderDistance());
+            LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
+            LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
+            LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
         }
         if (isPreRenderEnabled) {
-            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen());
+            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
             if (isDebugEnabled()) {
                 LOGGER.info("DownloadingTerrainScreen -> BuildingTerrainScreen");
-                LOGGER.info("Goal (Loaded Chunks): " + getPreRenderArea());
+                LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
             }
         }
-        else client.setScreenAndRender(new DownloadingTerrainScreen());
+        else client.setScreen(new DownloadingTerrainScreen());
     }
 
-    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated" +
-            "/IntegratedServer;isLoading()Z"))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
     private boolean removeWait(IntegratedServer integratedServer) {
         return true;
     }

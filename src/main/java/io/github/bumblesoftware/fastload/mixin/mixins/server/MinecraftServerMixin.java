@@ -23,7 +23,7 @@ public abstract class MinecraftServerMixin {
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int onPrepareRedirectChunksLoaded(int value) {
-        return 0;
+        return 1;
     }
 
     @Redirect(method = "prepareStartRegion", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V"))

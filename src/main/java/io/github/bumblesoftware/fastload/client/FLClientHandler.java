@@ -1,6 +1,5 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.config.init.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,8 +20,6 @@ public final class FLClientHandler {
 
     private static Screen oldCurrentScreen = null;
 
-    private static boolean accessedDownloadingTerrainScreen = false;
-
 
     /**
      * Boolean whether an object of Player has been initialised
@@ -32,12 +29,6 @@ public final class FLClientHandler {
      * Boolean whether player has joined ClientWorld
      */
     private static boolean playerJoined = false;
-
-    /**
-     * Shows getRenderKey-distance difference between set value & fastload's one if there is a difference.
-     * Used to send a debug message.
-     */
-    private static boolean hasNotShownRenderDifference = false;
     /**
      * Stores the old count to compare values on the next method call to see if the value
      * of loaded chunks is same.
@@ -70,30 +61,29 @@ public final class FLClientHandler {
     public static final TickTimer CLIENT_TIMER = new TickTimer(RENDER_TICK_EVENT);
 
     /**
-     * Logs Difference in Render and Pre-getRenderKey distances
-     */
-    private static void logRenderDistanceDifference() {
-        if (getRenderChunkRadius() != getRenderChunkRadius(true))
-            log("Pre-rendering radius changed to "
-                    + getRenderChunkRadius() + " from " + getRenderChunkRadius(true)
-                    + " to protect from chunks not loading past your given getRenderKey distance. " +
-                    "To resolve this, please adjust your getRenderKey distance accordingly");
-    }
-
-    /**
      * Logs amount of prepared chunks;
      */
     private static void logRendering(int chunkLoadedCount) {
-        log("Goal (Loaded Chunks): " + getPreRenderArea());
-        log("Loaded Chunks: " + chunkLoadedCount);
+        if (ABSTRACTED_CLIENT.isSingleplayer()) {
+            log("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+            log("Loaded Chunks: " + chunkLoadedCount);
+        } else {
+            log("Goal (Loaded Chunks): " + getServerRenderChunkArea());
+            log("Loaded Chunks: " + chunkLoadedCount);
+        }
     }
 
     /**
      * Lots Chunk-building status
      */
     private static void logBuilding(int chunkBuildCount) {
-        log("Goal (Built Chunks): " + getPreRenderArea());
-        log("Chunk Build Count: " + chunkBuildCount);
+        if (ABSTRACTED_CLIENT.isSingleplayer()) {
+            log("Goal (Built Chunks): " + getLocalRenderChunkArea());
+            log("Chunk Build Count: " + chunkBuildCount);
+        } else {
+            log("Goal (Built Chunks): " + getServerRenderChunkArea());
+            log("Chunk Build Count: " + chunkBuildCount);
+        }
     }
 
     /**
@@ -113,7 +103,7 @@ public final class FLClientHandler {
             playerJoined = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
-            ABSTRACTED_CLIENT.setScreen(null);
+            ABSTRACTED_CLIENT.getCurrentScreen().close();
         }
     }
 
@@ -137,14 +127,12 @@ public final class FLClientHandler {
             if (CLIENT_TIMER.isReady() && ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) && !ABSTRACTED_CLIENT.isWindowFocused()) {
                 if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
                 eventContext.ci().cancel();
-                ABSTRACTED_CLIENT.setScreen(null);
             }
             return null;
         });
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
                 if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
-                    hasNotShownRenderDifference = true;
                     if (isDebugEnabled())
                         log("setScreen(new BuildingTerrain)");
                 }
@@ -153,42 +141,37 @@ public final class FLClientHandler {
 
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen()) && playerReady && playerJoined) {
-                if (isDebugEnabled()) log("setScreen(new DownloadingTerrainScreen)");
-                playerReady = false;
-                playerJoined = false;
-                accessedDownloadingTerrainScreen = true;
-            }
-            return null;
-        });
-
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (eventContext.screen() == null && accessedDownloadingTerrainScreen) {
-                CLIENT_TIMER.setTime(20);
-                accessedDownloadingTerrainScreen = false;
+            if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
+                if (isDebugEnabled())
+                    log("setScreen(new DownloadingTerrainScreen)");
+                if (playerReady && playerJoined && isInstantLoadEnabled()) {
+                    eventContext.ci().cancel();
+                    ABSTRACTED_CLIENT.getClientInstance().setScreen(null);
+                    playerReady = false;
+                    playerJoined = false;
+                    CLIENT_TIMER.setTime(20);
+                }
             }
             return null;
         });
 
         RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (hasNotShownRenderDifference) {
-                logRenderDistanceDifference();
-                hasNotShownRenderDifference = false;
-            }
             if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
                 if (ABSTRACTED_CLIENT.getClientWorld() != null) {
                     final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
                     final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();
                     final int oldPreparationWarningCache = preparationWarnings;
                     final int oldBuildingWarningCache = buildingWarnings;
-                    final double goalMultiplier = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).goalMultiplier;
+                    final int loadingAreaGoal = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).loadingAreaGoal;
 
                     if (isDebugEnabled()) {
                         logRendering(chunkLoadedCount);
                         logBuilding(chunkBuildCount);
                     }
 
-                    if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null) {
+                    if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null
+                            && chunkBuildCount > 0 && chunkLoadedCount > 0
+                    ) {
                         if (oldChunkLoadedCountStorage == chunkLoadedCount)
                             preparationWarnings++;
                         if (oldChunkBuildCountStorage == chunkBuildCount)
@@ -230,9 +213,8 @@ public final class FLClientHandler {
 
                     oldChunkLoadedCountStorage = chunkLoadedCount;
                     oldChunkBuildCountStorage = chunkBuildCount;
-                    int goal = (int) (getPreRenderArea() * goalMultiplier);
 
-                    if (chunkLoadedCount >= goal && chunkBuildCount >= goal) {
+                    if (chunkLoadedCount >= loadingAreaGoal && chunkBuildCount >= loadingAreaGoal) {
                         stopBuilding(chunkLoadedCount, chunkBuildCount);
                         log("Successfully pre-loaded the world!");
                     }
@@ -242,11 +224,11 @@ public final class FLClientHandler {
         });
 
         RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (FLMath.isDebugEnabled()) {
+            if (isDebugEnabled()) {
                 ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
                     if (oldCurrentScreen != screen) {
                         oldCurrentScreen = screen;
-                        Fastload.LOGGER.info(screen.getTitle().getString() + "--" + screen);
+                        Fastload.LOGGER.info("Screen changed to: " + screen);
                     }
                     return false;
                 });

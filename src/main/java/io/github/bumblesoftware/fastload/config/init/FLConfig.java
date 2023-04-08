@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.config.init;
 
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.Bound;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.BufferedWriter;
@@ -19,22 +19,24 @@ import static io.github.bumblesoftware.fastload.config.init.FLMath.*;
 public class FLConfig {
     public static void init() {}
 
-    //Init Vars
     private static final Properties properties;
     private static final Path path;
 
-    //Config Variables
+
     protected static boolean getRawDebug() {
         return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
     }
-    protected static int getRawServerRenderDivisor() {
-        return getInt(SERVER_RENDER_DIVISOR_KEY, DEF_SERVER_RENDER_DIVISOR, SERVER_RENDER_DIVISOR_BOUND);
+    protected static boolean getRawInstantLoad() {
+        return getBoolean(INSTANT_LOAD_KEY, DEF_INSTANT_LOAD_VALUE);
     }
     protected static int getRawChunkTryLimit() {
         return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
     }
-    protected static int getRawRenderRadius() {
-        return getInt(RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, CHUNK_RADIUS_BOUND);
+    protected static int getRawLocalRenderChunkRadius() {
+        return getInt(LOCAL_RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, LOCAL_CHUNK_RADIUS_BOUND);
+    }
+    protected static int getRawServerRenderChunkRadius() {
+        return getInt(SERVER_RENDER_RADIUS_KEY, DEF_SERVER_RENDER_RADIUS_VALUE, SERVER_CHUNK_RADIUS_BOUND);
     }
 
     static {
@@ -49,11 +51,11 @@ public class FLConfig {
             }
         }
 
-        //Don't forget that these variables are sorted alphabetically in .properties files!
         getRawChunkTryLimit();
         getRawDebug();
-        getRawRenderRadius();
-        getRawServerRenderDivisor();
+        getRawInstantLoad();
+        getRawLocalRenderChunkRadius();
+        getRawServerRenderChunkRadius();
 
         writeToDisk();
 
@@ -75,15 +77,15 @@ public class FLConfig {
                     "diagnosing issues.");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
-            comment.write("\n# " + writable(RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
-                    "completed.");
-            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
-            comment.write("\n#");
             comment.write("\n# " + writable(CHUNK_TRY_LIMIT_KEY) + " = how many times in a row should the same count of loaded chunks " +
                     "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
-            comment.write("\n# " + writable(SERVER_RENDER_DIVISOR_KEY) + " = should fastload's rendering apply for servers as " +
+            comment.write("\n# " + writable(LOCAL_RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
+                    "completed.");
+            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
+            comment.write("\n#");
+            comment.write("\n# " + writable(SERVER_RENDER_RADIUS_KEY) + " = should fastload's rendering apply for servers as " +
                     "well?");
             comment.write("\n# Enabled = true, Disabled = false");
             comment.write("\n#");
@@ -96,9 +98,9 @@ public class FLConfig {
         return "'" + key.toLowerCase() + "'";
     }
 
-    private static int getInt(String key, int def, MinMaxHolder minMaxHolder) {
+    private static int getInt(String key, int def, Bound bound) {
         try {
-            int i = parseMinMax(Integer.parseInt(properties.getProperty(key)), minMaxHolder);
+            final int i = bound.minMax(Integer.parseInt(properties.getProperty(key)));
             properties.setProperty(key, String.valueOf(i));
             return i;
         } catch (NumberFormatException e) {
@@ -131,5 +133,9 @@ public class FLConfig {
     public static void storeProperty(String key, String value) {
         if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
         properties.setProperty(key, value);
+    }
+
+    public static String retrieveProperty(String key) {
+        return properties.get(key).toString();
     }
 }

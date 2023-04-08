@@ -17,7 +17,7 @@ public class FrustumMixin {
     @Inject(method = "isVisible(DDDDDD)Z", at = @At("HEAD"), cancellable = true)
     private void setVisible(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, CallbackInfoReturnable<Boolean> cir) {
         if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) &&
-                FLMath.isPreRenderEnabled())
+                FLMath.isLocalRenderEnabled())
             cir.setReturnValue(true);
     }
 }

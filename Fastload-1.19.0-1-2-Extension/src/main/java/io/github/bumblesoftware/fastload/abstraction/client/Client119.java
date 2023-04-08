@@ -5,7 +5,7 @@ import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.config.init.DefaultConfig;
 import io.github.bumblesoftware.fastload.config.screen.FLConfigScreen119;
-import io.github.bumblesoftware.fastload.util.MinMaxHolder;
+import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
@@ -18,10 +18,10 @@ public class Client119 extends Client1182 {
     }
 
     @Override
-    public int getRenderDistance() {
+    public int getViewDistance() {
         if (getClientInstance().options == null) {
-            return DefaultConfig.CHUNK_RADIUS_BOUND.max();
-        } else return getClientInstance().options.getViewDistance().getValue();
+            return DefaultConfig.LOCAL_CHUNK_RADIUS_BOUND.max();
+        } else return getClientInstance().options.getClampedViewDistance();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Client119 extends Client1182 {
             final String identifier,
             final RetrieveValueFunction retrieveValueFunction,
             final StoreValueFunction storeValueFunction,
-            final MinMaxHolder minMaxValues,
+            final Bound minMaxValues,
             final int width
     ) {
         int max = minMaxValues.max();
@@ -74,7 +74,8 @@ public class Client119 extends Client1182 {
                     if (value.equals(min)) {
                         return GameOptions.getGenericValueText(optionText, Text.translatable(namespace + identifier + ".min"));
                     } else if (value.equals(max)) {
-                        return GameOptions.getGenericValueText(optionText, Text.translatable(namespace + identifier + ".max"));
+                        return GameOptions.getGenericValueText(optionText,
+                                Text.translatable(namespace + identifier + ".max"));
                     } else {
                         return GameOptions.getGenericValueText(optionText, value);
                     }

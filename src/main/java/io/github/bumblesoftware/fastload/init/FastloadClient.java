@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.abstraction.tool.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.tool.AbstractedClientHolder;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
@@ -25,11 +25,13 @@ public class FastloadClient implements ClientModInitializer {
         FLClientHandler.init();
         MinecraftVersionUtil.getVersion();
         LOGGER.info("Fastload Perceived Version: " + MinecraftVersionUtil.getVersion());
-        LOGGER.info("Fastload Internal Mapping Support Versions: " + ABSTRACTED_CLIENT.getCompatibleVersions());
+        LOGGER.info("Fastload Abstraction Supported Versions: " + ABSTRACTED_CLIENT.getCompatibleVersions());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
         LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
-        LOGGER.info(logKey(RENDER_RADIUS_KEY) + getRenderChunkRadius());
-        LOGGER.info(logKey(RENDER_AREA_KEY) + getPreRenderArea());
+        LOGGER.info(logKey(LOCAL_RENDER_RADIUS_KEY) + getLocalRenderChunkRadius());
+        LOGGER.info(logKey(LOCAL_RENDER_AREA_KEY) + getLocalRenderChunkArea());
+        LOGGER.info(logKey(SERVER_RENDER_RADIUS_KEY) + getServerRenderChunkRadius());
+        LOGGER.info(logKey(SERVER_RENDER_AREA_KEY) + getServerRenderChunkArea());
     }
 
     private static AbstractClientCalls getAbstractedClient() {
