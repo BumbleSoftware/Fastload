@@ -23,5 +23,12 @@
     "fabricloader": ">=0.14.10",
     "minecraft": "*",
     "java": ">=17"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "fastload"
+      }
+    }
   }
 }
