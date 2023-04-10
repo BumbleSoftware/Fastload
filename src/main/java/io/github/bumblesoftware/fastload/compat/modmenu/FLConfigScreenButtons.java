@@ -37,6 +37,7 @@ public class FLConfigScreenButtons<Option> {
         return List.of(
                 getNewBoolButton(DEBUG_KEY),
                 getNewBoolButton(INSTANT_LOAD_KEY),
+                getNewBoolButton(SHOW_CHUNKMAP_KEY),
                 getNewSlider(LOCAL_RENDER_RADIUS_KEY, LOCAL_CHUNK_RADIUS_BOUND),
                 getNewSlider(SERVER_RENDER_RADIUS_KEY, SERVER_CHUNK_RADIUS_BOUND),
                 getNewSlider(CHUNK_TRY_LIMIT_KEY, CHUNK_TRY_LIMIT_BOUND)

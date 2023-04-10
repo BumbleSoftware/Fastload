@@ -29,6 +29,9 @@ public class FLConfig {
     protected static boolean getRawInstantLoad() {
         return getBoolean(INSTANT_LOAD_KEY, DEF_INSTANT_LOAD_VALUE);
     }
+    protected static boolean getRawShowChunkmap() {
+        return getBoolean(SHOW_CHUNKMAP_KEY, DEF_SHOW_CHUNKMAP_VALUE);
+    }
     protected static int getRawChunkTryLimit() {
         return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
     }
@@ -54,6 +57,7 @@ public class FLConfig {
         getRawChunkTryLimit();
         getRawDebug();
         getRawInstantLoad();
+        getRawShowChunkmap();
         getRawLocalRenderChunkRadius();
         getRawServerRenderChunkRadius();
 

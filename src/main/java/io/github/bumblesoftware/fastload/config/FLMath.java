@@ -41,6 +41,9 @@ public class FLMath {
     public static Boolean isInstantLoadEnabled() {
         return getRawInstantLoad();
     }
+    public static Boolean isShowChunkmapEnabled() {
+        return getRawShowChunkmap();
+    }
     public static Boolean isServerRenderEnabled() {
         return getServerRenderChunkArea() > 0;
     }

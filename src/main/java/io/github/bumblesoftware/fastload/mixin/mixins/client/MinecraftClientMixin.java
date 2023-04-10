@@ -22,19 +22,21 @@ public abstract class MinecraftClientMixin {
             "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet" +
             "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        final var isPreRenderEnabled = isLocalRenderEnabled();
-        if (isDebugEnabled()) {
-            LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
-            LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
-            LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
-        }
-        if (isPreRenderEnabled) {
-            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
+        if (!isShowChunkmapEnabled()) {
+            final var isPreRenderEnabled = isLocalRenderEnabled();
             if (isDebugEnabled()) {
-                LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
-                LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+                LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
+                LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
+                LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
             }
-        } else client.setScreen(new DownloadingTerrainScreen());
+            if (isPreRenderEnabled) {
+                client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
+                if (isDebugEnabled()) {
+                    LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
+                    LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+                }
+            } else client.setScreen(new DownloadingTerrainScreen());
+        } else client.setScreen(screen);
     }
 
     @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
@@ -44,5 +46,21 @@ public abstract class MinecraftClientMixin {
     }
 
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))
-    private void removeProgressScreen(MinecraftClient client, Screen screen) {}
+    private void removeProgressScreen(MinecraftClient client, Screen screen) {
+        if (isShowChunkmapEnabled()) {
+            final var isPreRenderEnabled = isLocalRenderEnabled();
+            if (isDebugEnabled()) {
+                LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
+                LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
+                LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
+            }
+            if (isPreRenderEnabled) {
+                client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
+                if (isDebugEnabled()) {
+                    LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
+                    LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+                }
+            } else client.setScreen(new DownloadingTerrainScreen());
+        }
+    }
 }

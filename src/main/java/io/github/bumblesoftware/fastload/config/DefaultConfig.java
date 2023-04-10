@@ -7,6 +7,8 @@ public interface DefaultConfig {
     String CHUNK_TRY_LIMIT_KEY = "chunk_try_limit";
     String DEBUG_KEY = "debug";
     String INSTANT_LOAD_KEY = "instant_load";
+    String SHOW_CHUNKMAP_KEY = "show_chunkmap";
+
     String LOCAL_RENDER_KEY = renderKey("local");
     String LOCAL_RENDER_RADIUS_KEY = suffix(LOCAL_RENDER_KEY, false);
     String LOCAL_RENDER_AREA_KEY = suffix(LOCAL_RENDER_KEY, true);
@@ -20,6 +22,7 @@ public interface DefaultConfig {
 
     boolean DEF_DEBUG_VALUE = false;
     boolean DEF_INSTANT_LOAD_VALUE = false;
+    boolean DEF_SHOW_CHUNKMAP_VALUE = false;
     int DEF_SERVER_RENDER_RADIUS_VALUE = 3;
     int DEF_RENDER_RADIUS_VALUE = 10;
     int DEF_TRY_LIMIT_VALUE = 100;
