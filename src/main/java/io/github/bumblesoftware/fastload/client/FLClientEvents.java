@@ -14,6 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class FLClientEvents {
     public static void init() {}
 
+    public interface EventLocations {
+        String LLS441Redirect = "LevelLoadingScreen_replace_via_redirect";
+    }
+
     public interface Events {
         AbstractEvent<Empty> CLIENT_PLAYER_INIT_EVENT =  new CapableEvent<>();
         AbstractEvent<SetScreenEventContext> SET_SCREEN_EVENT = new CapableEvent<>();
@@ -23,9 +27,6 @@ public class FLClientEvents {
         AbstractEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new CapableEvent<>();
     }
 
-    /**
-     * Stores the default record types for {@link FLClientEvents}
-     */
     public static class RecordTypes {
         public record Empty() {}
         public record PlayerJoinEventContext(GameJoinS2CPacket packet) {}
@@ -33,5 +34,4 @@ public class FLClientEvents {
         public record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
         public record PauseMenuEventContext(boolean pause, CallbackInfo ci) {}
     }
-
 }

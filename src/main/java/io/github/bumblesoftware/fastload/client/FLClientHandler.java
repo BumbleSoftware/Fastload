@@ -2,10 +2,15 @@ package io.github.bumblesoftware.fastload.client;
 
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
 
+import java.util.List;
+
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.EventLocations.LLS441Redirect;
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
+import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 /**
@@ -152,6 +157,23 @@ public final class FLClientHandler {
                     CLIENT_TIMER.setTime(20);
                 }
             }
+            return null;
+        });
+
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS441Redirect), (eventContext, event, closer, eventArgs) -> {
+            final var isPreRenderEnabled = isLocalRenderEnabled();
+            if (isDebugEnabled()) {
+                LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
+                LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
+                LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
+            }
+            if (isPreRenderEnabled) {
+                ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
+                if (isDebugEnabled()) {
+                    LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
+                    LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+                }
+            } else ABSTRACTED_CLIENT.setScreen(new DownloadingTerrainScreen());
             return null;
         });
 
