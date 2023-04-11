@@ -1,14 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.bumblesoftware.fastload.mixin.local",
+  "package": "io.github.bumblesoftware.fastload.mixin",
   "plugin": "io.github.bumblesoftware.fastload.mixin.plugin.FLConditionalMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "HookClient1192"
+    "mixins.mc119.local.HookClient1192"
   ],
   "client": [
-    "MinecraftClientMixin"
+    "mixins.mc119.client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.server;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.server;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
 import net.minecraft.server.MinecraftServer;

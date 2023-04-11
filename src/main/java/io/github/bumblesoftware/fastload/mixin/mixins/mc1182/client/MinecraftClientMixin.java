@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.SetScreenEventContext;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;

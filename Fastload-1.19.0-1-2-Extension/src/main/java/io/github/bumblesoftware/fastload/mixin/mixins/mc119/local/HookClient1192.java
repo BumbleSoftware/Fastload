@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.local;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc119.local;
 
 import io.github.bumblesoftware.fastload.abstraction.client.Client119;
 import io.github.bumblesoftware.fastload.config.FLMath;

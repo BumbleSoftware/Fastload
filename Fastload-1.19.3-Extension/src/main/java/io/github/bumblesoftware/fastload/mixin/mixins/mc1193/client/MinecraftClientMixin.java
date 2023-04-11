@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.local1;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1193.client;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;

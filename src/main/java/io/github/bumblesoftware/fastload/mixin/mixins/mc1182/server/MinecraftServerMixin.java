@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.server;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.server;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
