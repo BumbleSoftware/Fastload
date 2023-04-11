@@ -1,9 +1,9 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
+import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.SetScreenEventContext;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.server.integrated.IntegratedServer;
 import org.jetbrains.annotations.Nullable;
@@ -11,9 +11,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import static io.github.bumblesoftware.fastload.config.FLMath.*;
-import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import java.util.List;
+
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.EventLocations.LLS441Redirect;
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET_SCREEN_EVENT;
 
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = "1.18.2"))
 @Mixin(MinecraftClient.class)
@@ -22,19 +23,10 @@ public abstract class MinecraftClientMixin {
             "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet" +
             "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        final var isPreRenderEnabled = isLocalRenderEnabled();
-        if (isDebugEnabled()) {
-            LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
-            LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
-            LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
-        }
-        if (isPreRenderEnabled) {
-            client.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
-            if (isDebugEnabled()) {
-                LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
-                LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
-            }
-        } else client.setScreen(new DownloadingTerrainScreen());
+        SET_SCREEN_EVENT.fireEvent(
+                List.of(LLS441Redirect),
+                new SetScreenEventContext(screen, null)
+        );
     }
 
     @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +

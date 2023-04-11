@@ -1,10 +1,12 @@
 package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -13,15 +15,21 @@ import java.util.Comparator;
  *           for examples.
  */
 public class CapableEvent<Context> implements AbstractEvent<Context> {
-    public final EventHolder<Context>
-            allEvents = getNewHolder(),
-            eventsToAdd = getNewHolder(),
-            eventsToRemove = getNewHolder();
+    public final Object2ObjectOpenHashMap<String,EventHolder<Context>>
+            allEvents,
+            eventsToAdd,
+            eventsToRemove;
 
     public final @Nullable SwitchHelper<Context> switchHelper;
 
     public CapableEvent(@Nullable SwitchHelper<Context> switchHelper) {
         this.switchHelper = switchHelper;
+        allEvents = new Object2ObjectOpenHashMap<>();
+        eventsToAdd = new Object2ObjectOpenHashMap<>();
+        eventsToRemove = new Object2ObjectOpenHashMap<>();
+        allEvents.put(GENERIC_LOCATION, getNewHolder());
+        eventsToAdd.put(GENERIC_LOCATION, getNewHolder());
+        eventsToRemove.put(GENERIC_LOCATION, getNewHolder());
     }
 
     public CapableEvent() {
@@ -29,59 +37,120 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public EventHolder<Context> getHolder() {
+    public Object2ObjectOpenHashMap<String, EventHolder<Context>> getStorage() {
         return allEvents;
     }
 
     @Override
-    public void removeThreadSafe(final long priority, final EventArgs<Context> eventArgs) {
-        eventsToRemove.priorityHolder().add(priority);
-        eventsToRemove.argsHolder().get(priority).add(eventArgs);
+    public void removeThreadSafe(
+            final long priority,
+            final List<String> locations,
+            final EventArgs<Context> eventArgs
+    ) {
+        for (final var string : locations) {
+            eventsToRemove.putIfAbsent(string, getNewHolder());
+            final var holder = eventsToRemove.get(string);
+            if (!holder.priorityHolder().contains(priority))
+                holder.priorityHolder().add(priority);
+            if (!holder.argsHolder().containsKey(priority)) {
+                final ArrayList<EventArgs<Context>> list = new ArrayList<>();
+                list.add(eventArgs);
+                holder.argsHolder().put(priority, list);
+            } else if (!holder.argsHolder().get(priority).contains(eventArgs))
+                holder.argsHolder().get(priority).add(eventArgs);
+        }
     }
 
     @Override
-    public void registerThreadsafe(long priority, EventArgs<Context> eventArgs) {
-        eventsToAdd.priorityHolder().add(priority);
-        eventsToAdd.argsHolder().get(priority).add(eventArgs);
+    public void registerThreadsafe(
+            final long priority,
+            final List<String> locations,
+            final EventArgs<Context> eventArgs
+    ) {
+        for (final var string : locations) {
+            eventsToAdd.putIfAbsent(string, getNewHolder());
+            final var holder = eventsToAdd.get(string);
+            if (!holder.priorityHolder().contains(priority))
+                holder.priorityHolder().add(priority);
+            if (!holder.argsHolder().containsKey(priority)) {
+                final ArrayList<EventArgs<Context>> list = new ArrayList<>();
+                list.add(eventArgs);
+                holder.argsHolder().put(priority, list);
+            } else if (!holder.argsHolder().get(priority).contains(eventArgs))
+                holder.argsHolder().get(priority).add(eventArgs);
+        }
     }
 
     @Override
-    public void registerThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
-        var priHol = allEvents.priorityHolder();
-        if (!priHol.contains(priority))
-            priHol.add(priority);
-        var argHol = allEvents.argsHolder();
-        argHol.putIfAbsent(priority, new ArrayList<>());
-        argHol.get(priority).add(eventArgs);
+    public void registerThreadUnsafe(
+            final long priority,
+            final List<String> locations,
+            final EventArgs<Context> eventArgs
+    ) {
+        for (final var string : locations) {
+            allEvents.putIfAbsent(string, getNewHolder());
+            final EventHolder<Context> holder = allEvents.get(string);
+            final var priHol = holder.priorityHolder();
+            final var argHol = holder.argsHolder();
+
+            if (!priHol.contains(priority))
+                priHol.add(priority);
+            if (!argHol.containsKey(priority)) {
+                final ArrayList<EventArgs<Context>> list = new ArrayList<>();
+                list.add(eventArgs);
+                argHol.put(priority, list);
+            } else if (!argHol.get(priority).contains(eventArgs))
+                argHol.get(priority).add(eventArgs);
+        }
     }
 
     @Override
-    public EventHolder<Context> getMultipleArgsHolders(String identifier) {
+    public Object2ObjectOpenHashMap<String, EventHolder<Context>> getMultipleArgsHolders(String identifier) {
         if (switchHelper == null) {
             throw new UnsupportedOperationException();
         } else return switchHelper.switchWith(identifier);
     }
 
     private void iterate(EventHolder<Context> holder, ArgsIterator<Context> argsIterator) {
-        for (long priority : holder.priorityHolder()) {
-            for (EventArgs<Context> arg : holder.argsHolder().get(priority)) {
-                if (arg != null) {
-                    argsIterator.onElement(priority, arg);
-                }
-            }
-        }
+        if (holder != null)
+            for (long priority : holder.priorityHolder())
+                for (EventArgs<Context> arg : holder.argsHolder().get(priority))
+                    if (arg != null)
+                        argsIterator.onElement(priority, arg);
     }
 
     @Override
-    public void fireEvent(final Context eventContext) {
-        iterate(eventsToAdd, this::registerThreadUnsafe);
-        allEvents.priorityHolder().sort(Comparator.reverseOrder());
-        iterate(allEvents, (priority, arg) -> arg.onEvent(eventContext, this, 0, arg));
-        iterate(eventsToRemove, this::removeThreadUnsafe);
-        eventsToAdd.priorityHolder().clear();
-        eventsToAdd.argsHolder().clear();
-        eventsToRemove.priorityHolder().clear();
-        eventsToRemove.argsHolder().clear();
+    public void fireEvent(final List<String> locations, final Context eventContext) {
+        for (final var string : locations) {
+            final var add = eventsToAdd.get(string);
+            final var all = allEvents.get(string);
+            final var remove = eventsToRemove.remove(string);
+            final ArrayList<Long> emptyPriorities = new ArrayList<>();
+
+            iterate(add, this::registerThreadUnsafe);
+            all.priorityHolder().sort(Comparator.reverseOrder());
+            iterate(all, (priority, arg) -> arg.onEvent(eventContext, this, 0, arg));
+            iterate(remove, this::removeThreadUnsafe);
+
+            for (long priority : all.priorityHolder())
+                if (all.argsHolder().get(priority).isEmpty()) {
+                    all.argsHolder().remove(priority);
+                    emptyPriorities.add(priority);
+                }
+            for (long priority : emptyPriorities)
+                all.priorityHolder().remove(priority);
+
+            emptyPriorities.clear();
+
+            if (add != null) {
+                add.priorityHolder().clear();
+                add.argsHolder().clear();
+            }
+            if (remove != null) {
+                remove.priorityHolder().clear();
+                remove.argsHolder().clear();
+            }
+        }
     }
 
     private interface ArgsIterator<Ctx> {
@@ -89,6 +158,6 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     private interface SwitchHelper<Ctx> {
-        EventHolder<Ctx> switchWith(final String identifier);
+        Object2ObjectOpenHashMap<String, EventHolder<Ctx>> switchWith(final String identifier);
     }
 }

@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.client;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
