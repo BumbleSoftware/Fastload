@@ -1,21 +1,23 @@
 pluginManagement {
     repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://maven.minecraftforge.net/" }
         mavenCentral()
         gradlePluginPortal()
     }
 }
 
-include "Fastload-1.19.0-1-2-Extension"
-include "Fastload-1.19.3-Extension"
-include "Fastload-1.19.4-Extension"
-include "Fastload-Fapi-Forwarding-1.18.2"
-include "Fastload-Fapi-Forwarding-1.19"
-include "Fastload-Fapi-Forwarding-1.19.1"
-include "Fastload-Fapi-Forwarding-1.19.2"
-include "Fastload-Fapi-Forwarding-1.19.3"
-include "Fastload-Fapi-Forwarding-1.19.4"
+include "common-1.19.0-1-2-extension"
+include "common-1.19.3-extension"
+include "common-1.19.4-extension"
+include "common"
+include "forge"
+include "fabric"
+// include "Fastload-Fapi-Forwarding-1.18.2"
+// include "Fastload-Fapi-Forwarding-1.19"
+// include "Fastload-Fapi-Forwarding-1.19.1"
+// include "Fastload-Fapi-Forwarding-1.19.2"
+// include "Fastload-Fapi-Forwarding-1.19.3"
+// include "Fastload-Fapi-Forwarding-1.19.4"
 

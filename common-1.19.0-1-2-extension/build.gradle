@@ -1,0 +1,13 @@
+archivesBaseName = "Fastload-1.19.0-1-2-Extension"
+
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+    minecraft = "1.19.2"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.19.2"
+    mappings "net.fabricmc:yarn:1.19.2+build.${project.yarn_mappings_1192}:v2"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_1192}"
+    implementation project(path: ':common', configuration: "namedElements")
+}

@@ -2,40 +2,39 @@
 plugins {
 	id 'java'
 	id 'idea'
-	id 'eclipse'
-	id 'fabric-loom' version '1.1-SNAPSHOT'
-	id 'maven-publish'
+	id "architectury-plugin" version "3.4-SNAPSHOT"
+	id "dev.architectury.loom" version "1.1-SNAPSHOT" apply false
 	id "io.github.p03w.machete" version "2.0.1"
 }
-loom {
-}
 
+apply plugin: "dev.architectury.loom"
 
 dependencies {
 	minecraft "com.mojang:minecraft:1.18.2"
 	mappings "net.fabricmc:yarn:1.18.2+build.${project.yarn_mappings_1182}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	implementation project(path: ':Fastload-Fapi-Forwarding-1.18.2', configuration: "namedElements")
-	implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
-	modImplementation(include 'com.github.Fallen-Breath:conditional-mixin:v0.3.2')
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_1182}"
-
-	afterEvaluate {
+	/*afterEvaluate {
 		subprojects.each {
 			//noinspection ForeignDelegate
 			include project("${it.name}:")
 		}
+	}*/
+}
+
+subprojects {
+	apply plugin: "dev.architectury.loom"
+
+	dependencies {
+		implementation"it.unimi.dsi:fastutil:${project.fastutil_version}"
+		modImplementation 'com.github.Fallen-Breath:conditional-mixin:v0.3.2'
 	}
 
+	version = rootProject.version
 }
 
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'idea'
-	apply plugin: 'eclipse'
-	apply plugin: 'fabric-loom'
-	apply plugin: 'maven-publish'
+	apply plugin: 'architectury-plugin'
 	apply plugin: "io.github.p03w.machete"
 
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -45,12 +44,6 @@ allprojects {
 	version = project.mod_version
 	group = project.maven_group
 
-	sourceSets {
-		testmod {
-			compileClasspath += main.compileClasspath
-			runtimeClasspath += main.runtimeClasspath
-		}
-	}
 
 	repositories {
 		maven { url = "https://maven.terraformersmc.com/" }
@@ -58,55 +51,12 @@ allprojects {
 		maven { url 'https://jitpack.io' }
 	}
 
-	configurations {
-		dev {
-			canBeResolved = false
-			canBeConsumed = true
-		}
-	}
-
-	processResources {
-		inputs.property "version", project.version
-
-		filesMatching("fabric.mod.json") {
-			expand "version": project.version
-		}
-	}
-
-	tasks.withType(JavaCompile).configureEach {
-		//noinspection GroovyAssignabilityCheck
-		//noinspection GroovyAccessibility
-		it.options.release = 17
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+		options.release = 17
 	}
 
 	java {
 		withSourcesJar()
 	}
-
-	jar {
-		from("LICENSE") {
-			rename { "${it}_${project.archivesBaseName}" }
-		}
-	}
-
-	publishing {
-		publications {
-			//noinspection GroovyAssignabilityCheck
-			mavenJava(MavenPublication) {
-				from components.java
-			}
-		}
-
-		repositories {
-		}
-	}
-}
-
-subprojects {
-	dependencies {
-		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-		modImplementation 'com.github.Fallen-Breath:conditional-mixin:v0.3.2'
-	}
-
-	version = rootProject.version
 }
