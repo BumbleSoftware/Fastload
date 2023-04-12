@@ -22,7 +22,7 @@ public interface DefaultConfig {
     boolean DEF_INSTANT_LOAD_VALUE = false;
     int DEF_SERVER_RENDER_RADIUS_VALUE = 3;
     int DEF_RENDER_RADIUS_VALUE = 10;
-    int DEF_TRY_LIMIT_VALUE = 100;
+    int DEF_TRY_LIMIT_VALUE = 250;
 
 
     private static String renderKey(final String env) {

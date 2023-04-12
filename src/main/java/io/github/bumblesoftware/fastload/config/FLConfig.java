@@ -81,13 +81,18 @@ public class FLConfig {
                     "be ignored before we cancel pre-rendering.");
             comment.write("\n# Min = 1, Max = 1000. Set 1000 for infinity");
             comment.write("\n#");
+            comment.write("\n# " + writable(INSTANT_LOAD_KEY) + " = should fastload just nuke the downloading terrain" +
+                    " screen? This boolean is for impatient people who think fastload's loading screen isn't " +
+                    "necessary.");
+            comment.write("\n# Enabled = true, Disabled = false");
+            comment.write("\n#");
             comment.write("\n# " + writable(LOCAL_RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
-                    "completed.");
+                    "completed on singleplayer join.");
             comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
             comment.write("\n#");
-            comment.write("\n# " + writable(SERVER_RENDER_RADIUS_KEY) + " = should fastload's rendering apply for servers as " +
-                    "well?");
-            comment.write("\n# Enabled = true, Disabled = false");
+            comment.write("\n# " + writable(SERVER_RENDER_RADIUS_KEY) + " = how many chunks are loaded until 'building terrain' is " +
+                    "completed on server join.");
+            comment.write("\n# Min = 0, Max = 32 or your render distance, Whichever is smaller. Set 0 to disable.");
             comment.write("\n#");
 
         } catch (IOException e) {
