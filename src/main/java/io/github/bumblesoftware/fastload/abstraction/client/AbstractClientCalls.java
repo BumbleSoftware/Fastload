@@ -4,6 +4,7 @@ import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -14,6 +15,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
+
+import java.util.function.Function;
 
 
 /**
@@ -28,8 +31,14 @@ public interface AbstractClientCalls {
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
+    <T, X> Screen newConfigScreen(
+            final Screen parent,
+            X gameOptions,
+            final Text title,
+            Function<Object[], T[]> options,
+            Action config
+    );
     Screen newFastloadConfigScreen(final Screen parent);
-    Screen newBuildingTerrainScreen();
     Screen newBuildingTerrainScreen(final int loadingAreaGoal);
 
     Screen getCurrentScreen();
