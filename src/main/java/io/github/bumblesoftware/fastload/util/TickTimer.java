@@ -22,13 +22,14 @@ public final class TickTimer {
      * Registers a client event for the timer to use
      */
     public TickTimer(AbstractEvent<TickEventContext> abstractUnsafeEvent) {
-        abstractUnsafeEvent.registerThreadUnsafe(1, (eventContext, abstractParent, closer, eventArgs) -> {
-            if (remainingTime > 0) {
-                remainingTime--;
-                if (isDebugEnabled()) log(String.valueOf(remainingTime));
-            }
-            return null;
-        });
+        abstractUnsafeEvent.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (remainingTime > 0) {
+                        remainingTime--;
+                        if (isDebugEnabled()) log(String.valueOf(remainingTime));
+                    }
+                })
+        );
     }
 
 

@@ -23,7 +23,8 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_C
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;addPlayer(ILnet/minecraft/client/network/AbstractClientPlayerEntity;)V"))
     private void onGamedJoinEvent(GameJoinS2CPacket packet, CallbackInfo ci) {
-        PLAYER_JOIN_EVENT.fireEvent(new FLClientEvents.RecordTypes.PlayerJoinEventContext(packet));
+        if (PLAYER_JOIN_EVENT.isNotEmpty())
+            PLAYER_JOIN_EVENT.fireEvent(new FLClientEvents.RecordTypes.PlayerJoinEventContext(packet));
     }
 
     @Redirect(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))

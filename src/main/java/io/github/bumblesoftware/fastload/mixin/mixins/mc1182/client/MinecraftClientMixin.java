@@ -23,10 +23,11 @@ public abstract class MinecraftClientMixin {
             "ZLnet/minecraft/client/MinecraftClient$WorldLoadAction;)V", at = @At(value = "INVOKE", target = "Lnet" +
             "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        SET_SCREEN_EVENT.fireEvent(
-                List.of(LLS441Redirect),
-                new SetScreenEventContext(screen, null)
-        );
+        if (SET_SCREEN_EVENT.isNotEmpty())
+            SET_SCREEN_EVENT.fireEvent(
+                    List.of(LLS441Redirect),
+                    new SetScreenEventContext(screen, null)
+            );
     }
 
     @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +

@@ -16,6 +16,7 @@ import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.CLI
 public class ClientPlayerEntityMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void onClientPlayerEntityMixinInitEvent(CallbackInfo ci) {
-        CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLClientEvents.RecordTypes.Empty());
+        if (CLIENT_PLAYER_INIT_EVENT.isNotEmpty())
+            CLIENT_PLAYER_INIT_EVENT.fireEvent(new FLClientEvents.RecordTypes.Empty());
     }
 }

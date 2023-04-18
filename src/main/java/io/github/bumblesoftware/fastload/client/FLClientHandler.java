@@ -116,146 +116,157 @@ public final class FLClientHandler {
      * Event Registration for fastload
      */
     private static void registerEvents() {
-        CLIENT_PLAYER_INIT_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (isDebugEnabled()) Fastload.LOGGER.info("shouldLoad = true");
-            playerReady = true;
-            return null;
-        });
+        CLIENT_PLAYER_INIT_EVENT.registerThreadUnsafe(1,
+                 event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (isDebugEnabled()) Fastload.LOGGER.info("shouldLoad = true");
+                    playerReady = true;
+                })
+        );
 
-        PLAYER_JOIN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (isDebugEnabled()) Fastload.LOGGER.info("playerJoined = true");
-            playerJoined = true;
-            return null;
-        });
+        PLAYER_JOIN_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (isDebugEnabled()) Fastload.LOGGER.info("playerJoined = true");
+                    playerJoined = true;
+                })
+        );
 
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (CLIENT_TIMER.isReady() && ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) && !ABSTRACTED_CLIENT.isWindowFocused()) {
-                if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
-                eventContext.ci().cancel();
-            }
-            return null;
-        });
-
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-                if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
-                    if (isDebugEnabled())
-                        log("setScreen(new BuildingTerrain)");
-                }
-            return null;
-        });
-
-
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
-                if (isDebugEnabled())
-                    log("setScreen(new DownloadingTerrainScreen)");
-                if (playerReady && playerJoined && isInstantLoadEnabled()) {
-                    eventContext.ci().cancel();
-                    ABSTRACTED_CLIENT.getClientInstance().setScreen(null);
-                    playerReady = false;
-                    playerJoined = false;
-                    CLIENT_TIMER.setTime(20);
-                }
-            }
-            return null;
-        });
-
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS441Redirect), (eventContext, event, closer, eventArgs) -> {
-            final var isPreRenderEnabled = isLocalRenderEnabled();
-            if (isDebugEnabled()) {
-                LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
-                LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
-                LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
-            }
-            if (isPreRenderEnabled) {
-                ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
-                if (isDebugEnabled()) {
-                    LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
-                    LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
-                }
-            } else ABSTRACTED_CLIENT.setScreen(new DownloadingTerrainScreen());
-            return null;
-        });
-
-        RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
-                if (ABSTRACTED_CLIENT.getClientWorld() != null) {
-                    final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
-                    final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();
-                    final int oldPreparationWarningCache = preparationWarnings;
-                    final int oldBuildingWarningCache = buildingWarnings;
-                    final int loadingAreaGoal = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).loadingAreaGoal;
-
-                    if (isDebugEnabled()) {
-                        logRendering(chunkLoadedCount);
-                        logBuilding(chunkBuildCount);
-                    }
-
-                    if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null
-                            && chunkBuildCount > 0 && chunkLoadedCount > 0
+        SET_SCREEN_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (CLIENT_TIMER.isReady() &&
+                            ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
+                            !ABSTRACTED_CLIENT.isWindowFocused()
                     ) {
-                        if (oldChunkLoadedCountStorage == chunkLoadedCount)
-                            preparationWarnings++;
-                        if (oldChunkBuildCountStorage == chunkBuildCount)
-                            buildingWarnings++;
+                        if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
+                        eventContext.ci().cancel();
+                    }
+                })
+        );
 
-                        if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit())) {
-                            buildingWarnings = 0;
-                            preparationWarnings = 0;
-                            log("Rendering is either taking too long or hit a roadblock. If you are in a server, this" +
-                                    " is potentially a limitation of the servers render distance and can be ignored.");
-                            stopBuilding(chunkLoadedCount, chunkBuildCount);
-                        }
+        SET_SCREEN_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
+                        if (isDebugEnabled())
+                            log("setScreen(new BuildingTerrain)");
+                    }
+                })
+        );
 
-                        //Log Warnings
-                        final int spamLimit = 2;
-                        if (preparationWarnings > 0) {
-                            if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
-                                log("Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
-                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
-                                        "stopped");
-                                if (isDebugEnabled()) logRendering(chunkLoadedCount);
-                            }
-                            if (chunkLoadedCount > oldChunkLoadedCountStorage) {
-                                preparationWarnings = 0;
-                            }
+
+        SET_SCREEN_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
+                        if (isDebugEnabled())
+                            log("setScreen(new DownloadingTerrainScreen)");
+                        if (playerReady && playerJoined && isInstantLoadEnabled()) {
+                            eventContext.ci().cancel();
+                            ABSTRACTED_CLIENT.getClientInstance().setScreen(null);
+                            playerReady = false;
+                            playerJoined = false;
+                            CLIENT_TIMER.setTime(20);
                         }
-                        if (buildingWarnings > 0) {
-                            if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
-                                log("Same built chunk count returned " + buildingWarnings + " time(s) in a row!");
-                                log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
-                                        "stopped");
-                                if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                    }
+                })
+        );
+
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS441Redirect),
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    final var isPreRenderEnabled = isLocalRenderEnabled();
+                    if (isDebugEnabled()) {
+                        LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
+                        LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
+                        LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
+                    }
+                    if (isPreRenderEnabled) {
+                        ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
+                        if (isDebugEnabled()) {
+                            LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
+                            LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
+                        }
+                    } else ABSTRACTED_CLIENT.setScreen(new DownloadingTerrainScreen());
+                })
+        );
+
+        RENDER_TICK_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
+                        if (ABSTRACTED_CLIENT.getClientWorld() != null) {
+                            final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
+                            final int chunkBuildCount = ABSTRACTED_CLIENT.getCompletedChunkCount();
+                            final int oldPreparationWarningCache = preparationWarnings;
+                            final int oldBuildingWarningCache = buildingWarnings;
+                            final int loadingAreaGoal = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).loadingAreaGoal;
+
+                            if (isDebugEnabled()) {
+                                logRendering(chunkLoadedCount);
+                                logBuilding(chunkBuildCount);
                             }
-                            if (chunkBuildCount > oldChunkBuildCountStorage) {
-                                buildingWarnings = 0;
+
+                            if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null
+                                    && chunkBuildCount > 0 && chunkLoadedCount > 0
+                            ) {
+                                if (oldChunkLoadedCountStorage == chunkLoadedCount)
+                                    preparationWarnings++;
+                                if (oldChunkBuildCountStorage == chunkBuildCount)
+                                    buildingWarnings++;
+
+                                if ((buildingWarnings >= getChunkTryLimit() || preparationWarnings >= getChunkTryLimit())) {
+                                    buildingWarnings = 0;
+                                    preparationWarnings = 0;
+                                    log("Rendering is either taking too long or hit a roadblock. If you are in a server, this" +
+                                            " is potentially a limitation of the servers render distance and can be ignored.");
+                                    stopBuilding(chunkLoadedCount, chunkBuildCount);
+                                }
+
+                                //Log Warnings
+                                final int spamLimit = 2;
+                                if (preparationWarnings > 0) {
+                                    if (oldPreparationWarningCache == preparationWarnings && preparationWarnings > spamLimit) {
+                                        log("Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
+                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
+                                                "stopped");
+                                        if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                                    }
+                                    if (chunkLoadedCount > oldChunkLoadedCountStorage) {
+                                        preparationWarnings = 0;
+                                    }
+                                }
+                                if (buildingWarnings > 0) {
+                                    if (oldBuildingWarningCache == buildingWarnings && buildingWarnings > spamLimit) {
+                                        log("Same built chunk count returned " + buildingWarnings + " time(s) in a row!");
+                                        log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
+                                                "stopped");
+                                        if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                                    }
+                                    if (chunkBuildCount > oldChunkBuildCountStorage) {
+                                        buildingWarnings = 0;
+                                    }
+                                }
+                            }
+
+                            oldChunkLoadedCountStorage = chunkLoadedCount;
+                            oldChunkBuildCountStorage = chunkBuildCount;
+
+                            if (chunkLoadedCount >= loadingAreaGoal && chunkBuildCount >= loadingAreaGoal) {
+                                stopBuilding(chunkLoadedCount, chunkBuildCount);
+                                log("Successfully pre-loaded the world!");
                             }
                         }
                     }
+                })
+        );
 
-                    oldChunkLoadedCountStorage = chunkLoadedCount;
-                    oldChunkBuildCountStorage = chunkBuildCount;
-
-                    if (chunkLoadedCount >= loadingAreaGoal && chunkBuildCount >= loadingAreaGoal) {
-                        stopBuilding(chunkLoadedCount, chunkBuildCount);
-                        log("Successfully pre-loaded the world!");
+        RENDER_TICK_EVENT.registerThreadUnsafe(1,
+                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                    if (isDebugEnabled()) {
+                        ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
+                            if (oldCurrentScreen != screen) {
+                                oldCurrentScreen = screen;
+                                Fastload.LOGGER.info("Screen changed to: " + screen);
+                            }
+                            return false;
+                        });
                     }
-                }
-            }
-            return null;
-        });
-
-        RENDER_TICK_EVENT.registerThreadUnsafe(1, (eventContext, abstractUnsafeEvent, closer, eventArgs) -> {
-            if (isDebugEnabled()) {
-                ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
-                    if (oldCurrentScreen != screen) {
-                        oldCurrentScreen = screen;
-                        Fastload.LOGGER.info("Screen changed to: " + screen);
-                    }
-                    return false;
-                });
-            }
-            return null;
-        });
+                })
+        );
     }
 }

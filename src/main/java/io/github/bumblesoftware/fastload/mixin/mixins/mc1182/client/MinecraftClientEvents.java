@@ -16,17 +16,20 @@ import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 public class MinecraftClientEvents {
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
-        SET_SCREEN_EVENT.fireEvent(new SetScreenEventContext(screen, ci));
+        if (SET_SCREEN_EVENT.isNotEmpty())
+            SET_SCREEN_EVENT.fireEvent(new SetScreenEventContext(screen, ci));
     }
 
     @Inject(method = "openPauseMenu", at = @At("HEAD"), cancellable = true)
     private void openPauseMenuEvent(boolean pause, CallbackInfo ci) {
-        PAUSE_MENU_EVENT.fireEvent(new PauseMenuEventContext(pause, ci));
+        if (SET_SCREEN_EVENT.isNotEmpty())
+            PAUSE_MENU_EVENT.fireEvent(new PauseMenuEventContext(pause, ci));
 
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void renderEvent(boolean tick, CallbackInfo ci) {
-        RENDER_TICK_EVENT.fireEvent(new TickEventContext(tick));
+        if (RENDER_TICK_EVENT.isNotEmpty())
+            RENDER_TICK_EVENT.fireEvent(new TickEventContext(tick));
     }
 }

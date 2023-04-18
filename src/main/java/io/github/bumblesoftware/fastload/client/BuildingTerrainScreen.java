@@ -1,12 +1,15 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.compat.bedrockify.BedrockifyCompat.Context;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
+import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+import static io.github.bumblesoftware.fastload.compat.bedrockify.BedrockifyCompat.BEDROCKIFY_COMPAT_EVENT;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
@@ -49,17 +52,40 @@ public class BuildingTerrainScreen extends Screen {
      */
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
         final String loadedChunksString =
                 getLoadedChunkCount() + "/"  + loadingAreaGoal;
         final String builtChunksString =
                 getBuiltChunkCount() + "/"  + loadingAreaGoal;
-        if (preparedProgressStorage < getLoadedChunkCount()) {
+
+        if (BEDROCKIFY_COMPAT_EVENT.isNotEmpty()) {
+            final var shouldContinue = new ObjectHolder<>(true);
+            BEDROCKIFY_COMPAT_EVENT.fireEvent(
+                    new Context(
+                            shouldContinue,
+                            ABSTRACTED_CLIENT,
+                            screenName,
+                            screenTemplate,
+                            preparingChunks,
+                            buildingChunks,
+                            loadedChunksString,
+                            builtChunksString,
+                            this::getLoadedChunkCount,
+                            this::getBuiltChunkCount,
+                            loadingAreaGoal
+                    )
+            );
+            if (!shouldContinue.heldObj)
+                return;
+        }
+
+
+        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
+
+        if (preparedProgressStorage < getLoadedChunkCount())
             Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
-        }
-        if (buildingProgressStorage < getBuiltChunkCount()) {
+        if (buildingProgressStorage < getBuiltChunkCount())
             Fastload.LOGGER.info("World Chunk Building: " + builtChunksString);
-        }
+
         preparedProgressStorage = getLoadedChunkCount();
         buildingProgressStorage = getBuiltChunkCount();
 

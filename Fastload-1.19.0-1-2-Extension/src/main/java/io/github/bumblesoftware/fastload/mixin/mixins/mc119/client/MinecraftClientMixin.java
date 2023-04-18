@@ -25,10 +25,11 @@ import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET
 public class MinecraftClientMixin {
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
-        SET_SCREEN_EVENT.fireEvent(
-                List.of(LLS441Redirect),
-                new FLClientEvents.RecordTypes.SetScreenEventContext(screen, null)
-        );
+        if (SET_SCREEN_EVENT.isNotEmpty())
+            SET_SCREEN_EVENT.fireEvent(
+                    List.of(LLS441Redirect),
+                    new FLClientEvents.RecordTypes.SetScreenEventContext(screen, null)
+            );
     }
 
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
