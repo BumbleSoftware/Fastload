@@ -4,6 +4,7 @@ import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.function.Supplier;
@@ -16,6 +17,7 @@ public final class BedrockifyCompat {
     public record Context(
             ObjectHolder<Boolean> shouldContinueMethodCall,
             AbstractClientCalls clientCalls,
+            MatrixStack matrices,
             Text screenName,
             Text screenTemplate,
             Text preparingChunks,

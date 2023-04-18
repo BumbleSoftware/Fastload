@@ -63,6 +63,7 @@ public class BuildingTerrainScreen extends Screen {
                     new Context(
                             shouldContinue,
                             ABSTRACTED_CLIENT,
+                            matrices,
                             screenName,
                             screenTemplate,
                             preparingChunks,
