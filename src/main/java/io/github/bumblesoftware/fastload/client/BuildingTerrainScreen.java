@@ -57,6 +57,16 @@ public class BuildingTerrainScreen extends Screen {
         final String builtChunksString =
                 getBuiltChunkCount() + "/"  + loadingAreaGoal;
 
+        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
+
+        if (preparedProgressStorage < getLoadedChunkCount())
+            Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
+        if (buildingProgressStorage < getBuiltChunkCount())
+            Fastload.LOGGER.info("World Chunk Building: " + builtChunksString);
+
+        preparedProgressStorage = getLoadedChunkCount();
+        buildingProgressStorage = getBuiltChunkCount();
+
         if (BEDROCKIFY_COMPAT_EVENT.isNotEmpty()) {
             final var shouldContinue = new ObjectHolder<>(true);
             BEDROCKIFY_COMPAT_EVENT.fireEvent(
@@ -78,17 +88,6 @@ public class BuildingTerrainScreen extends Screen {
             if (!shouldContinue.heldObj)
                 return;
         }
-
-
-        ABSTRACTED_CLIENT.renderScreenBackgroundTexture(this, 0, matrices);
-
-        if (preparedProgressStorage < getLoadedChunkCount())
-            Fastload.LOGGER.info("World Chunk Loading: " + loadedChunksString);
-        if (buildingProgressStorage < getBuiltChunkCount())
-            Fastload.LOGGER.info("World Chunk Building: " + builtChunksString);
-
-        preparedProgressStorage = getLoadedChunkCount();
-        buildingProgressStorage = getBuiltChunkCount();
 
         if (getLoadedChunkCount() == 0 && getBuiltChunkCount() == 0) {
             ABSTRACTED_CLIENT.drawCenteredText(
