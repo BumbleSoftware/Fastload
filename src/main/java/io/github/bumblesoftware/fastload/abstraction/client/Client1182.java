@@ -4,24 +4,24 @@ import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
-import io.github.bumblesoftware.fastload.config.DefaultConfig;
-import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreen1182;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
+import io.github.bumblesoftware.fastload.config.DefaultConfig;
+import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client.OptionAccess;
 import io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client.ScreenAccess;
+import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.gui.screen.ProgressScreen;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.option.SimpleOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.CyclingOption;
 import net.minecraft.client.option.DoubleOption;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Option;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
@@ -29,6 +29,8 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+
+import java.util.function.Function;
 
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
@@ -51,13 +53,45 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public Screen newFastloadConfigScreen(final Screen parent) {
-        return new FLConfigScreen1182(parent);
+    public <T, X> Screen newConfigScreen(
+            final Screen parent,
+            X gameOptions,
+            final Text title,
+            Function<Object[], T[]> options,
+            Action config
+    ) {
+        return new SimpleOptionsScreen(
+                parent,
+                (GameOptions) gameOptions,
+                title,
+                (Option[]) options.apply(new Option[]{})
+        ) {
+            @Override
+            protected void initFooter() {
+                ABSTRACTED_CLIENT.addDrawableChild(this,
+                        ABSTRACTED_CLIENT.getNewButton(
+                                this.width / 2 - 100,
+                                this.height - 27,
+                                200, 20,
+                                ScreenTexts.DONE,
+                                (button) -> {
+                                    config.commit();
+                                    getClientInstance().setScreen(parent);
+                                })
+                );
+            }
+        };
     }
 
     @Override
-    public Screen newBuildingTerrainScreen() {
-        return new BuildingTerrainScreen();
+    public Screen newFastloadConfigScreen(final Screen parent) {
+        return newConfigScreen(
+                parent,
+                getClientInstance().options,
+                ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.config"),
+                objects -> ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions(objects),
+                FLConfig::writeToDisk
+        );
     }
 
     @Override

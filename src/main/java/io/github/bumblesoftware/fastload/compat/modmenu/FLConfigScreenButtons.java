@@ -9,8 +9,7 @@ import java.util.List;
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
-public class FLConfigScreenButtons<Option> {
-
+public final class FLConfigScreenButtons<Option> {
     private final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     public Option getNewBoolButton(final String identifier) {
