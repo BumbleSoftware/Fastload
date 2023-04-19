@@ -43,6 +43,7 @@ public interface AbstractClientCalls {
 
     Screen getCurrentScreen();
     Text newTranslatableText(final String content);
+    @SuppressWarnings("unused")
     Text newLiteralText(final String content);
     <T extends Element & Drawable> T addDrawableChild(final Screen screen, final T drawableElement);
     <T> FLConfigScreenButtons<T> newFLConfigScreenButtons();
@@ -102,6 +103,5 @@ public interface AbstractClientCalls {
     boolean forCurrentScreen(final ScreenProvider screenProvider);
     boolean isBuildingTerrainScreen(final Screen screen);
     boolean isGameMenuScreen(final Screen screen);
-    boolean isProgressScreen(final Screen screen);
     boolean isDownloadingTerrainScreen(final Screen screen);
 }

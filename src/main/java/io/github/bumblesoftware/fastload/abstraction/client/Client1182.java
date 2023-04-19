@@ -271,11 +271,6 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public boolean isProgressScreen(final Screen screen) {
-        return screen instanceof ProgressScreen;
-    }
-
-    @Override
     public boolean isDownloadingTerrainScreen(final Screen screen) {
         return screen instanceof DownloadingTerrainScreen;
     }

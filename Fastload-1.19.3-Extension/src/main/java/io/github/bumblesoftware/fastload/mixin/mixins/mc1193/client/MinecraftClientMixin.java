@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.mc119.client;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc1193.client;
 
-import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
+import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.common.FLCommonEvents;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
@@ -24,17 +24,13 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOO
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.SERVER_EVENT;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
 
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = {
-        "1.19",
-        "1.19.1",
-        "1.19.2"
-}))
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.19.3"))
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
         if (SET_SCREEN_EVENT.isNotEmpty())
-            SET_SCREEN_EVENT.fireEvent(new SetScreenEventContext(screen, ci));
+            SET_SCREEN_EVENT.fireEvent(new FLClientEvents.Contexts.SetScreenEventContext(screen, ci));
     }
 
     @Inject(method = "render", at = @At("HEAD"))
@@ -48,7 +44,7 @@ public class MinecraftClientMixin {
         if (SET_SCREEN_EVENT.isNotEmpty(LLS_441_REDIRECT))
             SET_SCREEN_EVENT.fireEvent(
                     List.of(LLS_441_REDIRECT),
-                    new SetScreenEventContext(screen, null)
+                    new FLClientEvents.Contexts.SetScreenEventContext(screen, null)
             );
     }
 
@@ -68,7 +64,7 @@ public class MinecraftClientMixin {
         if (SET_SCREEN_EVENT.isNotEmpty(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT))
             SET_SCREEN_EVENT.fireEvent(
                     List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
-                    new SetScreenEventContext(screen, null)
+                    new FLClientEvents.Contexts.SetScreenEventContext(screen, null)
             );
     }
 }
