@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.EventLocations.LLS441Redirect;
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.LLS_441_REDIRECT;
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET_SCREEN_EVENT;
 
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = {
@@ -27,8 +27,8 @@ public class MinecraftClientMixin {
     private void remove441(MinecraftClient client, @Nullable Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty())
             SET_SCREEN_EVENT.fireEvent(
-                    List.of(LLS441Redirect),
-                    new FLClientEvents.RecordTypes.SetScreenEventContext(screen, null)
+                    List.of(LLS_441_REDIRECT),
+                    new FLClientEvents.Contexts.SetScreenEventContext(screen, null)
             );
     }
 
@@ -37,6 +37,7 @@ public class MinecraftClientMixin {
         return true;
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void removeProgressScreen(MinecraftClient client, Screen screen) {}
 }

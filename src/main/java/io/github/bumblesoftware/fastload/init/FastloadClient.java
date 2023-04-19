@@ -54,7 +54,7 @@ public class FastloadClient implements ClientModInitializer {
 
     private static void registerBaseClient() {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(0,
-                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (MinecraftVersionUtil.matchesAny("1.18.2")) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.18.2 Base!");

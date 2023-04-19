@@ -1,15 +1,15 @@
 package io.github.bumblesoftware.fastload.util;
 
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.client.FLClientEvents.RecordTypes.TickEventContext;
+import java.util.List;
 
 import static io.github.bumblesoftware.fastload.client.FLClientHandler.log;
+import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
 import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
 
 /**
  * Simple event-based timer with respect to minecraft ticks.
  * To use, simply set your value via setTime(), then use isReady() for your if() checks.
- * The timer will tick down your value to 0. Each second is worth 20 ticks. Which means
+ * The timer will bool down your value to 0. Each second is worth 20 ticks. Which means
  * while your value isn't 0, isReady() will return true. Negative numbers
  */
 public final class TickTimer {
@@ -21,9 +21,9 @@ public final class TickTimer {
     /**
      * Registers a client event for the timer to use
      */
-    public TickTimer(AbstractEvent<TickEventContext> abstractUnsafeEvent) {
-        abstractUnsafeEvent.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+    public TickTimer(final String location) {
+        BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(location),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;
                         if (isDebugEnabled()) log(String.valueOf(remainingTime));
@@ -55,7 +55,7 @@ public final class TickTimer {
      * @param inSeconds makes remainingTime measured in seconds rather than ticks.
      */
     @SuppressWarnings("unused")
-    public void setTime(int remainingTime, boolean inSeconds) {
+    public void setTime(int remainingTime, final boolean inSeconds) {
         if (inSeconds) {
             remainingTime = remainingTime * 20;
         }

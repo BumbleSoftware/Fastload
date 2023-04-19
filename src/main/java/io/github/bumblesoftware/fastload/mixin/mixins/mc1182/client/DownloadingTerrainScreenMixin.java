@@ -23,7 +23,7 @@ public class DownloadingTerrainScreenMixin {
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
         if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
-                "DownloadingTerrainScreen set to close on next render tick."
+                "DownloadingTerrainScreen set to close on next render bool."
         );
         closeOnNextTick = true;
     }

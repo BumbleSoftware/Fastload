@@ -41,6 +41,7 @@ public class MinecraftClientMixin {
         return true;
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void removeProgressScreen(MinecraftClient client, Screen screen) {}
 }

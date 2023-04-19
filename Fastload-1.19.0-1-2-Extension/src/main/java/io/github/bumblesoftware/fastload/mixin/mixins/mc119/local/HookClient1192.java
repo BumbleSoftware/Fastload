@@ -18,7 +18,7 @@ public class HookClient1192 {
     @Inject(method = "registerBaseClient", at = @At("HEAD"), remap = false)
     private static void register1192(CallbackInfo ci) {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, closer, eventArgs) -> {
+                event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (matchesAny("1.19", "1.19.1", "1.19.2")) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.19.0-1-2 Hook!");

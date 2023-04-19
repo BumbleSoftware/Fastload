@@ -17,6 +17,7 @@ import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 
 public class FLConfig {
+    @SuppressWarnings("EmptyMethod")
     public static void init() {}
 
     private static final Properties properties;

@@ -1,7 +1,6 @@
 package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -24,21 +23,24 @@ public interface AbstractEvent<Context> {
     }
 
     default boolean isNotEmpty() {
-        final var value = new ObjectHolder<>(false);
-        for (final var location : getLocationList()) {
+        for (final var location : getLocationList())
+            if (isNotEmpty(location))
+                return true;
+        return false;
+    }
+
+    default boolean isNotEmpty(final String... locations) {
+        for (final var location : locations) {
             final var eventHolder = getStorage().get(location);
             if (eventHolder != null) {
                 for (final var priority : eventHolder.priorityHolder()) {
                     if (!eventHolder.argsHolder.get(priority.longValue()).isEmpty()) {
-                        value.heldObj = true;
-                        break;
+                        return true;
                     }
                 }
             }
-            if (value.heldObj)
-                break;
         }
-        return value.heldObj;
+        return false;
     }
 
     /**
@@ -188,7 +190,7 @@ public interface AbstractEvent<Context> {
          * @param eventArgs The current instance provided for return (recursion)
          * @return The current instance.
          */
-        @SuppressWarnings("UnusedReturnValue")
+        @SuppressWarnings({"UnusedReturnValue", "SameReturnValue"})
         EventArgs<Ctx> recursive(
                 final Ctx eventContext,
                 final AbstractEvent<Ctx> event,
@@ -214,17 +216,15 @@ public interface AbstractEvent<Context> {
                 final Object closer,
                 final EventArgs<Ctx> eventArgs
         ) {
-            stable(eventContext, closer, eventArgs);
+            stable(eventContext, eventArgs);
             return null;
         }
         /**
          * @param eventContext The events params.
-         * @param closer The instance responsible for holding the value that will close this loop.
          * @param eventArgs The current instance provided for return (recursion)
          */
         void stable(
                 final Ctx eventContext,
-                final Object closer,
                 final EventArgs<Ctx> eventArgs
         );
     }
