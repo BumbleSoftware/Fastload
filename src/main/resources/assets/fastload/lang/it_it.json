@@ -1,0 +1,29 @@
+{
+  "fastload.screen.buildingTerrain.building": "Caricando i chunk visibili",
+  "fastload.screen.buildingTerrain.preparing": "Preparando tutti i Chunk",
+  "fastload.buildingTerrain.starting": "Avviando la sessione",
+  "fastload.screen.buildingTerrain.template": "Completati / Obbiettivo",
+
+  "fastload.screen.config": "Configurazione di Fastload",
+
+  "fastload.button.debug": "Modalità di Debug",
+  "fastload.button.debug.tooltip": "I debug devono venir scritti nei log?",
+
+  "fastload.button.instant_load": "Caricamento instantaneo",
+  "fastload.button.instant_load.tooltip": "Sei impaziente? Odi le schermate di caricamento? Abilità questa opzione, carica un mondo e te ne pentirai. -_-",
+
+  "fastload.button.local_render_chunk_radius": "Raggio locale",
+  "fastload.button.local_render_chunk_radius.tooltip": "Raggio di quanti blocchi in un cerchio devono essere preparati nel caricamento del terreno di Fastload per la modalità giocatore singolo.",
+  "fastload.button.local_render_chunk_radius.min": "Disabilitato",
+  "fastload.button.local_render_chunk_radius.max": "Cosa?!?",
+
+  "fastload.button.server_render_chunk_radius": "Raggio server",
+  "fastload.button.server_render_chunk_radius.tooltip": "Raggio di quanti blocchi in un cerchio devono essere preparati nel caricamento del terreno di Fastload per i server.",
+  "fastload.button.server_render_chunk_radius.min": "Disabilitato",
+  "fastload.button.server_render_chunk_radius.max": "Cosa?!?",
+
+  "fastload.button.chunk_try_limit": "Limite rinvio Chunk",
+  "fastload.button.chunk_try_limit.tooltip": "Quante volte di fila lo stesso numero di chunk può essere rinviato prima di eseguire il pre-rendering",
+  "fastload.button.chunk_try_limit.min": "Computer della NASA",
+  "fastload.button.chunk_try_limit.max": "Lumaca"
+}
