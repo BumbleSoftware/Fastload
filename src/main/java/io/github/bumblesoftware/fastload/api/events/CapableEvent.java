@@ -14,6 +14,7 @@ import java.util.List;
  *           for examples.
  */
 public class CapableEvent<Context> implements AbstractEvent<Context> {
+    private final Comparator<Long> order;
     public final List<String> locationList;
     public final Object2ObjectOpenHashMap<String, EventHolder<Context>>
             allEvents,
@@ -21,14 +22,19 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
             eventsToRemove;
 
 
-    public CapableEvent() {
+    public CapableEvent(final Comparator<Long> eventOrder) {
+        order = eventOrder;
+        locationList = new ArrayList<>();
         allEvents = new Object2ObjectOpenHashMap<>();
         eventsToAdd = new Object2ObjectOpenHashMap<>();
         eventsToRemove = new Object2ObjectOpenHashMap<>();
-        locationList = new ArrayList<>();
         allEvents.put(GENERIC_LOCATION, getNewHolder());
         eventsToAdd.put(GENERIC_LOCATION, getNewHolder());
         eventsToRemove.put(GENERIC_LOCATION, getNewHolder());
+    }
+
+    public CapableEvent() {
+        this(Comparator.reverseOrder());
     }
 
     @Override
@@ -164,9 +170,8 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
             final var add = eventsToAdd.get(string);
             final var all = allEvents.get(string);
             final var remove = eventsToRemove.remove(string);
-
             iterate(add, (priority, eventArgs) -> registerThreadUnsafe(priority, event -> eventArgs));
-            all.priorityHolder().sort(Comparator.reverseOrder());
+            all.priorityHolder().sort(order);
             iterate(all, (priority, eventArgs) -> eventArgs.recursive(eventContext, this, 0, eventArgs));
             iterate(remove, this::removeThreadUnsafe);
         }

@@ -5,7 +5,10 @@ import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
+
+import java.util.Comparator;
 
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.*;
 
@@ -17,11 +20,14 @@ public interface FLCommonEvents {
     static void init() {}
 
     interface Events {
+        AbstractEvent<ObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>(Comparator.naturalOrder());
+        AbstractEvent<ObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>(Comparator.naturalOrder());
+        AbstractEvent<ObjectHolder<Runnable>> RUNNABLE_EVENT = new CapableEvent<>(Comparator.naturalOrder());
+        AbstractEvent<BoxBooleanContext> BOX_BOOLEAN_EVENT = new CapableEvent<>(Comparator.naturalOrder());
         AbstractEvent<EmptyContext> EMPTY_EVENT =  new CapableEvent<>();
-        AbstractEvent<ObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>();
-        AbstractEvent<ObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>();
         AbstractEvent<ProgressListenerContext> PROGRESS_LISTENER_EVENT = new CapableEvent<>();
         AbstractEvent<ServerContext> SERVER_EVENT = new CapableEvent<>();
+
     }
     interface Locations {
         String SERVER_TICK = "minecraft_server;server_tick;";
@@ -31,6 +37,7 @@ public interface FLCommonEvents {
 
     interface Contexts {
         record EmptyContext() {}
+        record BoxBooleanContext(Box box, ObjectHolder<Boolean> bool) {}
         record ServerContext(MinecraftServer server, ObjectHolder<?> returnValue) {}
         record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {}
 

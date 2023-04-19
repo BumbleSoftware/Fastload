@@ -8,8 +8,7 @@
     "mc1193.local.HookClient1193"
   ],
   "client": [
-    "mc1193.client.FrustumMixin",
-    "mc1193.client.MinecraftClientMixin"
+    "mc1193.client.FrustumMixin"
   ],
   "injectors": {
     "defaultRequire": 1

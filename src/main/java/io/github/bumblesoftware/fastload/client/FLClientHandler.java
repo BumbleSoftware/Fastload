@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import io.github.bumblesoftware.fastload.util.TickTimer;
@@ -300,6 +301,42 @@ public final class FLClientHandler {
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (!isInstantLoadEnabled())
                         ABSTRACTED_CLIENT.setScreen(eventContext.screen());
+                })
+        );
+
+        RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    final var client = ABSTRACTED_CLIENT.getClientInstance();
+                    if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
+                        ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).setClose(() ->
+                                client.execute(eventContext.heldObj));
+                    else client.execute(eventContext.heldObj);
+                })
+        );
+
+        BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    eventContext.heldObj = true;
+                    if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
+                            "DownloadingTerrainScreen set to close on next render bool."
+                    );
+                })
+        );
+
+        BOX_BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(FRUSTUM_BOX_BOOL),
+                event -> BOX_BOOLEAN_EVENT.stableArgs((eventContext, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) ||
+                            ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isDownloadingTerrainScreen)
+                    )
+                        eventContext.bool().heldObj = true;
+                })
+        );
+
+        INTEGER_EVENT.registerThreadUnsafe(1, List.of(WORLD_ICON),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    eventContext.heldObj = 100;
+                    if (FLMath.isDebugEnabled())
+                        Fastload.LOGGER.info("worldIcon time prolonged");
                 })
         );
     }

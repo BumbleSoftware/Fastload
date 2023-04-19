@@ -28,6 +28,10 @@ public interface FLClientEvents {
         String PROGRESS_SCREEN_JOIN_WORLD_REDIRECT = "minecraft_client;join_world;progress_screen;redirect";
         String CLIENT_PLAYER_INIT = "client_player;init;";
         String RENDER_TICK = "minecraft_client;render_tick;";
+        String RP_SEND_RUNNABLE = "client_play_network_handler;on_resource_pack_send;execute_runnable;redirect";
+        String DTS_TICK = "dts_tick;";
+        String FRUSTUM_BOX_BOOL = "frustum_box_bool";
+        String WORLD_ICON = "world_icon;";
     }
 
     interface Contexts {
