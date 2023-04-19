@@ -9,8 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 
 import java.util.List;
 
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.PLAYER_JOIN_EVENT;
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET_SCREEN_EVENT;
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.*;
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
@@ -328,7 +327,7 @@ public final class FLClientHandler {
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) ||
                             ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isDownloadingTerrainScreen)
                     )
-                        eventContext.bool().heldObj = true;
+                        eventContext.cir().setReturnValue(true);
                 })
         );
 

@@ -18,8 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET_SCREEN_EVENT;
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.LLS_441_REDIRECT;
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.PROGRESS_SCREEN_JOIN_WORLD_REDIRECT;
+import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.SERVER_EVENT;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
@@ -35,8 +34,8 @@ public abstract class MinecraftClientMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
     private void renderEvent(boolean tick, CallbackInfo ci) {
-        if (BOOLEAN_EVENT.isNotEmpty())
-            BOOLEAN_EVENT.fireEvent(new ObjectHolder<>(tick));
+        if (BOOLEAN_EVENT.isNotEmpty(RENDER_TICK))
+            BOOLEAN_EVENT.fireEvent(List.of(RENDER_TICK), new ObjectHolder<>(tick));
     }
 
     @Redirect(method = "startIntegratedServer(Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Function;" +
