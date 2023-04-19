@@ -1,15 +1,11 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.compat.bedrockify.BedrockifyCompat.Context;
-import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.compat.bedrockify.BedrockifyCompat.BEDROCKIFY_COMPAT_EVENT;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
@@ -18,6 +14,7 @@ public class BuildingTerrainScreen extends Screen {
     private final Text screenTemplate;
     private final Text buildingChunks;
     private final Text preparingChunks;
+    private final Text startingSession;
     private Integer preparedProgressStorage = 0;
     private Integer buildingProgressStorage = 0;
     private static final int heightUpFromCentre = 50;
@@ -41,10 +38,7 @@ public class BuildingTerrainScreen extends Screen {
         screenTemplate = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.template");
         buildingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.building");
         preparingChunks = ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.buildingTerrain.preparing");
-    }
-
-    public BuildingTerrainScreen() {
-        this(FLMath.getLocalRenderChunkArea());
+        startingSession = ABSTRACTED_CLIENT.newTranslatableText("fastload.buildingTerrain.starting");
     }
 
     /**
@@ -67,33 +61,11 @@ public class BuildingTerrainScreen extends Screen {
         preparedProgressStorage = getLoadedChunkCount();
         buildingProgressStorage = getBuiltChunkCount();
 
-        if (BEDROCKIFY_COMPAT_EVENT.isNotEmpty()) {
-            final var shouldContinue = new ObjectHolder<>(true);
-            BEDROCKIFY_COMPAT_EVENT.fireEvent(
-                    new Context(
-                            shouldContinue,
-                            ABSTRACTED_CLIENT,
-                            matrices,
-                            screenName,
-                            screenTemplate,
-                            preparingChunks,
-                            buildingChunks,
-                            loadedChunksString,
-                            builtChunksString,
-                            this::getLoadedChunkCount,
-                            this::getBuiltChunkCount,
-                            loadingAreaGoal
-                    )
-            );
-            if (!shouldContinue.heldObj)
-                return;
-        }
-
         if (getLoadedChunkCount() == 0 && getBuiltChunkCount() == 0) {
             ABSTRACTED_CLIENT.drawCenteredText(
                     matrices,
                     this.textRenderer,
-                    ABSTRACTED_CLIENT.newTranslatableText("fastload.buildingTerrain.starting"),
+                    startingSession,
                     this.width / 2,
                     this.height / 2 - heightUpFromCentre,
                     WHITE
