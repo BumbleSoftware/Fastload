@@ -60,6 +60,7 @@ public class Client1182 implements AbstractClientCalls {
             Function<Object[], T[]> options,
             Action config
     ) {
+        final var main = this;
         return new SimpleOptionsScreen(
                 parent,
                 gameOptions,
@@ -68,19 +69,23 @@ public class Client1182 implements AbstractClientCalls {
         ) {
             @Override
             protected void initFooter() {
-                ABSTRACTED_CLIENT.addDrawableChild(this,
-                        ABSTRACTED_CLIENT.getNewButton(
-                                this.width / 2 - 100,
-                                this.height - 27,
-                                200, 20,
-                                ScreenTexts.DONE,
-                                (button) -> {
-                                    config.commit();
-                                    getClientInstance().setScreen(parent);
-                                })
-                );
+                main.initFooter(this, parent, config);
             }
         };
+    }
+
+    protected void initFooter(final Screen current, final Screen parent, Action config) {
+        addDrawableChild(current,
+                getNewButton(
+                        current.width / 2 - 100,
+                        current.height - 27,
+                        200, 20,
+                        ScreenTexts.DONE,
+                        (button) -> {
+                            config.commit();
+                            getClientInstance().setScreen(parent);
+                        })
+        );
     }
 
     @Override

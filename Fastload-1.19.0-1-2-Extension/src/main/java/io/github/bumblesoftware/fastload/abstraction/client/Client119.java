@@ -10,12 +10,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.SimpleOptionsScreen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
 import java.util.function.Function;
-
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
 
 public class Client119 extends Client1182 {
     @Override
@@ -38,28 +35,20 @@ public class Client119 extends Client1182 {
             Function<Object[], T[]> options,
             Action config
     ) {
+        final var main = this;
         return new SimpleOptionsScreen(
                 parent,
                 gameOptions,
                 title,
-                (SimpleOption<?>[]) options.apply(new SimpleOption<?>[]{})
+                (SimpleOption<?>[]) options.apply(new SimpleOption[]{})
         ) {
             @Override
             protected void initFooter() {
-                ABSTRACTED_CLIENT.addDrawableChild(this,
-                        ABSTRACTED_CLIENT.getNewButton(
-                                this.width / 2 - 100,
-                                this.height - 27,
-                                200, 20,
-                                ScreenTexts.DONE,
-                                (button) -> {
-                                    config.commit();
-                                    getClientInstance().setScreen(parent);
-                                })
-                );
+                main.initFooter(this, parent, config);
             }
         };
     }
+
     @Override
     public Text newTranslatableText(final String content) {
         return Text.translatable(content);
