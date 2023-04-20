@@ -31,16 +31,16 @@ public class Client119 extends Client1182 {
     }
 
     @Override
-    public <T, X> Screen newConfigScreen(
+    public <T> Screen newConfigScreen(
             final Screen parent,
-            X gameOptions,
+            GameOptions gameOptions,
             final Text title,
             Function<Object[], T[]> options,
             Action config
     ) {
         return new SimpleOptionsScreen(
                 parent,
-                (GameOptions) gameOptions,
+                gameOptions,
                 title,
                 (SimpleOption<?>[]) options.apply(new SimpleOption<?>[]{})
         ) {

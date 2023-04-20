@@ -53,16 +53,16 @@ public class Client1182 implements AbstractClientCalls {
     }
 
     @Override
-    public <T, X> Screen newConfigScreen(
+    public <T> Screen newConfigScreen(
             final Screen parent,
-            X gameOptions,
+            GameOptions gameOptions,
             final Text title,
             Function<Object[], T[]> options,
             Action config
     ) {
         return new SimpleOptionsScreen(
                 parent,
-                (GameOptions) gameOptions,
+                gameOptions,
                 title,
                 (Option[]) options.apply(new Option[]{})
         ) {
