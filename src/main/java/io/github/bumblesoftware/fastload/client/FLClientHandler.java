@@ -150,7 +150,7 @@ public final class FLClientHandler {
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
                         if (isDebugEnabled())
-                            log("setScreen(new BuildingTerrain)");
+                            log("setScreen(new BuildingTerrainScreen)");
                     }
                 })
         );
