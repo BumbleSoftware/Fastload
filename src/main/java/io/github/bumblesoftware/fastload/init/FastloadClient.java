@@ -15,6 +15,7 @@ import net.fabricmc.api.ClientModInitializer;
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
+import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.EQUALS;
 import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.getVersion;
 
 public class FastloadClient implements ClientModInitializer {
@@ -56,7 +57,7 @@ public class FastloadClient implements ClientModInitializer {
     private static void registerBaseClient() {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(0,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (MinecraftVersionUtil.matchesAny("1.18.2")) {
+                    if (MinecraftVersionUtil.matchesAny(EQUALS, "1.18.2")) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.18.2 Base!");
                         eventContext.clientCallsHolder.heldObj = new Client1182();
