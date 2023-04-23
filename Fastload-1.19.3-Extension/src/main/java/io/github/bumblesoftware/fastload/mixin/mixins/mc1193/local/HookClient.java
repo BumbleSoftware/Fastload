@@ -13,7 +13,7 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.CLIENT_ABSTR
 import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.matchesAny;
 
 @Mixin(FastloadClient.class)
-public class HookClient1193 {
+public class HookClient {
     @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "registerBaseClient", at = @At("HEAD"), remap = false)
     private static void register1193(CallbackInfo ci) {

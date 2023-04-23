@@ -15,24 +15,21 @@ import net.fabricmc.api.ClientModInitializer;
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
+import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.getVersion;
 
 public class FastloadClient implements ClientModInitializer {
-    public static AbstractClientCalls ABSTRACTED_CLIENT;
+    public static final AbstractClientCalls ABSTRACTED_CLIENT;
     public static final AbstractEvent<ClientAbstractionContext> CLIENT_ABSTRACTION_EVENT;
 
     static {
         CLIENT_ABSTRACTION_EVENT = new CapableEvent<>();
-    }
-
-    @Override
-    public void onInitializeClient() {
         registerBaseClient();
         ABSTRACTED_CLIENT = getAbstractedClient();
         FLConfig.init();
         FLClientEvents.init();
         FLClientHandler.init();
-        MinecraftVersionUtil.getVersion();
-        LOGGER.info("Fastload Perceived Version: " + MinecraftVersionUtil.getVersion());
+
+        LOGGER.info("Fastload Perceived Version: " + getVersion());
         LOGGER.info("Fastload Abstraction Supported Versions: " + ABSTRACTED_CLIENT.getCompatibleVersions());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
         LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
@@ -42,6 +39,9 @@ public class FastloadClient implements ClientModInitializer {
         LOGGER.info(logKey(SERVER_RENDER_AREA_KEY) + getServerRenderChunkArea());
     }
 
+    @Override
+    public void onInitializeClient() {}
+
     private static AbstractClientCalls getAbstractedClient() {
         if (CLIENT_ABSTRACTION_EVENT.isNotEmpty()) {
             var clientHolder = new ObjectHolder<AbstractClientCalls>(null);
@@ -49,7 +49,8 @@ public class FastloadClient implements ClientModInitializer {
             if (clientHolder.heldObj != null)
                 return clientHolder.heldObj;
         }
-        throw new NullPointerException("Method abstraction for MC Client is unsupported for this version");
+        throw new NullPointerException(
+                "Method abstraction for MC Client is unsupported for this version. [VERSION: " + getVersion() +"]");
     }
 
     private static void registerBaseClient() {

@@ -5,7 +5,7 @@
   "plugin": "io.github.bumblesoftware.fastload.mixin.plugin.FLConditionalMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "mc1194.local.HookClient1194"
+    "mc1194.local.HookClient"
   ],
   "client": [
   ],

@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.mixin.mixins.mc1194.local;
+package io.github.bumblesoftware.fastload.mixin.mixins.mc119.local;
 
-import io.github.bumblesoftware.fastload.abstraction.client.Client1194;
+import io.github.bumblesoftware.fastload.abstraction.client.Client119;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.init.FastloadClient;
@@ -13,16 +13,16 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.CLIENT_ABSTR
 import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.matchesAny;
 
 @Mixin(FastloadClient.class)
-public class HookClient1194 {
+public class HookClient {
     @SuppressWarnings("UnresolvedMixinReference")
     @Inject(method = "registerBaseClient", at = @At("HEAD"), remap = false)
-    private static void register1194(CallbackInfo ci) {
-        CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(2,
+    private static void register1192(CallbackInfo ci) {
+        CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(1,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (matchesAny("1.19.4")) {
+                    if (matchesAny( "1.19.2", "1.19.1", "1.19")) {
                         if (FLMath.isDebugEnabled())
-                            Fastload.LOGGER.info("Fastload 1.19.4 Hook!");
-                        eventContext.clientCallsHolder().heldObj = new Client1194();
+                            Fastload.LOGGER.info("Fastload 1.19.0-1-2 Hook!");
+                        eventContext.clientCallsHolder().heldObj = new Client119();
                     }
                 })
         );
