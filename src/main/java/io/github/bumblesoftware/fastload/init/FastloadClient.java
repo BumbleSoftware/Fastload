@@ -8,21 +8,22 @@ import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.config.FLMath;
-import io.github.bumblesoftware.fastload.util.MinecraftVersionUtil;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.version.VersionConstants;
 import net.fabricmc.api.ClientModInitializer;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.EQUALS;
-import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.getVersion;
+import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1182;
+import static io.github.bumblesoftware.fastload.version.VersionHelper.getVersion;
 
 public class FastloadClient implements ClientModInitializer {
     public static final AbstractClientCalls ABSTRACTED_CLIENT;
     public static final AbstractEvent<ClientAbstractionContext> CLIENT_ABSTRACTION_EVENT;
 
     static {
+        VersionConstants.init();
         CLIENT_ABSTRACTION_EVENT = new CapableEvent<>();
         registerBaseClient();
         ABSTRACTED_CLIENT = getAbstractedClient();
@@ -57,7 +58,7 @@ public class FastloadClient implements ClientModInitializer {
     private static void registerBaseClient() {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(0,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (MinecraftVersionUtil.matchesAny(EQUALS, "1.18.2")) {
+                    if (IS_MINECRAFT_1182) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.18.2 Base!");
                         eventContext.clientCallsHolder.heldObj = new Client1182();

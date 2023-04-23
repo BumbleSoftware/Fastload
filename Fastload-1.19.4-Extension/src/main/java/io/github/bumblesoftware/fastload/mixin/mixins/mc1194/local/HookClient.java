@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.bumblesoftware.fastload.init.FastloadClient.CLIENT_ABSTRACTION_EVENT;
-import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.REGEX;
-import static io.github.bumblesoftware.fastload.util.MinecraftVersionUtil.matchesAny;
+import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1194;
+import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1200;
 
 @Mixin(FastloadClient.class)
 public class HookClient {
@@ -20,7 +20,7 @@ public class HookClient {
     private static void register1194(CallbackInfo ci) {
         CLIENT_ABSTRACTION_EVENT.registerThreadUnsafe(3,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (matchesAny(REGEX, "1.20", "1.19.4")) {
+                    if (IS_MINECRAFT_1194 || IS_MINECRAFT_1200) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.19.4 Hook!");
                         eventContext.clientCallsHolder().heldObj = new Client1194();
