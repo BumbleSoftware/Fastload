@@ -1,4 +1,0 @@
-v1	named	intermediary
-FIELD	com/abdelaziz/fastload/mixin/client/DownloadingTerrainScreenMixin	Z	closeOnNextTick	f_202372_
-FIELD	com/abdelaziz/fastload/mixin/server/WorldGenerationProcessLoggerMixin	I	generatedCount	f_9624_
-METHOD	com/abdelaziz/fastload/mixin/server/WorldGenerationProcessLoggerMixin	()I	getProgressPercentage	m_9636_
