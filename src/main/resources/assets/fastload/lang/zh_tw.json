@@ -1,0 +1,23 @@
+{
+  "fastload.screen.buildingTerrain.building": "正在建立可見區塊",
+  "fastload.screen.buildingTerrain.preparing": "準備所有區塊",
+  "fastload.buildingTerrain.starting": "啟動 Session",
+  "fastload.screen.buildingTerrain.template": "完成／目標",
+  "fastload.screen.config": "Fastload 設定",
+  "fastload.button.debug": "除錯模式",
+  "fastload.button.debug.tooltip": "是否在記錄中輸出除錯資訊？",
+  "fastload.button.instant_load": "瞬間載入",
+  "fastload.button.instant_load.tooltip": "您是不是很沒有耐心？討厭載入畫面？只需打開它，載入一個世界，然後您會後悔的。-_-",
+  "fastload.button.local_render_chunk_radius": "預繪製半徑",
+  "fastload.button.local_render_chunk_radius.tooltip": "Fastload 的單人模式建立地形時，應該在圓形中繪製多少區塊半徑？",
+  "fastload.button.local_render_chunk_radius.min": "禁用",
+  "fastload.button.local_render_chunk_radius.max": "Wtf",
+  "fastload.button.server_render_chunk_radius": "預生成半徑",
+  "fastload.button.server_render_chunk_radius.tooltip": "Fastload 的伺服器建立地形時，應該在圓形中繪製多少區塊半徑？",
+  "fastload.button.server_render_chunk_radius.min": "禁用",
+  "fastload.button.server_render_chunk_radius.max": "Wtf",
+  "fastload.button.chunk_try_limit": "區塊嘗試限制",
+  "fastload.button.chunk_try_limit.tooltip": "在放棄預繪製之前，允許相同的區塊計數連續返回的次數。",
+  "fastload.button.chunk_try_limit.min": "NASA 電腦",
+  "fastload.button.chunk_try_limit.max": "無限"
+}
