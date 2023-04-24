@@ -110,6 +110,7 @@ public class VersionHelper {
                     .getFriendlyString();
         }
     }
+    @SuppressWarnings("unused")
     public enum ExceptionStrategy {
         NO_EXCEPTION(version -> true),
         ONLY_FIRST_MAJOR(version -> {

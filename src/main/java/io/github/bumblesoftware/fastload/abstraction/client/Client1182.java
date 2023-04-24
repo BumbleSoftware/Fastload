@@ -74,13 +74,17 @@ public class Client1182 implements AbstractClientCalls {
         };
     }
 
+    protected Text getDoneText() {
+        return ScreenTexts.DONE;
+    }
+
     protected void initFooter(final Screen current, final Screen parent, Action config) {
         addDrawableChild(current,
                 getNewButton(
                         current.width / 2 - 100,
                         current.height - 27,
                         200, 20,
-                        ScreenTexts.DONE,
+                        getDoneText(),
                         (button) -> {
                             config.commit();
                             getClientInstance().setScreen(parent);
