@@ -16,7 +16,6 @@ import static io.github.bumblesoftware.fastload.version.VersionHelper.VersionPac
 public class VersionHelper {
     public static final GameSpecific MINECRAFT = new GameSpecific(ofFmjVersion("minecraft"), EQUALS, NO_EXCEPTION);
 
-
     public static class GameSpecific {
         public final String providedVersion;
         public final MatchingStrategy defaultMatchingStrategy;
@@ -69,7 +68,6 @@ public class VersionHelper {
             return matchesAny(comparedVersion, defaultMatchingStrategy, defaultException);
         }
     }
-
     public enum ExceptionStrategy {
         NO_EXCEPTION(version -> true),
         ONLY_FIRST_MAJOR(version -> {
@@ -82,7 +80,6 @@ public class VersionHelper {
             this.function = function;
         }
     }
-
     public enum MatchingStrategy {
         EQUALS(String::equals),
         REGEX(MatchingStrategy::regexMatch);
@@ -106,7 +103,6 @@ public class VersionHelper {
             return false;
         }
     }
-
     public static class VersionPackage {
         private final String info;
         private final Function<String, String> versionGetter;
