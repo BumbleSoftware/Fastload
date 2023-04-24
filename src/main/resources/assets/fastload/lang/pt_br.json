@@ -1,0 +1,12 @@
+{
+  "fastload.screen.buildingTerrain.template": "Concluído / Meta",
+  "fastload.screen.buildingTerrain.building": "Construindo chunks Visíveis",
+  "fastload.screen.buildingTerrain.preparing": "Preparando todas as chunks",
+  "fastload.screen.config": "Configuração de carregamento rápido",
+  "fastload.button.debug": "Modo de depuração",
+  "fastload.button.debug.tooltip": "As depurações devem ser impressas nos logs?",
+  "fastload.button.chunk_try_limit": "Limite de tentativa de bloco",
+  "fastload.button.chunk_try_limit.tooltip": "Quantas vezes a mesma contagem de blocos poderia ser retornada seguidas antes de abandonar a pré-renderização",
+  "fastload.button.chunk_try_limit.min": "NASA PC",
+  "fastload.button.chunk_try_limit.max": "Infinidade"
+}

@@ -1,0 +1,12 @@
+{
+  "fastload.screen.buildingTerrain.template": "已完成 / 目标",
+  "fastload.screen.buildingTerrain.building": "构建可见区块",
+  "fastload.screen.buildingTerrain.preparing": "准备所有区块中",
+  "fastload.screen.config": "Fastload 设置",
+  "fastload.button.debug": "调试模式",
+  "fastload.button.debug.tooltip": "调试结果是否应该在日志中打印？",
+  "fastload.button.chunk_try_limit": "区块尝试限制",
+  "fastload.button.chunk_try_limit.tooltip": "在放弃预渲染之前，允许同一区块数连续返回多少次？",
+  "fastload.button.chunk_try_limit.min": "NASA 电脑",
+  "fastload.button.chunk_try_limit.max": "无限"
+}

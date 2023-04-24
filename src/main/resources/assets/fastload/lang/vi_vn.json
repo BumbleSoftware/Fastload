@@ -1,0 +1,12 @@
+{
+  "fastload.screen.buildingTerrain.template": "Hoàn thành / Mục tiêu",
+  "fastload.screen.buildingTerrain.building": "Xây dựng khối có thể nhìn thấy",
+  "fastload.screen.buildingTerrain.preparing": "Chuẩn bị tất cả các khối",
+  "fastload.screen.config": "Cấu hình tải nhanh",
+  "fastload.button.debug": "Chế độ gỡ lỗi",
+  "fastload.button.debug.tooltip": "Có nên tạo các bản sửa lỗi trong nhật ký không?",
+  "fastload.button.chunk_try_limit": "chặn giới hạn nỗ lực",
+  "fastload.button.chunk_try_limit.tooltip": "Số lượng khối giống nhau sẽ được phép trả về liên tiếp bao nhiêu lần trước khi kết xuất lại",
+  "fastload.button.chunk_try_limit.min": "NASA PC",
+  "fastload.button.chunk_try_limit.max": "Vô hạn"
+}

@@ -1,59 +1,81 @@
 {
   "mappings": {
-    "com/abdelaziz/fastload/mixin/client/ClientPlayerEntityMixin": {
+    "io/github/bumblesoftware/fastload/mixin/client/FrustumMixin": {
+      "isVisible(DDDDDD)Z": "Lnet/minecraft/client/renderer/culling/Frustum;m_113006_(DDDDDD)Z"
+    },
+    "io/github/bumblesoftware/fastload/mixin/client/ClientPlayerEntityMixin": {
       "init": "Lnet/minecraft/client/player/LocalPlayer;m_172530_()V"
     },
-    "com/abdelaziz/fastload/mixin/client/MinecraftClientMixin": {
-      "openPauseMenu": "Lnet/minecraft/client/Minecraft;m_91358_(Z)V",
+    "io/github/bumblesoftware/fastload/mixin/client/MinecraftClientMixin": {
+      "joinWorld": "Lnet/minecraft/client/Minecraft;m_91156_(Lnet/minecraft/client/multiplayer/ClientLevel;)V",
+      "startIntegratedServer": "Lnet/minecraft/client/Minecraft;m_261031_(Ljava/lang/String;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lnet/minecraft/server/packs/repository/PackRepository;Lnet/minecraft/server/WorldStem;Z)V",
+      "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
+      "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91362_(Lnet/minecraft/client/gui/screens/Screen;)V",
       "setScreen": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
-      "render": "Lnet/minecraft/client/Minecraft;m_91383_(Z)V"
+      "render": "Lnet/minecraft/client/Minecraft;m_91383_(Z)V",
+      "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z": "Lnet/minecraft/client/server/IntegratedServer;m_129920_()Z"
     },
-    "com/abdelaziz/fastload/mixin/server/WorldGenerationProgressTrackerMixin": {
-      "Lnet/minecraft/server/WorldGenerationProgressLogger;<init>(I)V": "Lnet/minecraft/server/level/progress/LoggerChunkProgressListener;<init>(I)V"
-    },
-    "com/abdelaziz/fastload/mixin/client/ClientPlayNetworkHandlerMixin": {
-      "onGameJoin": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5998_(Lnet/minecraft/network/protocol/game/ClientboundLoginPacket;)V"
-    },
-    "com/abdelaziz/fastload/mixin/server/MinecraftServerMixin": {
-      "prepareStartRegion": "Lnet/minecraft/server/MinecraftServer;m_129940_(Lnet/minecraft/server/level/progress/ChunkProgressListener;)V",
-      "tick": "Lnet/minecraft/server/MinecraftServer;m_5705_(Ljava/util/function/BooleanSupplier;)V"
-    },
-    "com/abdelaziz/fastload/mixin/client/DownloadingTerrainScreenMixin": {
+    "io/github/bumblesoftware/fastload/mixin/client/DownloadingTerrainScreenMixin": {
       "setReady": "Lnet/minecraft/client/gui/screens/ReceivingLevelScreen;m_202375_()V"
     },
-    "com/abdelaziz/fastload/mixin/client/LevelLoadingScreenMixin": {
-      "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_96149_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/server/level/progress/StoringChunkProgressListener;IIII)V",
-      "render": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_86412_(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V",
-      "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_93208_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V"
+    "io/github/bumblesoftware/fastload/mixin/client/ClientPlayNetworkHandlerMixin": {
+      "onPlayerRespawn": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_7992_(Lnet/minecraft/network/protocol/game/ClientboundRespawnPacket;)V",
+      "onResourcePackSend": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5587_(Lnet/minecraft/network/protocol/game/ClientboundResourcePackPacket;)V",
+      "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
+      "onGameJoin": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5998_(Lnet/minecraft/network/protocol/game/ClientboundLoginPacket;)V",
+      "Lnet/minecraft/client/world/ClientWorld;addPlayer(ILnet/minecraft/client/network/AbstractClientPlayerEntity;)V": "Lnet/minecraft/client/multiplayer/ClientLevel;m_104630_(ILnet/minecraft/client/player/AbstractClientPlayer;)V",
+      "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V": "Lnet/minecraft/client/Minecraft;execute(Ljava/lang/Runnable;)V"
+    },
+    "io/github/bumblesoftware/fastload/mixin/client/GameRendererMixin": {
+      "updateWorldIcon(Ljava/nio/file/Path;)V": "Lnet/minecraft/client/renderer/GameRenderer;m_182642_(Ljava/nio/file/Path;)V"
+    },
+    "io/github/bumblesoftware/fastload/mixin/server/MinecraftServerMixin": {
+      "prepareStartRegion": "Lnet/minecraft/server/MinecraftServer;m_129940_(Lnet/minecraft/server/level/progress/ChunkProgressListener;)V",
+      "tick": "Lnet/minecraft/server/MinecraftServer;m_5705_(Ljava/util/function/BooleanSupplier;)V",
+      "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V": "Lnet/minecraft/server/level/progress/ChunkProgressListener;m_7647_(Lnet/minecraft/world/level/ChunkPos;)V"
+    },
+    "io/github/bumblesoftware/fastload/mixin/client/ScreenAccess": {
+      "addDrawableChild": "addDrawableChild(L/;)L/;"
     }
   },
   "data": {
     "named:intermediary": {
-      "com/abdelaziz/fastload/mixin/client/ClientPlayerEntityMixin": {
+      "io/github/bumblesoftware/fastload/mixin/client/FrustumMixin": {
+        "isVisible(DDDDDD)Z": "Lnet/minecraft/client/renderer/culling/Frustum;m_113006_(DDDDDD)Z"
+      },
+      "io/github/bumblesoftware/fastload/mixin/client/ClientPlayerEntityMixin": {
         "init": "Lnet/minecraft/client/player/LocalPlayer;m_172530_()V"
       },
-      "com/abdelaziz/fastload/mixin/client/MinecraftClientMixin": {
-        "openPauseMenu": "Lnet/minecraft/client/Minecraft;m_91358_(Z)V",
+      "io/github/bumblesoftware/fastload/mixin/client/MinecraftClientMixin": {
+        "joinWorld": "Lnet/minecraft/client/Minecraft;m_91156_(Lnet/minecraft/client/multiplayer/ClientLevel;)V",
+        "startIntegratedServer": "Lnet/minecraft/client/Minecraft;m_261031_(Ljava/lang/String;Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;Lnet/minecraft/server/packs/repository/PackRepository;Lnet/minecraft/server/WorldStem;Z)V",
+        "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
+        "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91362_(Lnet/minecraft/client/gui/screens/Screen;)V",
         "setScreen": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
-        "render": "Lnet/minecraft/client/Minecraft;m_91383_(Z)V"
+        "render": "Lnet/minecraft/client/Minecraft;m_91383_(Z)V",
+        "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z": "Lnet/minecraft/client/server/IntegratedServer;m_129920_()Z"
       },
-      "com/abdelaziz/fastload/mixin/server/WorldGenerationProgressTrackerMixin": {
-        "Lnet/minecraft/server/WorldGenerationProgressLogger;<init>(I)V": "Lnet/minecraft/server/level/progress/LoggerChunkProgressListener;<init>(I)V"
-      },
-      "com/abdelaziz/fastload/mixin/client/ClientPlayNetworkHandlerMixin": {
-        "onGameJoin": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5998_(Lnet/minecraft/network/protocol/game/ClientboundLoginPacket;)V"
-      },
-      "com/abdelaziz/fastload/mixin/server/MinecraftServerMixin": {
-        "prepareStartRegion": "Lnet/minecraft/server/MinecraftServer;m_129940_(Lnet/minecraft/server/level/progress/ChunkProgressListener;)V",
-        "tick": "Lnet/minecraft/server/MinecraftServer;m_5705_(Ljava/util/function/BooleanSupplier;)V"
-      },
-      "com/abdelaziz/fastload/mixin/client/DownloadingTerrainScreenMixin": {
+      "io/github/bumblesoftware/fastload/mixin/client/DownloadingTerrainScreenMixin": {
         "setReady": "Lnet/minecraft/client/gui/screens/ReceivingLevelScreen;m_202375_()V"
       },
-      "com/abdelaziz/fastload/mixin/client/LevelLoadingScreenMixin": {
-        "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawChunkMap(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/WorldGenerationProgressTracker;IIII)V": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_96149_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/server/level/progress/StoringChunkProgressListener;IIII)V",
-        "render": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_86412_(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V",
-        "Lnet/minecraft/client/gui/screen/LevelLoadingScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V": "Lnet/minecraft/client/gui/screens/LevelLoadingScreen;m_93208_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V"
+      "io/github/bumblesoftware/fastload/mixin/client/ClientPlayNetworkHandlerMixin": {
+        "onPlayerRespawn": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_7992_(Lnet/minecraft/network/protocol/game/ClientboundRespawnPacket;)V",
+        "onResourcePackSend": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5587_(Lnet/minecraft/network/protocol/game/ClientboundResourcePackPacket;)V",
+        "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V": "Lnet/minecraft/client/Minecraft;m_91152_(Lnet/minecraft/client/gui/screens/Screen;)V",
+        "onGameJoin": "Lnet/minecraft/client/multiplayer/ClientPacketListener;m_5998_(Lnet/minecraft/network/protocol/game/ClientboundLoginPacket;)V",
+        "Lnet/minecraft/client/world/ClientWorld;addPlayer(ILnet/minecraft/client/network/AbstractClientPlayerEntity;)V": "Lnet/minecraft/client/multiplayer/ClientLevel;m_104630_(ILnet/minecraft/client/player/AbstractClientPlayer;)V",
+        "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V": "Lnet/minecraft/client/Minecraft;execute(Ljava/lang/Runnable;)V"
+      },
+      "io/github/bumblesoftware/fastload/mixin/client/GameRendererMixin": {
+        "updateWorldIcon(Ljava/nio/file/Path;)V": "Lnet/minecraft/client/renderer/GameRenderer;m_182642_(Ljava/nio/file/Path;)V"
+      },
+      "io/github/bumblesoftware/fastload/mixin/server/MinecraftServerMixin": {
+        "prepareStartRegion": "Lnet/minecraft/server/MinecraftServer;m_129940_(Lnet/minecraft/server/level/progress/ChunkProgressListener;)V",
+        "tick": "Lnet/minecraft/server/MinecraftServer;m_5705_(Ljava/util/function/BooleanSupplier;)V",
+        "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V": "Lnet/minecraft/server/level/progress/ChunkProgressListener;m_7647_(Lnet/minecraft/world/level/ChunkPos;)V"
+      },
+      "io/github/bumblesoftware/fastload/mixin/client/ScreenAccess": {
+        "addDrawableChild": "addDrawableChild(L/;)L/;"
       }
     }
   }

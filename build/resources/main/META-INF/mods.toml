@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
 
 [[mods]]
 modId = "fastload"
-version = "2.6.9+1.19.3"
+version = "3.3.7+1.19.3"
 displayName = "Fastload"
 updateJSONURL = "https://github.com/BumbleSoftware/Fastload/raw/mc1.19.2/dev/updates.json"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/fastload"
