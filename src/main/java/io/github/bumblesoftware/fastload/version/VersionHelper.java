@@ -68,41 +68,6 @@ public class VersionHelper {
             return matchesAny(comparedVersion, defaultMatchingStrategy, defaultException);
         }
     }
-    public enum ExceptionStrategy {
-        NO_EXCEPTION(version -> true),
-        ONLY_FIRST_MAJOR(version -> {
-            final var array = version.toCharArray();
-            return !(array.length >= 6 && array[4] == '.' && Character.isDigit(array[5]));
-        });
-
-        public final Function<String, Boolean> function;
-        ExceptionStrategy(final Function<String, Boolean> function) {
-            this.function = function;
-        }
-    }
-    public enum MatchingStrategy {
-        EQUALS(String::equals),
-        REGEX(MatchingStrategy::regexMatch);
-
-        public final BiFunction<String, String, Boolean> function;
-        MatchingStrategy(final BiFunction<String, String, Boolean> function) {
-            this.function = function;
-        }
-
-        public static boolean regexMatch(final String main, final String regex) {
-            int matchesInARow = 0;
-            final char[] regexChars = regex.toCharArray();
-            final char[] mainChars = main.toCharArray();
-            for (char mainChar : mainChars) {
-                if (regexChars[matchesInARow] == mainChar)
-                    matchesInARow++;
-                else matchesInARow = 0;
-                if (matchesInARow == regexChars.length)
-                    return true;
-            }
-            return false;
-        }
-    }
     public static class VersionPackage {
         private final String info;
         private final Function<String, String> versionGetter;
@@ -143,6 +108,41 @@ public class VersionHelper {
                     .getMetadata()
                     .getVersion()
                     .getFriendlyString();
+        }
+    }
+    public enum ExceptionStrategy {
+        NO_EXCEPTION(version -> true),
+        ONLY_FIRST_MAJOR(version -> {
+            final var array = version.toCharArray();
+            return !(array.length >= 6 && array[4] == '.' && Character.isDigit(array[5]));
+        });
+
+        public final Function<String, Boolean> function;
+        ExceptionStrategy(final Function<String, Boolean> function) {
+            this.function = function;
+        }
+    }
+    public enum MatchingStrategy {
+        EQUALS(String::equals),
+        REGEX(MatchingStrategy::regexMatch);
+
+        public final BiFunction<String, String, Boolean> function;
+        MatchingStrategy(final BiFunction<String, String, Boolean> function) {
+            this.function = function;
+        }
+
+        public static boolean regexMatch(final String main, final String regex) {
+            int matchesInARow = 0;
+            final char[] regexChars = regex.toCharArray();
+            final char[] mainChars = main.toCharArray();
+            for (char mainChar : mainChars) {
+                if (regexChars[matchesInARow] == mainChar)
+                    matchesInARow++;
+                else matchesInARow = 0;
+                if (matchesInARow == regexChars.length)
+                    return true;
+            }
+            return false;
         }
     }
 }
