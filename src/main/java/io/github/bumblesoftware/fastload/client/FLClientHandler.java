@@ -204,7 +204,26 @@ public final class FLClientHandler {
                             else ABSTRACTED_CLIENT.setScreen(eventContext.screen());
                         }
                     }
-                }));
+                })
+        );
+
+
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(RESPAWN_DTS_REDIRECT),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    if (isInstantLoadEnabled())
+                        ABSTRACTED_CLIENT.setScreen(null);
+                    else ABSTRACTED_CLIENT.setScreen(eventContext.screen());
+                })
+        );
+
+        BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    eventContext.heldObj = true;
+                    if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
+                            "DownloadingTerrainScreen set to close on next render bool."
+                    );
+                })
+        );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
                 event -> event.stableArgs((eventContext, eventArgs) -> {
@@ -296,12 +315,6 @@ public final class FLClientHandler {
                 )
         );
 
-        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(RESPAWN_DTS_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (!isInstantLoadEnabled())
-                        ABSTRACTED_CLIENT.setScreen(eventContext.screen());
-                })
-        );
 
         RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
                 event -> event.stableArgs((eventContext, eventArgs) -> {
@@ -310,15 +323,6 @@ public final class FLClientHandler {
                         ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).setClose(() ->
                                 client.execute(eventContext.heldObj));
                     else client.execute(eventContext.heldObj);
-                })
-        );
-
-        BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
-                    eventContext.heldObj = true;
-                    if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
-                            "DownloadingTerrainScreen set to close on next render bool."
-                    );
                 })
         );
 
