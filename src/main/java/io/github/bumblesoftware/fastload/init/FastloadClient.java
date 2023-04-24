@@ -31,7 +31,7 @@ public class FastloadClient implements ClientModInitializer {
         FLClientEvents.init();
         FLClientHandler.init();
 
-        LOGGER.info("Fastload Perceived Version: " + MINECRAFT.actualVersion);
+        LOGGER.info("Fastload Perceived Version: " + MINECRAFT.providedVersion);
         LOGGER.info("Fastload Abstraction Supported Versions: " + ABSTRACTED_CLIENT.getCompatibleVersions());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
         LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
@@ -52,7 +52,7 @@ public class FastloadClient implements ClientModInitializer {
                 return clientHolder.heldObj;
         }
         throw new NullPointerException(
-                "Method abstraction for MC Client is unsupported for this version. [VERSION: " + MINECRAFT.actualVersion +"]");
+                "Method abstraction for MC Client is unsupported for this version. [VERSION: " + MINECRAFT.providedVersion +"]");
     }
 
     private static void registerBaseClient() {

@@ -18,16 +18,16 @@ public class VersionHelper {
 
 
     public static class GameSpecific {
-        public final String actualVersion;
+        public final String providedVersion;
         public final MatchingStrategy defaultMatchingStrategy;
         public final ExceptionStrategy defaultException;
 
         GameSpecific(
-                final VersionPackage actualVersion,
+                final VersionPackage providedVersion,
                 final MatchingStrategy defaultMatchingStrategy,
                 final ExceptionStrategy defaultException
         ) {
-            this.actualVersion = actualVersion.getVersion();
+            this.providedVersion = providedVersion.getVersion();
             this.defaultMatchingStrategy = defaultMatchingStrategy;
             this.defaultException = defaultException;
 
@@ -39,10 +39,10 @@ public class VersionHelper {
                 final ExceptionStrategy checkForExceptions
         ) {
             final boolean matches =
-                    strategy.function.apply(actualVersion, comparedVersion) && checkForExceptions.function.apply(actualVersion);
+                    strategy.function.apply(providedVersion, comparedVersion) && checkForExceptions.function.apply(providedVersion);
             if (isDebugEnabled())
                 Fastload.LOGGER.info(
-                        "VERSIONS:[" + actualVersion + ", " + comparedVersion + "], MATCHES: " + matches
+                        "VERSIONS:[" + providedVersion + ", " + comparedVersion + "], MATCHES: " + matches
                                 + ", STRATEGY: " + strategy.name()
                 );
             return matches;
