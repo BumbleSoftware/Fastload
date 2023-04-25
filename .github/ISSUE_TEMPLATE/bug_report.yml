@@ -1,0 +1,42 @@
+name: Bug Report
+description: Submit a bug report for fastload.
+labels: [ "bug" ]
+body:
+    -   type: textarea
+        attributes:
+            label: What went wrong?
+            description: Describe the problem you are facing in a couple of words.
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Reproduction steps
+            description: How is this bug recreated? Please test extensively instead of "I installed fastload into my 200 mod large modpack and it's not working!"
+            value: |
+                1. {Mods required}
+                2. {Conditions}
+                3. {Execution}
+                4. {Failure}
+                ...
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Visual demonstration
+            description: If the bug report is better explained in pictures of video, please provide!
+        validations:
+            required: false
+    -   type: textarea
+        attributes:
+            label: Crash Report & Log
+            description: Please provide both. They are 2 pieces of core information I need to help you. Ideally provide with debug mode on fastload on!
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Environment
+            description: Please provide 3 things, mod version, modloader environment (type and version), and minecraft version.
+            value: |
+                Fastload 3.3.8, Fabric 0.14.14, 1.18.2
+        validations:
+            required: true
