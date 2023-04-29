@@ -27,7 +27,7 @@ import java.util.function.Function;
 @SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 public interface AbstractClientCalls {
     default String getCompatibleVersions() {
-        return "null";
+        throw new IllegalCallerException();
     }
 
     MinecraftClient getClientInstance();
