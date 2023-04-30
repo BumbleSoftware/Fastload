@@ -16,7 +16,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.*;
+import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screen.GameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.screen.option.SimpleOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.CyclingOption;
@@ -32,14 +35,11 @@ import net.minecraft.text.TranslatableText;
 
 import java.util.function.Function;
 
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
-
 @SuppressWarnings("unchecked")
 public class Client1182 implements AbstractClientCalls {
-
     @Override
-    public String getCompatibleVersions() {
-        return "1.18.2";
+    public String[] getSupportedMinecraftVersions() {
+        return new String[] {"1.18.2"};
     }
 
     @Override
@@ -97,8 +97,8 @@ public class Client1182 implements AbstractClientCalls {
         return newConfigScreen(
                 parent,
                 getClientInstance().options,
-                ABSTRACTED_CLIENT.newTranslatableText("fastload.screen.config"),
-                objects -> ABSTRACTED_CLIENT.newFLConfigScreenButtons().getAllOptions(objects),
+                newTranslatableText("fastload.screen.config"),
+                objects -> newFLConfigScreenButtons().getAllOptions(objects),
                 FLConfig::writeToDisk
         );
     }
@@ -261,7 +261,7 @@ public class Client1182 implements AbstractClientCalls {
 
     @Override
     public boolean isSingleplayer() {
-        return ABSTRACTED_CLIENT.getClientInstance().isInSingleplayer();
+        return getClientInstance().isInSingleplayer();
     }
 
     @Override

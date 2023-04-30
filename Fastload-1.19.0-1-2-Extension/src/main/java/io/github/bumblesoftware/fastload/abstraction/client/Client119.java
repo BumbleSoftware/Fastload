@@ -16,8 +16,8 @@ import java.util.function.Function;
 
 public class Client119 extends Client1182 {
     @Override
-    public String getCompatibleVersions() {
-        return "1.19, 1.19.1, 1.19.2";
+    public String[] getSupportedMinecraftVersions() {
+        return new String[] {"1.19", "1.19.1", "1.19.2"};
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
 import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.tool.SupportedVersions;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
@@ -25,11 +26,7 @@ import java.util.function.Function;
  * compat.
  */
 @SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
-public interface AbstractClientCalls {
-    default String getCompatibleVersions() {
-        throw new IllegalCallerException();
-    }
-
+public interface AbstractClientCalls extends SupportedVersions {
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
     <T> Screen newConfigScreen(

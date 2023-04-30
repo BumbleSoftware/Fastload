@@ -2,6 +2,8 @@ package io.github.bumblesoftware.fastload.init;
 
 import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.client.Client1182;
+import io.github.bumblesoftware.fastload.abstraction.client.MinecraftAbstractionImpl;
+import io.github.bumblesoftware.fastload.abstraction.tool.MinecraftAbstraction;
 import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
@@ -16,23 +18,22 @@ import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1182;
-import static io.github.bumblesoftware.fastload.version.VersionHelper.MINECRAFT;
 
 public class FastloadClient implements ClientModInitializer {
-    public static final AbstractClientCalls ABSTRACTED_CLIENT;
     public static final AbstractEvent<ClientAbstractionContext> CLIENT_ABSTRACTION_EVENT;
+    public static final MinecraftAbstraction<AbstractClientCalls> MINECRAFT_ABSTRACTION;
 
     static {
         VersionConstants.init();
         CLIENT_ABSTRACTION_EVENT = new CapableEvent<>();
         registerBaseClient();
-        ABSTRACTED_CLIENT = getAbstractedClient();
+        MINECRAFT_ABSTRACTION = new MinecraftAbstractionImpl(getAbstractedClient());
         FLConfig.init();
         FLClientEvents.init();
         FLClientHandler.init();
 
-        LOGGER.info("Fastload Perceived Version: " + MINECRAFT.providedVersion);
-        LOGGER.info("Fastload Abstraction Supported Versions: " + ABSTRACTED_CLIENT.getCompatibleVersions());
+        LOGGER.info("Fastload Perceived Version: " + MINECRAFT_ABSTRACTION.getMinecraftVersion());
+        LOGGER.info("Fastload Abstraction Supported Versions: " + MINECRAFT_ABSTRACTION.getSupportedMinecraftVersionsNonArray());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
         LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
         LOGGER.info(logKey(LOCAL_RENDER_RADIUS_KEY) + getLocalRenderChunkRadius());
@@ -52,7 +53,8 @@ public class FastloadClient implements ClientModInitializer {
                 return clientHolder.heldObj;
         }
         throw new NullPointerException(
-                "Method abstraction for MC Client is unsupported for this version. [VERSION: " + MINECRAFT.providedVersion +"]");
+                "Method abstraction for MC Client is unsupported for this version. [VERSION: " + MINECRAFT_ABSTRACTION.getMinecraftVersionUtil().providedVersion + "]"
+        );
     }
 
     private static void registerBaseClient() {

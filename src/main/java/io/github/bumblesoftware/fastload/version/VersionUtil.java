@@ -9,27 +9,30 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
-import static io.github.bumblesoftware.fastload.version.VersionHelper.ExceptionStrategy.*;
-import static io.github.bumblesoftware.fastload.version.VersionHelper.MatchingStrategy.EQUALS;
-import static io.github.bumblesoftware.fastload.version.VersionHelper.VersionPackage.*;
 
-public class VersionHelper {
-    public static final GameSpecific MINECRAFT = new GameSpecific(ofFmjVersion("minecraft"), EQUALS, NO_EXCEPTION);
-
+public class VersionUtil {
     public static class GameSpecific {
+        public final String gameId;
         public final String providedVersion;
         public final MatchingStrategy defaultMatchingStrategy;
         public final ExceptionStrategy defaultException;
 
-        GameSpecific(
-                final VersionPackage providedVersion,
+        public GameSpecific(
+                final String gameId,
+                final Function<String ,VersionPackage> providedVersion,
                 final MatchingStrategy defaultMatchingStrategy,
                 final ExceptionStrategy defaultException
         ) {
-            this.providedVersion = providedVersion.getVersion();
+            this.gameId = gameId;
+            this.providedVersion = providedVersion.apply(gameId).getVersion();
             this.defaultMatchingStrategy = defaultMatchingStrategy;
             this.defaultException = defaultException;
 
+        }
+
+        @Override
+        public String toString() {
+            return "VersionHelper.GameSpecific[id=" + gameId +",version= " + providedVersion +"]" + hashCode();
         }
 
         public boolean matchesAny(

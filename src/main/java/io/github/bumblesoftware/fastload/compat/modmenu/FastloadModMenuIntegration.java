@@ -2,11 +2,13 @@ package io.github.bumblesoftware.fastload.compat.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
+import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import net.minecraft.client.gui.screen.Screen;
 
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
 
 public class FastloadModMenuIntegration implements ModMenuApi {
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
     /**
      *  Registers our config screen to modmenu
      */

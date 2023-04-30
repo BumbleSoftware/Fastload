@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.compat.modmenu;
 
+import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.Bound;
@@ -7,9 +8,11 @@ import io.github.bumblesoftware.fastload.util.Bound;
 import java.util.List;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
 
 public final class FLConfigScreenButtons<Option> {
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
+
     private final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
 
     public Option getNewBoolButton(final String identifier) {

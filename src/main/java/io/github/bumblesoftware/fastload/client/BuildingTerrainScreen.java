@@ -1,12 +1,13 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
 import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
 public class BuildingTerrainScreen extends Screen {
@@ -18,6 +19,7 @@ public class BuildingTerrainScreen extends Screen {
     private Integer preparedProgressStorage = 0;
     private Integer buildingProgressStorage = 0;
     private static final int heightUpFromCentre = 50;
+    private static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
     public final int loadingAreaGoal;
     private Runnable runnable;
 

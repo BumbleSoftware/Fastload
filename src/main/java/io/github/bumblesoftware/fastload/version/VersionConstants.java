@@ -1,11 +1,13 @@
 package io.github.bumblesoftware.fastload.version;
 
-import static io.github.bumblesoftware.fastload.version.VersionHelper.MINECRAFT;
-import static io.github.bumblesoftware.fastload.version.VersionHelper.MatchingStrategy.REGEX;
+import io.github.bumblesoftware.fastload.init.FastloadClient;
+
+import static io.github.bumblesoftware.fastload.version.VersionUtil.MatchingStrategy.REGEX;
 
 public class VersionConstants {
     public static void init() {}
 
+    private static final VersionUtil.GameSpecific MINECRAFT = FastloadClient.MINECRAFT_ABSTRACTION.getMinecraftVersionUtil();
     public static final boolean IS_MINECRAFT_1200;
     public static final boolean IS_MINECRAFT_1194;
     public static final boolean IS_MINECRAFT_1192;

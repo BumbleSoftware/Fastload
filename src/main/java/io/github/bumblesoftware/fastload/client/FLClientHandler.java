@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
+import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
@@ -15,7 +16,7 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.ABSTRACTED_CLIENT;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
 
 /**
  * Fastload's client handling, based upon {@link io.github.bumblesoftware.fastload.api.events.CapableEvent
@@ -26,9 +27,9 @@ public final class FLClientHandler {
     public static void init() {
         registerEvents();
     }
+    private static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
 
     private static Screen oldCurrentScreen = null;
-
 
     /**
      * Boolean whether an object of Player has been initialised

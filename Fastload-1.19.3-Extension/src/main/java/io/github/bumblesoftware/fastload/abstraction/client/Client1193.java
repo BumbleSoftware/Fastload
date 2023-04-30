@@ -12,8 +12,8 @@ import net.minecraft.text.Text;
 
 public class Client1193 extends Client119 {
     @Override
-    public String getCompatibleVersions() {
-        return "1.19.3";
+    public String[] getSupportedMinecraftVersions() {
+        return new String[] {"1.19.3"};
     }
 
     @Override
