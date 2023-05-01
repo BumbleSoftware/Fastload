@@ -28,21 +28,21 @@ public abstract class MinecraftServerMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (BOOLEAN_EVENT.isNotEmpty(PREPARE_START_REGION))
-            BOOLEAN_EVENT.fireEvent(List.of(SERVER_TICK), new ObjectHolder<>(shouldKeepTicking.getAsBoolean()));
+            BOOLEAN_EVENT.fire(List.of(SERVER_TICK), new ObjectHolder<>(shouldKeepTicking.getAsBoolean()));
     }
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int modify_prepareStartRegion_chunkCount(int value) {
         final var returnValue = new ObjectHolder<>(441);
         if (INTEGER_EVENT.isNotEmpty(PREPARE_START_REGION))
-            INTEGER_EVENT.fireEvent(List.of(PREPARE_START_REGION), returnValue);
+            INTEGER_EVENT.fire(List.of(PREPARE_START_REGION), returnValue);
         return returnValue.heldObj;
     }
 
     @Redirect(method = "prepareStartRegion", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V"))
     private void handleProgressListener(WorldGenerationProgressListener worldGenerationProgressListener, ChunkPos chunkPos) {
         if (PROGRESS_LISTENER_EVENT.isNotEmpty(PREPARE_START_REGION))
-            PROGRESS_LISTENER_EVENT.fireEvent(
+            PROGRESS_LISTENER_EVENT.fire(
                     new FLCommonEvents.Contexts.ProgressListenerContext(worldGenerationProgressListener, chunkPos)
             );
     }

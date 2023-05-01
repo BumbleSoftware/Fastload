@@ -1,8 +1,9 @@
-package io.github.bumblesoftware.fastload.abstraction.client;
+package io.github.bumblesoftware.fastload.api.internal.abstraction;
 
-import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.tool.ScreenProvider;
-import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.client.ScreenProvider;
+import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.config.DefaultConfig;
@@ -38,7 +39,7 @@ import java.util.function.Function;
 @SuppressWarnings("unchecked")
 public class Client1182 implements AbstractClientCalls {
     @Override
-    public String[] getSupportedMinecraftVersions() {
+    public String[] getSupportedVersions() {
         return new String[] {"1.18.2"};
     }
 

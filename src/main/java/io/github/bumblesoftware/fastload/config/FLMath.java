@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.config;
 
-import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.util.Bound;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;

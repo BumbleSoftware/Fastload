@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.events;
+package io.github.bumblesoftware.fastload.api.external.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
@@ -152,14 +152,14 @@ public interface AbstractEvent<Context> {
      * @param locations All locations to be fired.
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    void fireEvent(final List<String> locations, final Context eventContext);
+    void fire(final List<String> locations, final Context eventContext);
 
     /**
-     * Generic location alternative to {@link AbstractEvent#fireEvent(List, Context)}
+     * Generic location alternative to {@link AbstractEvent#fire(List, Context)}
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    default void fireEvent(final Context eventContext) {
-        fireEvent(GENERIC_LOCATION_LIST, eventContext);
+    default void fire(final Context eventContext) {
+        fire(GENERIC_LOCATION_LIST, eventContext);
     }
 
     /**

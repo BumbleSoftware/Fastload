@@ -7,7 +7,7 @@ import static io.github.bumblesoftware.fastload.version.VersionUtil.MatchingStra
 public class VersionConstants {
     public static void init() {}
 
-    private static final VersionUtil.GameSpecific MINECRAFT = FastloadClient.MINECRAFT_ABSTRACTION.getMinecraftVersionUtil();
+    private static final VersionUtil.GameSpecific MINECRAFT = FastloadClient.MINECRAFT_ABSTRACTION.getVersionUtil();
     public static final boolean IS_MINECRAFT_1200;
     public static final boolean IS_MINECRAFT_1194;
     public static final boolean IS_MINECRAFT_1192;

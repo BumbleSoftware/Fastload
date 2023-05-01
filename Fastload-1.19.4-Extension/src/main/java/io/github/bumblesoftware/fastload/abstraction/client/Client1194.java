@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 public class Client1194 extends Client1193 {
 
     @Override
-    public String[] getSupportedMinecraftVersions() {
+    public String[] getSupportedVersions() {
         return new String[] {"1.19.4, 1.20"};
     }
 

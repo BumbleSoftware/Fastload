@@ -2,8 +2,8 @@ package io.github.bumblesoftware.fastload.abstraction.client;
 
 
 import com.mojang.serialization.Codec;
-import io.github.bumblesoftware.fastload.abstraction.tool.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.abstraction.tool.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.StoreValueFunction;
 import io.github.bumblesoftware.fastload.util.Bound;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.GameOptions;
@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 
 public class Client1193 extends Client119 {
     @Override
-    public String[] getSupportedMinecraftVersions() {
+    public String[] getSupportedVersions() {
         return new String[] {"1.19.3"};
     }
 

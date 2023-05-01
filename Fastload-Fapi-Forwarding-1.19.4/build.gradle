@@ -11,4 +11,5 @@ dependencies {
     minecraft "com.mojang:minecraft:1.19.4"
     mappings "net.fabricmc:yarn:1.19.4+build.${project.yarn_mappings_1194}:v2"
     include(modImplementation(fabricApi.module("fabric-resource-loader-v0", "${project.fapi_1194}+1.19.4")))
+
 }

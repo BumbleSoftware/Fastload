@@ -1,6 +1,7 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
@@ -19,7 +20,7 @@ import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
 
 /**
- * Fastload's client handling, based upon {@link io.github.bumblesoftware.fastload.api.events.CapableEvent
+ * Fastload's client handling, based upon {@link CapableEvent
  * CapableEvent}.
  */
 public final class FLClientHandler {

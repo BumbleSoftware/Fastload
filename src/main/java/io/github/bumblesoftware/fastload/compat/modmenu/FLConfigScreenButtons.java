@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.compat.modmenu;
 
-import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.Bound;

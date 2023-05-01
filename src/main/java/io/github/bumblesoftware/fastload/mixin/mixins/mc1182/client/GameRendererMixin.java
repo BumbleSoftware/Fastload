@@ -17,7 +17,7 @@ public class GameRendererMixin {
     private static int delayWorldIcon(int constant) {
         final var returnValue = new ObjectHolder<>(constant);
         if (INTEGER_EVENT.isNotEmpty(WORLD_ICON))
-            INTEGER_EVENT.fireEvent(List.of(WORLD_ICON), returnValue);
+            INTEGER_EVENT.fire(List.of(WORLD_ICON), returnValue);
         return returnValue.heldObj;
     }
 }

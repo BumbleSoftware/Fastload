@@ -9,4 +9,8 @@ public final class ObjectHolder<Type> {
     public ObjectHolder(Type heldObj) {
         this.heldObj = heldObj;
     }
+
+    public ObjectHolder() {
+        this(null);
+    }
 }

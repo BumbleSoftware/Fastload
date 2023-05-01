@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.events;
+package io.github.bumblesoftware.fastload.api.external.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -165,7 +165,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void fireEvent(final List<String> locations, final Context eventContext) {
+    public void fire(final List<String> locations, final Context eventContext) {
         for (final var string : locations) {
             final var add = eventsToAdd.get(string);
             final var all = allEvents.get(string);
