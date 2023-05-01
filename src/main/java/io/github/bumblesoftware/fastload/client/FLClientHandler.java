@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;

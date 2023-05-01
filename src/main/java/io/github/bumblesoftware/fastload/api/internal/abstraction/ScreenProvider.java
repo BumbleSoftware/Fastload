@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.client;
+package io.github.bumblesoftware.fastload.api.internal.abstraction;
 
 import net.minecraft.client.gui.screen.Screen;
 

@@ -1,6 +1,5 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.management;
+package io.github.bumblesoftware.fastload.api.external.abstraction.core;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractionApi;
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
 

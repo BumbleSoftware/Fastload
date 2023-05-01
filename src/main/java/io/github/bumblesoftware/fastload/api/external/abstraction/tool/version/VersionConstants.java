@@ -1,8 +1,8 @@
-package io.github.bumblesoftware.fastload.version;
+package io.github.bumblesoftware.fastload.api.external.abstraction.tool.version;
 
 import io.github.bumblesoftware.fastload.init.FastloadClient;
 
-import static io.github.bumblesoftware.fastload.version.VersionUtil.MatchingStrategy.REGEX;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionUtil.MatchingStrategy.REGEX;
 
 public class VersionConstants {
     public static void init() {}

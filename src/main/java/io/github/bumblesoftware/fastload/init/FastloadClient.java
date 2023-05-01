@@ -1,36 +1,39 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractionManagerImpl;
-import io.github.bumblesoftware.fastload.api.external.abstraction.management.AbstractionHandler;
-import io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.AbstractionManager;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.AbstractionDirectory;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.AbstractionHandler;
+import io.github.bumblesoftware.fastload.api.external.abstraction.def.MinecraftAbstractionDirectoryManager;
+import io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionConstants;
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.FLConfig;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
-import io.github.bumblesoftware.fastload.version.VersionConstants;
 import net.fabricmc.api.ClientModInitializer;
 
 import java.util.List;
 
+import static io.github.bumblesoftware.fastload.api.external.abstraction.core.AbstractionFactory.create;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.core.AbstractionHandler.Environment.CLIENT;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionConstants.IS_MINECRAFT_1182;
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1182;
 
 public class FastloadClient implements ClientModInitializer {
     public static final AbstractEvent<ClientAbstractionContext> CLIENT_ABSTRACTION_EVENT;
-    public static final AbstractionManager<AbstractClientCalls> MINECRAFT_ABSTRACTION;
+    public static final AbstractionDirectory<AbstractClientCalls> MINECRAFT_ABSTRACTION;
     public static final AbstractionHandler<AbstractClientCalls> MINECRAFT_ABSTRACTION_HANDLER;
 
     static {
         VersionConstants.init();
-        MINECRAFT_ABSTRACTION_HANDLER = new AbstractionHandler<>(
+        MINECRAFT_ABSTRACTION_HANDLER = create(
                 List.of(""),
+                CLIENT,
                 event -> event.registerThreadUnsafe(0,
                         eventInstance -> event.stableArgs((eventContext, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
@@ -43,7 +46,7 @@ public class FastloadClient implements ClientModInitializer {
         );
         CLIENT_ABSTRACTION_EVENT = new CapableEvent<>();
         registerBaseClient();
-        MINECRAFT_ABSTRACTION = new AbstractionManagerImpl<>(getAbstractedClient());
+        MINECRAFT_ABSTRACTION = new MinecraftAbstractionDirectoryManager<>(getAbstractedClient());
         FLConfig.init();
         FLClientEvents.init();
         FLClientHandler.init();

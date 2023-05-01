@@ -1,8 +1,6 @@
 package io.github.bumblesoftware.fastload.api.internal.abstraction;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.api.external.abstraction.client.ScreenProvider;
 import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;

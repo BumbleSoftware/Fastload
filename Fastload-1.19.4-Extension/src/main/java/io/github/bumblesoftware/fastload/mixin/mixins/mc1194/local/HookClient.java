@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static io.github.bumblesoftware.fastload.init.FastloadClient.CLIENT_ABSTRACTION_EVENT;
-import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1194;
-import static io.github.bumblesoftware.fastload.version.VersionConstants.IS_MINECRAFT_1200;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionConstants.IS_MINECRAFT_1194;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionConstants.IS_MINECRAFT_1200;
 
 @Mixin(FastloadClient.class)
 public class HookClient {
