@@ -1,22 +1,19 @@
 package io.github.bumblesoftware.fastload.config;
 
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.util.Bound;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLConfig.*;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 
 public class FLMath {
-    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
-
     public static double getCircleArea(final int radius) {
         return Math.PI * radius * radius;
     }
     private static int parseRenderChunkRadius(final int rawRadius, final Bound bound) {
         return bound.minMax(
                 rawRadius,
-                integer -> Math.min(integer, ABSTRACTED_CLIENT.getViewDistance()),
+                integer -> Math.min(integer, MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries().getViewDistance()),
                 integer -> integer
         );
     }

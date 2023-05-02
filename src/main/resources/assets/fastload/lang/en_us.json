@@ -1,6 +1,6 @@
 {
-  "fastload.screen.buildingTerrain.building": "Building Visible Chunks",
-  "fastload.screen.buildingTerrain.preparing": "Preparing All Chunks",
+  "fastload.screen.buildingTerrain.building": "Building Client Chunks",
+  "fastload.screen.buildingTerrain.preparing": "Generating Server Chunks",
   "fastload.buildingTerrain.starting": "Starting Session",
   "fastload.screen.buildingTerrain.template": "Completed / Goal",
 

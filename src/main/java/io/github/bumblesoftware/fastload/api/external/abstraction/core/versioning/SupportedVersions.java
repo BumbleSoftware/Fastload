@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.tool.version;
+package io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning;
 
 import java.util.Arrays;
 

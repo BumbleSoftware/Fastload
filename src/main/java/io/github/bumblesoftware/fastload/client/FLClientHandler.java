@@ -17,7 +17,7 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 
 /**
  * Fastload's client handling, based upon {@link CapableEvent
@@ -28,7 +28,7 @@ public final class FLClientHandler {
     public static void init() {
         registerEvents();
     }
-    private static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
 
     private static Screen oldCurrentScreen = null;
 

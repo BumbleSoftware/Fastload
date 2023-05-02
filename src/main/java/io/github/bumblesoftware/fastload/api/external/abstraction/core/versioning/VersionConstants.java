@@ -1,13 +1,13 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.tool.version;
+package io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning;
 
-import io.github.bumblesoftware.fastload.init.FastloadClient;
+import io.github.bumblesoftware.fastload.api.external.abstraction.def.VersionUtils;
 
-import static io.github.bumblesoftware.fastload.api.external.abstraction.tool.version.VersionUtil.MatchingStrategy.REGEX;
+import static io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionUtil.MatchingStrategy.REGEX;
 
 public class VersionConstants {
     public static void init() {}
 
-    private static final VersionUtil.GameSpecific MINECRAFT = FastloadClient.MINECRAFT_ABSTRACTION.getVersionUtil();
+    private static final VersionUtil.GameSpecific MINECRAFT = VersionUtils.MINECRAFT;
     public static final boolean IS_MINECRAFT_1200;
     public static final boolean IS_MINECRAFT_1194;
     public static final boolean IS_MINECRAFT_1192;

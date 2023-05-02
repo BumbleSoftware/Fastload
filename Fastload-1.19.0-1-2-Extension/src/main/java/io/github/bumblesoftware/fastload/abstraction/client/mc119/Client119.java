@@ -1,35 +1,66 @@
-package io.github.bumblesoftware.fastload.abstraction.client;
-
+package io.github.bumblesoftware.fastload.abstraction.client.mc119;
 
 import com.mojang.serialization.Codec;
-import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.config.DefaultConfig;
+import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.option.SimpleOptionsScreen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 
-public class Client1193 extends Client119 {
+import java.util.function.Function;
+
+public class Client119 extends Client1182 {
     @Override
     public String[] getSupportedVersions() {
-        return new String[] {"1.19.3"};
+        return new String[] {"1.19", "1.19.1", "1.19.2"};
     }
 
     @Override
-    public ButtonWidget getNewButton(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final Text message,
-            final ButtonWidget.PressAction onPress
-    ) {
-        return ButtonWidget.builder(message, onPress)
-                .dimensions(x, y, width, height)
-                .build();
+    public int getViewDistance() {
+        if (getClientInstance().options == null) {
+            return DefaultConfig.LOCAL_CHUNK_RADIUS_BOUND.max();
+        } else return getClientInstance().options.getClampedViewDistance();
     }
 
+    @Override
+    public <T> Screen newConfigScreen(
+            final Screen parent,
+            GameOptions gameOptions,
+            final Text title,
+            Function<Object[], T[]> options,
+            Action config
+    ) {
+        final var main = this;
+        return new SimpleOptionsScreen(
+                parent,
+                gameOptions,
+                title,
+                (SimpleOption<?>[]) options.apply(new SimpleOption[]{})
+        ) {
+            @Override
+            protected void initFooter() {
+                main.initFooter(this, parent, config);
+            }
+        };
+    }
+
+    @Override
+    public Text newTranslatableText(final String content) {
+        return Text.translatable(content);
+    }
+
+    @Override
+    public Text newLiteralText(final String content) {
+        return Text.literal(content);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public SimpleOption<Boolean> newCyclingButton(
             final String namespace,
@@ -45,6 +76,7 @@ public class Client1193 extends Client119 {
         );
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public SimpleOption<Integer> newSlider(
             final String namespace,
@@ -63,7 +95,8 @@ public class Client1193 extends Client119 {
                     if (value.equals(min)) {
                         return GameOptions.getGenericValueText(optionText, Text.translatable(namespace + identifier + ".min"));
                     } else if (value.equals(max)) {
-                        return GameOptions.getGenericValueText(optionText, Text.translatable(namespace + identifier + ".max"));
+                        return GameOptions.getGenericValueText(optionText,
+                                Text.translatable(namespace + identifier + ".max"));
                     } else {
                         return GameOptions.getGenericValueText(optionText, value);
                     }
@@ -73,5 +106,10 @@ public class Client1193 extends Client119 {
                 Integer.parseInt(retrieveValueFunction.getValue(identifier)),
                 value -> storeValueFunction.setValue(identifier, Integer.toString(value))
         );
+    }
+
+    @Override
+    public boolean isWindowFocused() {
+        return getClientInstance().isWindowFocused();
     }
 }

@@ -8,10 +8,10 @@ import io.github.bumblesoftware.fastload.util.Bound;
 import java.util.List;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 
 public final class FLConfigScreenButtons<Option> {
-    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
 
     private final String NAMESPACE_BUTTON = Fastload.NAMESPACE.toLowerCase() + ".button.";
 

@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.api.internal.abstraction;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.AbstractionApi;
-import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.api.external.abstraction.tool.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.MethodAbstractionApi;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.StoreValueFunction;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
@@ -25,7 +25,7 @@ import java.util.function.Function;
  * compat.
  */
 @SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
-public interface AbstractClientCalls extends AbstractionApi {
+public interface AbstractClientCalls extends MethodAbstractionApi {
 
     MinecraftClient getClientInstance();
     ClientWorld getClientWorld();
