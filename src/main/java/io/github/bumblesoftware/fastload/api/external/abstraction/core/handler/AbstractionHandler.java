@@ -2,7 +2,6 @@ package io.github.bumblesoftware.fastload.api.external.abstraction.core.handler;
 
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
-import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.ObjectHolder;
 
 import java.util.Arrays;
@@ -13,13 +12,13 @@ import java.util.function.Function;
 import static net.fabricmc.loader.api.FabricLoader.getInstance;
 
 public class AbstractionHandler<A extends MethodAbstractionApi> {
-    private static final String NAMESPACE = Fastload.NAMESPACE;
     public final AbstractionDirectory<A> directory;
     public final List<String> abstractionModIds;
     public final Environment environment;
     public final String entrypointName;
 
     AbstractionHandler(
+            final String namespace,
             final List<String> abstractionModIds,
             final Environment environment,
             final Consumer<AbstractEvent<ObjectHolder<A>>> base,
@@ -27,7 +26,7 @@ public class AbstractionHandler<A extends MethodAbstractionApi> {
     ) {
         final AbstractEvent<ObjectHolder<A>> event = new CapableEvent<>();
         final ObjectHolder<A> abstractionApiHolder = new ObjectHolder<>();
-        final String entrypointName = NAMESPACE.toLowerCase() + "_" + environment.name().toLowerCase();
+        final String entrypointName = namespace.toLowerCase() + "_" + environment.name().toLowerCase();
 
         base.accept(event);
         getInstance().getEntrypointContainers(entrypointName, AbstractionEntrypoint.class)

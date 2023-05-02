@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.abstraction.client.mc119;
 
 import com.mojang.serialization.Codec;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
 import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.RetrieveValueFunction;
 import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
 import io.github.bumblesoftware.fastload.config.DefaultConfig;
 import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;
@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import java.util.function.Function;
 
 public class Client119 extends Client1182 {
+
     @Override
     public String[] getSupportedVersions() {
         return new String[] {"1.19", "1.19.1", "1.19.2"};

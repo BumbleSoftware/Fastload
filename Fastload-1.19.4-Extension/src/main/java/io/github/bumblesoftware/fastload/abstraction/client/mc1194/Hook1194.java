@@ -18,8 +18,7 @@ public class Hook1194 implements AbstractionEntrypoint {
                     if (IS_MINECRAFT_1194 || IS_MINECRAFT_1200) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.19.4 Hook!");
-                        //noinspection unchecked
-                        eventContext.heldObj = (A) new Client1194();
+                        eventContext.heldObj = new Client1194().generify();
                     }
                 })
         );

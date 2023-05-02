@@ -11,19 +11,21 @@ import java.util.function.Function;
 
 public class AbstractionFactory {
     public static <A extends MethodAbstractionApi> AbstractionHandler<A> create(
+            final String namespace,
             final List<String> abstractionModIds,
             final Environment common,
             final Consumer<AbstractEvent<ObjectHolder<A>>> base,
             final Function<A, AbstractionDirectory<A>> abstractionInstanceGetter
     )  {
-        return new AbstractionHandler<>(abstractionModIds, common, base, abstractionInstanceGetter);
+        return new AbstractionHandler<>(namespace, abstractionModIds, common, base, abstractionInstanceGetter);
     }
 
     public static <A extends MethodAbstractionApi> AbstractionHandler<A> create(
+            final String namespace,
             final List<String> abstractionModIds,
             final Environment common,
             final Consumer<AbstractEvent<ObjectHolder<A>>> base
     ) {
-        return new AbstractionHandler<>(abstractionModIds, common, base, MinecraftAbstraction::new);
+        return new AbstractionHandler<>(namespace, abstractionModIds, common, base, MinecraftAbstraction::new);
     }
 }

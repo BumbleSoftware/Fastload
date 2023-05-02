@@ -17,8 +17,7 @@ public class Hook119 implements AbstractionEntrypoint {
                     if (IS_MINECRAFT_1190 || IS_MINECRAFT_1191 || IS_MINECRAFT_1192) {
                         if (FLMath.isDebugEnabled())
                             Fastload.LOGGER.info("Fastload 1.19.0-1-2 Hook!");
-                        //noinspection unchecked
-                        eventContext.heldObj = (A) new Client119();
+                        eventContext.heldObj = new Client119().generify();
                     }
                 })
         );
