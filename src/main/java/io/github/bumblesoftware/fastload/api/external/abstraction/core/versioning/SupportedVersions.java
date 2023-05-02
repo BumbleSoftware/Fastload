@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public interface SupportedVersions {
     String[] getSupportedVersions();
-    default String getSupportedMinecraftVersionsNonArray() {
+    default String getSupportedVersionsNonArray() {
         return Arrays.toString(getSupportedVersions());
     }
 }

@@ -17,7 +17,7 @@
   "icon": "assets/fastload/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client" : [
+    "fastload_client" : [
       "io.github.bumblesoftware.fastload.abstraction.client.mc119.Hook119"
     ]
   },

@@ -42,7 +42,7 @@ public class FastloadClient implements ClientModInitializer {
         FLClientHandler.init();
 
         LOGGER.info("Fastload Perceived Version: " + MINECRAFT_ABSTRACTION_HANDLER.directory.getVersion());
-        LOGGER.info("Fastload Abstraction Supported Versions: " + MINECRAFT_ABSTRACTION_HANDLER.directory.getSupportedMinecraftVersionsNonArray());
+        LOGGER.info("Fastload Abstraction Supported Versions: " + MINECRAFT_ABSTRACTION_HANDLER.directory.getSupportedVersionsNonArray());
         LOGGER.info(logKey(DEBUG_KEY) + isDebugEnabled().toString().toUpperCase());
         LOGGER.info(logKey(CHUNK_TRY_LIMIT_KEY) + getChunkTryLimit());
         LOGGER.info(logKey(LOCAL_RENDER_RADIUS_KEY) + getLocalRenderChunkRadius());
