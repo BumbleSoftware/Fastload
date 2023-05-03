@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.AbstractionHandler;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionConstants;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
+import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants;
+import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.Client1182;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.FLConfig;
@@ -12,9 +12,9 @@ import net.fabricmc.api.ClientModInitializer;
 
 import java.util.List;
 
-import static io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.AbstractionFactory.create;
-import static io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.AbstractionHandler.Environment.CLIENT;
-import static io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionConstants.IS_MINECRAFT_1182;
+import static io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionFactory.create;
+import static io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler.Environment.CLIENT;
+import static io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants.IS_MINECRAFT_1182;
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
@@ -30,13 +30,13 @@ public class FastloadClient implements ClientModInitializer {
                 List.of("fastload-119-0-1-2-compat", "fastload-1193-compat", "fastload-1194-compat"),
                 CLIENT,
                 event -> event.registerThreadUnsafe(0,
-                        eventInstance -> event.stableArgs((eventContext, eventArgs) -> {
+                        (eventContext, event1, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
                                 if (FLMath.isDebugEnabled())
                                     LOGGER.info("Fastload 1.18.2 Base!");
                                 eventContext.heldObj = new Client1182();
                             }
-                        })
+                        }
                 )
         );
         FLConfig.init();

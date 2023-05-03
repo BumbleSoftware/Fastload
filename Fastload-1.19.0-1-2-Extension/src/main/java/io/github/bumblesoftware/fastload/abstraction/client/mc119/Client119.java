@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.abstraction.client.mc119;
 
 import com.mojang.serialization.Codec;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.StoreValueFunction;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.Client1182;
+import io.github.bumblesoftware.fastload.api.abstraction.core.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.abstraction.core.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.abstraction.Client1182;
 import io.github.bumblesoftware.fastload.config.DefaultConfig;
 import io.github.bumblesoftware.fastload.util.Action;
 import io.github.bumblesoftware.fastload.util.Bound;

@@ -1,8 +1,8 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.handler;
+package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.SupportedVersions;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionProvider;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionUtil.GameSpecific;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.SupportedVersions;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionProvider;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil.GameSpecific;
 
 public interface AbstractionDirectory<T extends MethodAbstractionApi> extends VersionProvider, SupportedVersions {
     @Override

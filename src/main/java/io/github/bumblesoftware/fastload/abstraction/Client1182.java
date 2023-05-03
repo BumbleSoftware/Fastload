@@ -1,7 +1,7 @@
-package io.github.bumblesoftware.fastload.api.internal.abstraction;
+package io.github.bumblesoftware.fastload.abstraction;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.RetrieveValueFunction;
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.config.StoreValueFunction;
+import io.github.bumblesoftware.fastload.api.abstraction.core.config.RetrieveValueFunction;
+import io.github.bumblesoftware.fastload.api.abstraction.core.config.StoreValueFunction;
 import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.config.DefaultConfig;

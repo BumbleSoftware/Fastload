@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.events;
+package io.github.bumblesoftware.fastload.api.events;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -40,12 +40,12 @@ public class EmptyEvent<T> implements AbstractEvent<T> {
     }
 
     @Override
-    public void registerThreadsafe(long priority, List<String> locations, ArgsProvider<T> argsProvider) {
+    public void registerThreadsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {
 
     }
 
     @Override
-    public void registerThreadUnsafe(long priority, List<String> locations, ArgsProvider<T> argsProvider) {
+    public void registerThreadUnsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {
 
     }
 

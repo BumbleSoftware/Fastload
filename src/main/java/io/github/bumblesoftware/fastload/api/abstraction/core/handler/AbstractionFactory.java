@@ -1,8 +1,8 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.handler;
+package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.AbstractionHandler.Environment;
-import io.github.bumblesoftware.fastload.api.external.abstraction.def.MinecraftAbstraction;
-import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler.Environment;
+import io.github.bumblesoftware.fastload.api.abstraction.def.MinecraftAbstraction;
+import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.handler;
+package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.SupportedVersions;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.SupportedVersions;
 
 public interface MethodAbstractionApi extends SupportedVersions {
     /**

@@ -24,12 +24,12 @@ public final class TickTimer {
      */
     public TickTimer(final String location) {
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(location),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;
                         if (isDebugEnabled()) Fastload.LOGGER.info(String.valueOf(remainingTime));
                     }
-                })
+                }
         );
     }
 

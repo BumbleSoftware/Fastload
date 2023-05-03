@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
@@ -125,21 +125,21 @@ public final class FLClientHandler {
      */
     private static void registerEvents() {
         EMPTY_EVENT.registerThreadUnsafe(1, List.of(CLIENT_PLAYER_INIT),
-                 event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (isDebugEnabled()) Fastload.LOGGER.info("shouldLoad = true");
                     playerReady = true;
-                })
+                }
         );
 
         PLAYER_JOIN_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (isDebugEnabled()) Fastload.LOGGER.info("playerJoined = true");
                     playerJoined = true;
-                })
+                }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (
                             CLIENT_TIMER.isReady() &&
                             ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
@@ -148,21 +148,21 @@ public final class FLClientHandler {
                         if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
                         eventContext.ci().cancel();
                     }
-                })
+                }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
                         if (isDebugEnabled())
                             log("setScreen(new BuildingTerrainScreen)");
                     }
-                })
+                }
         );
 
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
                         if (isDebugEnabled())
                             log("setScreen(new DownloadingTerrainScreen)");
@@ -174,11 +174,11 @@ public final class FLClientHandler {
                             CLIENT_TIMER.setTime(20);
                         }
                     }
-                })
+                }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS_441_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     final var isPreRenderEnabled = isLocalRenderEnabled();
                     if (isDebugEnabled()) {
                         LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
@@ -192,11 +192,11 @@ public final class FLClientHandler {
                             LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
                         }
                     } else ABSTRACTED_CLIENT.setScreen(new DownloadingTerrainScreen());
-                })
+                }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(DTS_GAME_JOIN_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isSingleplayer()) {
                         if (!isLocalRenderEnabled())
                             ABSTRACTED_CLIENT.setScreen(eventContext.screen());
@@ -209,20 +209,20 @@ public final class FLClientHandler {
                             else ABSTRACTED_CLIENT.setScreen(eventContext.screen());
                         }
                     }
-                })
+                }
         );
 
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(RESPAWN_DTS_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (isInstantLoadEnabled())
                         ABSTRACTED_CLIENT.setScreen(null);
                     else ABSTRACTED_CLIENT.setScreen(eventContext.screen());
-                })
+                }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isSingleplayer()) {
                         if (isLocalRenderEnabled()) {
                             ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
@@ -230,20 +230,20 @@ public final class FLClientHandler {
                     } else if (isServerRenderEnabled()) {
                         ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
                     } else ABSTRACTED_CLIENT.reset(eventContext.screen());
-                })
+                }
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext, event, eventArgs) -> {
                     eventContext.heldObj = true;
                     if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
                             "DownloadingTerrainScreen set to close on next render tick."
                     );
-                })
+                }
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+               (eventContext, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
                         if (ABSTRACTED_CLIENT.getClientWorld() != null) {
                             final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
@@ -308,11 +308,11 @@ public final class FLClientHandler {
                             }
                         }
                     }
-                })
+                }
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext, event, eventArgs) -> {
                     if (isDebugEnabled()) {
                         ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
                             if (oldCurrentScreen != screen) {
@@ -322,40 +322,38 @@ public final class FLClientHandler {
                             return false;
                         });
                     }
-                })
+                }
         );
 
         SERVER_EVENT.registerThreadUnsafe(1, List.of(SERVER_PSR_LOADING_REDIRECT),
-                event -> event.stableArgs((eventContext, eventArgs) ->
-                        eventContext.returnValue().heldObj = true
-                )
+                (eventContext,event, eventArgs) -> eventContext.returnValue().heldObj = true
         );
 
         RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     final var client = ABSTRACTED_CLIENT.getClientInstance();
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
                         ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).setClose(() ->
                                 client.execute(eventContext.heldObj));
                     else client.execute(eventContext.heldObj);
-                })
+                }
         );
 
         BOX_BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(FRUSTUM_BOX_BOOL),
-                event -> BOX_BOOLEAN_EVENT.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) ||
                             ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isDownloadingTerrainScreen)
                     )
                         eventContext.cir().setReturnValue(true);
-                })
+                }
         );
 
         INTEGER_EVENT.registerThreadUnsafe(1, List.of(WORLD_ICON),
-                event -> event.stableArgs((eventContext, eventArgs) -> {
+                (eventContext,event, eventArgs) -> {
                     eventContext.heldObj = 100;
                     if (FLMath.isDebugEnabled())
                         Fastload.LOGGER.info("worldIcon time prolonged");
-                })
+                }
         );
     }
 }

@@ -1,8 +1,6 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning;
+package io.github.bumblesoftware.fastload.api.abstraction.core.versioning;
 
-import io.github.bumblesoftware.fastload.api.external.abstraction.def.VersionUtils;
-
-import static io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionUtil.MatchingStrategy.REGEX;
+import io.github.bumblesoftware.fastload.api.abstraction.def.VersionUtils;
 
 public class VersionConstants {
     public static void init() {}
@@ -18,7 +16,7 @@ public class VersionConstants {
 
 
     static {
-        IS_MINECRAFT_1200 = MINECRAFT.matchesAny("1.20", REGEX);
+        IS_MINECRAFT_1200 = MINECRAFT.matchesAny("1.20", VersionUtil.MatchingStrategy.REGEX);
         IS_MINECRAFT_1194 = MINECRAFT.matchesAny( "1.19.4");
         IS_MINECRAFT_1193 = MINECRAFT.matchesAny( "1.19.3");
         IS_MINECRAFT_1192 = MINECRAFT.matchesAny( "1.19.2");

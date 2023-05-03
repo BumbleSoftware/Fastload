@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.events;
+package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -111,12 +111,11 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     public void registerThreadsafe(
             final long priority,
             final List<String> locations,
-            final ArgsProvider<Context> argsProvider
+            final EventArgs<Context> eventArgs
     ) {
         for (final var location : locations) {
             eventsToAdd.putIfAbsent(location, getNewHolder());
             final var holder = eventsToAdd.get(location);
-            final var eventArgs = argsProvider.getEvent(this);
 
             if (!holder.priorityHolder().contains(priority))
                 holder.priorityHolder().add(priority);
@@ -133,15 +132,13 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     public void registerThreadUnsafe(
             final long priority,
             final List<String> locations,
-            final ArgsProvider<Context> argsProvider
+            final EventArgs<Context> eventArgs
     ) {
         for (final var location : locations) {
             allEvents.putIfAbsent(location, getNewHolder());
             final EventHolder<Context> holder = allEvents.get(location);
             final var priHol = holder.priorityHolder();
             final var argHol = holder.argsHolder();
-            final var eventArgs = argsProvider.getEvent(this);
-
 
             if (!locationList.contains(location))
                 locationList.add(location);
@@ -176,7 +173,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
                 order = this.order.reversed();
             else order = this.order;
 
-            iterate(add, (priority, eventArgs) -> registerThreadUnsafe(priority, event -> eventArgs));
+            iterate(add, this::registerThreadUnsafe);
             all.priorityHolder().sort(order);
             iterate(all, (priority, eventArgs) -> eventArgs.recursive(eventContext, this, 0, eventArgs));
             iterate(remove, this::removeThreadUnsafe);

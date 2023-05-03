@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.common;
 
-import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;

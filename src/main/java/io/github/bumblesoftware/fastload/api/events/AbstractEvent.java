@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.events;
+package io.github.bumblesoftware.fastload.api.events;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
@@ -18,10 +18,10 @@ public interface AbstractEvent<Context> {
     String GENERIC_LOCATION = "generic";
     List<String> GENERIC_LOCATION_LIST = List.of(GENERIC_LOCATION);
 
-    default EventArgs<Context> stableArgs(StableEventArgs<Context> eventArgs) {
-        return eventArgs;
-    }
-
+    /**
+     * Checks to see whether this event is empty and has no actions that are currently registered.
+     * @return whether there are any active actions.
+     */
     default boolean isNotEmpty() {
         for (final var location : getLocationList())
             if (isNotEmpty(location))
@@ -29,6 +29,11 @@ public interface AbstractEvent<Context> {
         return false;
     }
 
+    /**
+     * Checks to see whether this event location is empty and has no actions that are currently registered.
+     * @param locations a location (or subbranch) for this event to check.
+     * @return whether there are any active actions in this location.
+     */
     default boolean isNotEmpty(final String... locations) {
         for (final var location : locations) {
             final var eventHolder = getStorage().get(location);
@@ -93,7 +98,6 @@ public interface AbstractEvent<Context> {
         removeThreadSafe(priority, GENERIC_LOCATION_LIST, eventArgs);
     }
 
-
     /**
      * Thread unsafe method of removing events. It's faster but will cause CME's if you aren't careful.
      * @param eventArgs The args that will be called when event fires.
@@ -117,40 +121,84 @@ public interface AbstractEvent<Context> {
     }
 
     /**
-     * Registers a lambda to a map. A thread safe alternative to {@link #registerThreadUnsafe(long, List, ArgsProvider)},
+     * Registers a lambda to a map. A thread safe alternative to {@link #registerThreadUnsafe(long, List, EventArgs)},
      * at the expense of speed & efficiency.
-     * @param argsProvider Args that are to be called upon the eventArgs getting fired.
+     * @param eventArgs The args that will be called when event fires.
      * @param locations All locations that this eventArg should be registered to.
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
     @SuppressWarnings("unused")
-    void registerThreadsafe(final long priority, final List<String> locations, final ArgsProvider<Context> argsProvider);
+    void registerThreadsafe(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
 
     /**
-     * Generic location alternative to {@link AbstractEvent#registerThreadsafe(long, List, ArgsProvider)}
-     * @param argsProvider Args that are to be called upon the eventArgs getting fired.
+     * StableEventArgs alternative to {@link AbstractEvent#registerThreadsafe(long, List, EventArgs)}.
+     * @param eventArgs The args that will be called when event fires.
+     * @param locations All locations that this eventArg should be registered to.
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
     @SuppressWarnings("unused")
-    default void registerThreadsafe(final long priority, final ArgsProvider<Context> argsProvider) {
-        registerThreadsafe(priority, GENERIC_LOCATION_LIST, argsProvider);
+    default void registerThreadsafe(
+            final long priority,
+            final List<String> locations,
+            final StableEventArgs<Context> eventArgs
+    ) {
+        registerThreadsafe(priority, locations, eventArgs.upcast());
+    }
+
+    /**
+     * Generic location alternative to {@link AbstractEvent#registerThreadsafe(long, List, EventArgs)}.
+     * @param eventArgs The args that will be called when event fires.
+     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     */
+    @SuppressWarnings("unused")
+    default void registerThreadsafe(final long priority, final EventArgs<Context> eventArgs) {
+        registerThreadsafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    }
+
+    /**
+     * StableEventArgs alternative to {@link AbstractEvent#registerThreadsafe(long, EventArgs)}.
+     * @param eventArgs The args that will be called when event fires.
+     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     */
+    @SuppressWarnings("unused")
+    default void registerThreadsafe(final long priority, final StableEventArgs<Context> eventArgs) {
+        registerThreadsafe(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
     }
 
     /**
      * Registers a lambda to a map. It's not thread safe so do it at startup to avoid CME's.
-     * @param argsProvider Args that are to be called upon the eventArgs getting fired.
+     * @param eventArgs The args that will be called when event fires.
      * @param locations All locations that this eventArg should be registered to.
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
-    void registerThreadUnsafe(final long priority, final List<String> locations, final ArgsProvider<Context> argsProvider);
+    void registerThreadUnsafe(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
 
     /**
-     * Generic location alternative to {@link AbstractEvent#registerThreadUnsafe(long, List, ArgsProvider)}
-     * @param argsProvider Args that are to be called upon the eventArgs getting fired.
+     * StableEventArgs alternative to {@link AbstractEvent#registerThreadUnsafe(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event fires.
      * @param priority Holds the value for the priority value, which correlates with when it's fired.
      */
-    default void registerThreadUnsafe(final long priority, final ArgsProvider<Context> argsProvider) {
-        registerThreadUnsafe(priority, GENERIC_LOCATION_LIST, argsProvider);
+    @SuppressWarnings("unused")
+    default void registerThreadUnsafe(final long priority, final List<String> locations, final StableEventArgs<Context> eventArgs) {
+        registerThreadUnsafe(priority, locations, eventArgs.upcast());
+    }
+
+    /**
+     * Generic location alternative to {@link AbstractEvent#registerThreadUnsafe(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event fires.
+     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     */
+    default void registerThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
+        registerThreadUnsafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    }
+
+    /**
+     * StableEventArgs alternative to {@link AbstractEvent#registerThreadUnsafe(long, EventArgs)}
+     * @param eventArgs The args that will be called when event fires.
+     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     */
+    default void registerThreadUnsafe(final long priority, final StableEventArgs<Context> eventArgs) {
+        registerThreadUnsafe(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
     }
 
     /**
@@ -227,6 +275,10 @@ public interface AbstractEvent<Context> {
     @FunctionalInterface
     interface StableEventArgs<Ctx> extends EventArgs<Ctx> {
 
+        default EventArgs<Ctx> upcast() {
+            return this;
+        }
+
         /**
          * @param eventContext The events params.
          * @param event The event instance for managerial purposes.
@@ -241,7 +293,7 @@ public interface AbstractEvent<Context> {
                 final Object closer,
                 final EventArgs<Ctx> eventArgs
         ) {
-            stable(eventContext, eventArgs);
+            stable(eventContext, event, eventArgs);
             return null;
         }
         /**
@@ -250,12 +302,8 @@ public interface AbstractEvent<Context> {
          */
         void stable(
                 final Ctx eventContext,
+                final AbstractEvent<Ctx> event,
                 final EventArgs<Ctx> eventArgs
         );
-    }
-
-    @FunctionalInterface
-    interface ArgsProvider<Ctx> {
-        EventArgs<Ctx> getEvent(final AbstractEvent<Ctx> event);
     }
 }

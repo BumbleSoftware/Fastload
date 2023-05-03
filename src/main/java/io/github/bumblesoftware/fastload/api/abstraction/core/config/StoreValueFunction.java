@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.config;
+package io.github.bumblesoftware.fastload.api.abstraction.core.config;
 
 public interface StoreValueFunction {
     void setValue(String key, String value);

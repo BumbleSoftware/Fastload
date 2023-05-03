@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.compat.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
 import net.minecraft.client.gui.screen.Screen;
 
 import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;

@@ -12,11 +12,11 @@ public class FLCommonHandler {
 
     static {
         INTEGER_EVENT.registerThreadUnsafe(1, List.of(PREPARE_START_REGION),
-                event -> event.stableArgs((eventContext, eventArgs) -> eventContext.heldObj = 1)
+                (eventContext,event, eventArgs) -> eventContext.heldObj = 1
         );
 
         PROGRESS_LISTENER_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> eventContext.progressListener().stop())
+                (eventContext,event, eventArgs) -> eventContext.progressListener().stop()
         );
     }
 }

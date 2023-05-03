@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;

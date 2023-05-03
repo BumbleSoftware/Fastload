@@ -1,4 +1,4 @@
-package io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning;
+package io.github.bumblesoftware.fastload.api.abstraction.core.versioning;
 
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.fabricmc.loader.api.FabricLoader;
