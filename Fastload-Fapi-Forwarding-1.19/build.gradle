@@ -9,6 +9,6 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:1.19"
-    mappings "net.fabricmc:yarn:1.19+build.${project.yarn_mappings_119}:v2"
-    include(modImplementation(fabricApi.module("fabric-resource-loader-v0", "${project.fapi_119}+1.19")))
+    mappings "net.fabricmc:yarn:1.19+build.${project.yarn_mappings_1190}:v2"
+    include(modImplementation(fabricApi.module("fabric-resource-loader-v0", "${project.fapi_1190}+1.19")))
 }

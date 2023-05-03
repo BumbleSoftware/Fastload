@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,18 +16,20 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.*;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
-import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 
 /**
- * Fastload's client handling, based upon {@link io.github.bumblesoftware.fastload.api.events.CapableEvent
+ * Fastload's client handling, based upon {@link CapableEvent
  * CapableEvent}.
  */
 public final class FLClientHandler {
 
     public static void init() {
+        if (isDebugEnabled())
+            LOGGER.info("FLClientHandler initialised");
         registerEvents();
     }
-    private static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
 
     private static Screen oldCurrentScreen = null;
 
@@ -61,7 +63,7 @@ public final class FLClientHandler {
     /**
      *  Quick, easy, and lazy logging method
      */
-    public static void log(String toLog) {
+    private static void log(String toLog) {
         Fastload.LOGGER.info(toLog);
     }
 
@@ -100,7 +102,7 @@ public final class FLClientHandler {
      * Stops the BuildingTerrainScreen when called and resets relevant params
      */
     private static void stopBuilding(int chunkLoadedCount, int chunkBuildCount) {
-        if (playerJoined) {
+        if (playerJoined && playerReady) {
             System.gc();
             if (isDebugEnabled()) {
                 logBuilding(chunkBuildCount);
@@ -111,6 +113,7 @@ public final class FLClientHandler {
                 if (isDebugEnabled()) log("Delaying PauseMenu until worldRendering initiates.");
             }
             playerJoined = false;
+            playerReady = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
             ABSTRACTED_CLIENT.getCurrentScreen().close();
@@ -137,7 +140,8 @@ public final class FLClientHandler {
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (CLIENT_TIMER.isReady() &&
+                    if (
+                            CLIENT_TIMER.isReady() &&
                             ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
                             !ABSTRACTED_CLIENT.isWindowFocused()
                     ) {
@@ -164,7 +168,7 @@ public final class FLClientHandler {
                             log("setScreen(new DownloadingTerrainScreen)");
                         if (playerReady && playerJoined && isInstantLoadEnabled()) {
                             eventContext.ci().cancel();
-                            ABSTRACTED_CLIENT.getClientInstance().setScreen(null);
+                            ABSTRACTED_CLIENT.setScreen(null);
                             playerReady = false;
                             playerJoined = false;
                             CLIENT_TIMER.setTime(20);
@@ -217,11 +221,23 @@ public final class FLClientHandler {
                 })
         );
 
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.isSingleplayer()) {
+                        if (isLocalRenderEnabled()) {
+                            ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
+                        }
+                    } else if (isServerRenderEnabled()) {
+                        ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
+                    } else ABSTRACTED_CLIENT.reset(eventContext.screen());
+                })
+        );
+
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     eventContext.heldObj = true;
                     if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
-                            "DownloadingTerrainScreen set to close on next render bool."
+                            "DownloadingTerrainScreen set to close on next render tick."
                     );
                 })
         );
@@ -309,13 +325,11 @@ public final class FLClientHandler {
                 })
         );
 
-        //noinspection RedundantCast,unchecked
         SERVER_EVENT.registerThreadUnsafe(1, List.of(SERVER_PSR_LOADING_REDIRECT),
                 event -> event.stableArgs((eventContext, eventArgs) ->
-                        ((ObjectHolder<Boolean>)eventContext.returnValue()).heldObj = true
+                        eventContext.returnValue().heldObj = true
                 )
         );
-
 
         RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
                 event -> event.stableArgs((eventContext, eventArgs) -> {

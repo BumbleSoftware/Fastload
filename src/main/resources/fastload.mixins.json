@@ -8,6 +8,7 @@
     "mc1182.server.MinecraftServerMixin"
   ],
   "client": [
+    "mc1182.client.ClientAccess",
     "mc1182.client.ClientPlayerEntityMixin",
     "mc1182.client.ClientPlayNetworkHandlerMixin",
     "mc1182.client.DownloadingTerrainScreenMixin",

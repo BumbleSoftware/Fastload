@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.BoxBooleanContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.PlayerJoinEventContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
@@ -10,8 +10,6 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.util.math.Box;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Comparator;
 
 /**
  * Stores important events based on {@link AbstractEvent} that fastload uses.
@@ -23,7 +21,7 @@ public interface FLClientEvents {
     interface Events {
         AbstractEvent<SetScreenEventContext> SET_SCREEN_EVENT = new CapableEvent<>();
         AbstractEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new CapableEvent<>();
-        AbstractEvent<BoxBooleanContext> BOX_BOOLEAN_EVENT = new CapableEvent<>(Comparator.naturalOrder());
+        AbstractEvent<BoxBooleanContext> BOX_BOOLEAN_EVENT = new CapableEvent<>();
 
     }
 
@@ -43,7 +41,7 @@ public interface FLClientEvents {
 
     interface Contexts {
         record PlayerJoinEventContext(GameJoinS2CPacket packet) {}
-        record BoxBooleanContext(Box box, CallbackInfoReturnable<Boolean> cir) {}
+        record BoxBooleanContext(Box box, CallbackInfoReturnable<Boolean> cir ) {}
         record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
     }
 }

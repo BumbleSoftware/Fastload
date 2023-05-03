@@ -1,16 +1,18 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.abstraction.client.AbstractClientCalls;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION;
+import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 import static io.github.bumblesoftware.fastload.util.FLColourConstants.WHITE;
 
 public class BuildingTerrainScreen extends Screen {
+    public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
+    private static final int HEIGHT_UP_FROM_CENTRE = 50;
     private final Text screenName;
     private final Text screenTemplate;
     private final Text buildingChunks;
@@ -18,8 +20,6 @@ public class BuildingTerrainScreen extends Screen {
     private final Text startingSession;
     private Integer preparedProgressStorage = 0;
     private Integer buildingProgressStorage = 0;
-    private static final int heightUpFromCentre = 50;
-    private static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION.getAbstractedEntries();
     public final int loadingAreaGoal;
     private Runnable runnable;
 
@@ -69,7 +69,7 @@ public class BuildingTerrainScreen extends Screen {
                     this.textRenderer,
                     startingSession,
                     this.width / 2,
-                    this.height / 2 - heightUpFromCentre,
+                    this.height / 2 - HEIGHT_UP_FROM_CENTRE,
                     WHITE
             );
             return;
@@ -80,7 +80,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.textRenderer,
                 screenName,
                 this.width / 2,
-                this.height / 2 - heightUpFromCentre,
+                this.height / 2 - HEIGHT_UP_FROM_CENTRE,
                 WHITE
         );
 
@@ -89,7 +89,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.textRenderer,
                 screenTemplate,
                 this.width / 2,
-                this.height / 2 - heightUpFromCentre + 30,
+                this.height / 2 - HEIGHT_UP_FROM_CENTRE + 30,
                 WHITE
         );
 
@@ -98,7 +98,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.textRenderer,
                  preparingChunks.getString() + ": " + loadedChunksString,
                 width / 2,
-                height / 2 - heightUpFromCentre + 45,
+                height / 2 - HEIGHT_UP_FROM_CENTRE + 45,
                 WHITE);
 
         ABSTRACTED_CLIENT.drawCenteredText(
@@ -106,7 +106,7 @@ public class BuildingTerrainScreen extends Screen {
                 this.textRenderer,
                 buildingChunks.getString() + ": " + builtChunksString,
                 width / 2,
-                height / 2 - heightUpFromCentre + 60,
+                height / 2 - HEIGHT_UP_FROM_CENTRE + 60,
                 WHITE);
 
         super.render(matrices, mouseX, mouseY, delta);

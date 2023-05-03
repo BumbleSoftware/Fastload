@@ -1,8 +1,9 @@
 package io.github.bumblesoftware.fastload.util;
 
+import io.github.bumblesoftware.fastload.init.Fastload;
+
 import java.util.List;
 
-import static io.github.bumblesoftware.fastload.client.FLClientHandler.log;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
 import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
 
@@ -26,7 +27,7 @@ public final class TickTimer {
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;
-                        if (isDebugEnabled()) log(String.valueOf(remainingTime));
+                        if (isDebugEnabled()) Fastload.LOGGER.info(String.valueOf(remainingTime));
                     }
                 })
         );

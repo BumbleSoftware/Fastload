@@ -16,6 +16,11 @@
   "license": "LGPL-3.0",
   "icon": "assets/fastload/icon.png",
   "environment": "*",
+  "entrypoints": {
+    "fastload_client" : [
+      "io.github.bumblesoftware.fastload.abstraction.client.mc1193.Hook1193"
+    ]
+  },
   "mixins": [
     "fastload-1193-compat.mixins.json"
   ],
