@@ -67,8 +67,7 @@ public interface AbstractClientCalls extends MethodAbstractionApi {
             final Bound minMaxValues,
             final int width
     );
-
-
+    void reset(final Screen screen);
     void setScreen(final Screen screen);
     void renderScreenBackgroundTexture(
             final Screen screen,

@@ -20,6 +20,6 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "init", at = @At("HEAD"))
     private void onClientPlayerEntityMixinInitEvent(CallbackInfo ci) {
         if (EMPTY_EVENT.isNotEmpty())
-            EMPTY_EVENT.fire(List.of(CLIENT_PLAYER_INIT), new EmptyContext(null));
+            EMPTY_EVENT.fire(List.of(CLIENT_PLAYER_INIT), new EmptyContext());
     }
 }

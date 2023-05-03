@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.server.integrated.IntegratedServer;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,7 +30,11 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.
         "1.19.2"
 }))
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public abstract class MinecraftClientMixin {
+    @Shadow public abstract void setScreen(@Nullable Screen screen);
+
+    @Shadow protected abstract void reset(Screen screen);
+
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
         if (SET_SCREEN_EVENT.isNotEmpty())
@@ -49,6 +54,7 @@ public class MinecraftClientMixin {
                     List.of(LLS_441_REDIRECT),
                     new SetScreenEventContext(screen, null)
             );
+        else this.setScreen(screen);
     }
 
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
@@ -69,5 +75,6 @@ public class MinecraftClientMixin {
                     List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
                     new SetScreenEventContext(screen, null)
             );
+        else this.reset(screen);
     }
 }

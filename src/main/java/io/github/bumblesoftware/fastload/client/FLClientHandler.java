@@ -25,6 +25,8 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_AB
 public final class FLClientHandler {
 
     public static void init() {
+        if (isDebugEnabled())
+            LOGGER.info("FLClientHandler initialised");
         registerEvents();
     }
     public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
@@ -61,7 +63,7 @@ public final class FLClientHandler {
     /**
      *  Quick, easy, and lazy logging method
      */
-    public static void log(String toLog) {
+    private static void log(String toLog) {
         Fastload.LOGGER.info(toLog);
     }
 
@@ -219,6 +221,18 @@ public final class FLClientHandler {
                 })
         );
 
+        SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
+                event -> event.stableArgs((eventContext, eventArgs) -> {
+                    if (ABSTRACTED_CLIENT.isSingleplayer()) {
+                        if (isLocalRenderEnabled()) {
+                            ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
+                        }
+                    } else if (isServerRenderEnabled()) {
+                        ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
+                    } else ABSTRACTED_CLIENT.reset(eventContext.screen());
+                })
+        );
+
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     eventContext.heldObj = true;
@@ -316,7 +330,6 @@ public final class FLClientHandler {
                         eventContext.returnValue().heldObj = true
                 )
         );
-
 
         RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
                 event -> event.stableArgs((eventContext, eventArgs) -> {

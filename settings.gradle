@@ -18,4 +18,5 @@ include "Fastload-Fapi-Forwarding-1.19.1"
 include "Fastload-Fapi-Forwarding-1.19.2"
 include "Fastload-Fapi-Forwarding-1.19.3"
 include "Fastload-Fapi-Forwarding-1.19.4"
+include "Fastload-Fapi-Forwarding-1.20"
 

@@ -6,6 +6,7 @@ import io.github.bumblesoftware.fastload.client.BuildingTerrainScreen;
 import io.github.bumblesoftware.fastload.compat.modmenu.FLConfigScreenButtons;
 import io.github.bumblesoftware.fastload.config.DefaultConfig;
 import io.github.bumblesoftware.fastload.config.FLConfig;
+import io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client.ClientAccess;
 import io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client.OptionAccess;
 import io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client.ScreenAccess;
 import io.github.bumblesoftware.fastload.util.Action;
@@ -196,6 +197,11 @@ public class Client1182 implements AbstractClientCalls {
                         StringVisitable.plain(new TranslatableText(namespace + identifier + ".tooltip").getString()),
                         200
                 ));
+    }
+
+    @Override
+    public void reset(Screen screen) {
+        ((ClientAccess)getClientInstance()).resetProxy(screen);
     }
 
 

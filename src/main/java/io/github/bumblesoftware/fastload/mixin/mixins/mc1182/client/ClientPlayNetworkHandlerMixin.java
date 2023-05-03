@@ -35,18 +35,21 @@ public class ClientPlayNetworkHandlerMixin {
     private void modifyDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(DTS_GAME_JOIN_REDIRECT))
             SET_SCREEN_EVENT.fire(List.of(DTS_GAME_JOIN_REDIRECT), new SetScreenEventContext(screen, null));
+        else client.setScreen(screen);
     }
 
     @Redirect(method = "onPlayerRespawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
-    private void instantLoad(MinecraftClient instance, Screen screen) {
+    private void instantLoad(MinecraftClient client, Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(RESPAWN_DTS_REDIRECT))
             SET_SCREEN_EVENT.fire(List.of(RESPAWN_DTS_REDIRECT), new SetScreenEventContext(screen, null));
+        else client.setScreen(screen);
+
     }
 
     @Redirect(method = "onResourcePackSend", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     private void redirectResourcePackScreen(MinecraftClient client, Runnable runnable) {
         if (RUNNABLE_EVENT.isNotEmpty(RP_SEND_RUNNABLE))
             RUNNABLE_EVENT.fire(List.of(RP_SEND_RUNNABLE), new MutableObjectHolder<>(runnable));
+        else client.execute(runnable);
     }
-
 }

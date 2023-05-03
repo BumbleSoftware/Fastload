@@ -32,7 +32,7 @@ public interface FLCommonEvents {
     }
 
     interface Contexts {
-        record EmptyContext(String description) {}
+        record EmptyContext() {}
         record ServerContext<T>(MinecraftServer server, MutableObjectHolder<T> returnValue) {}
         record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {}
     }

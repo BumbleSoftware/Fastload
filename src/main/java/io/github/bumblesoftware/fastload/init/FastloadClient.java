@@ -18,6 +18,7 @@ import static io.github.bumblesoftware.fastload.api.external.abstraction.core.ve
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLMath.*;
 import static io.github.bumblesoftware.fastload.init.Fastload.LOGGER;
+import static io.github.bumblesoftware.fastload.init.Fastload.NAMESPACE;
 
 public class FastloadClient implements ClientModInitializer {
     public static final AbstractionHandler<AbstractClientCalls> MINECRAFT_ABSTRACTION_HANDLER;
@@ -25,7 +26,7 @@ public class FastloadClient implements ClientModInitializer {
     static {
         VersionConstants.init();
         MINECRAFT_ABSTRACTION_HANDLER = create(
-                "fastload",
+                NAMESPACE,
                 List.of("fastload-119-0-1-2-compat", "fastload-1193-compat", "fastload-1194-compat"),
                 CLIENT,
                 event -> event.registerThreadUnsafe(0,
