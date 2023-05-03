@@ -1,4 +1,4 @@
-archivesBaseName = "Fastload-Fapi-Forwarding-1.19.4"
+archivesBaseName = "Fastload-Fapi-Forwarding-1.20"
 version = project.fapi_forwarding_version
 loom {
 }
