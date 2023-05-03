@@ -61,6 +61,13 @@ public interface AbstractEvent<Context> {
      */
     Object2ObjectMap<String, EventHolder<Context>> getStorage();
 
+    /**
+     * This is to get a list of locations for which the event will be called. Locations are essentially
+     * nested events to create multiple different sub event streams for the same contexts. It's used to
+     * save memory and clean up code a bit. Locations should not be used to distinguish between immutable
+     * and mutable contexts.
+     * @return a list of locations.
+     */
     List<String> getLocationList();
 
     /**
@@ -150,16 +157,34 @@ public interface AbstractEvent<Context> {
      * To set up an event listener, just mixin to your target, call this method with a new event context.
      * See {@link AbstractEvent} for what an actual implementation looks like.
      * @param locations All locations to be fired.
+     * @param orderFlipped should event order be flipped when firing?
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    void fire(final List<String> locations, final Context eventContext);
+    void fire(final List<String> locations, final boolean orderFlipped, final Context eventContext);
 
     /**
-     * Generic location alternative to {@link AbstractEvent#fire(List, Context)}
+     * A default ordered alternative to {@link AbstractEvent#fire(List, boolean, Context)}
+     * @param locations All locations to be fired.
+     * @param eventContext The provided context (of params) through this classes generic.
+     */
+    default void fire(final List<String> locations, final Context eventContext) {
+        fire(locations, false, eventContext);
+    }
+
+    /**
+     * Generic location alternative to {@link AbstractEvent#fire(List, boolean, Context)}
+     * @param eventContext The provided context (of params) through this classes generic.
+     */
+    default void fire(final boolean orderFlipped, final Context eventContext) {
+        fire(GENERIC_LOCATION_LIST, orderFlipped, eventContext);
+    }
+
+    /**
+     * Generic location and default ordered alternative to {@link AbstractEvent#fire(List, boolean, Context)}
      * @param eventContext The provided context (of params) through this classes generic.
      */
     default void fire(final Context eventContext) {
-        fire(GENERIC_LOCATION_LIST, eventContext);
+        fire(GENERIC_LOCATION_LIST, false, eventContext);
     }
 
     /**

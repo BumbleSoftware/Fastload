@@ -5,13 +5,13 @@ import io.github.bumblesoftware.fastload.api.external.abstraction.core.handler.M
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 
 import static io.github.bumblesoftware.fastload.api.external.abstraction.core.versioning.VersionConstants.*;
 
 public class Hook1193 implements AbstractionEntrypoint {
     @Override
-    public <A extends MethodAbstractionApi> void register(AbstractEvent<ObjectHolder<A>> clientAbstractionEvent) {
+    public <A extends MethodAbstractionApi> void register(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
         clientAbstractionEvent.registerThreadUnsafe(2,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     if (IS_MINECRAFT_1193) {

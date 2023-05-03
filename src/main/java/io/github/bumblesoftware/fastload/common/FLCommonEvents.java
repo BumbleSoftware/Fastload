@@ -2,12 +2,10 @@ package io.github.bumblesoftware.fastload.common;
 
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.util.math.ChunkPos;
-
-import java.util.Comparator;
 
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.*;
 
@@ -19,12 +17,12 @@ public interface FLCommonEvents {
     static void init() {}
 
     interface Events {
-        AbstractEvent<ObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>(Comparator.naturalOrder());
-        AbstractEvent<ObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>(Comparator.naturalOrder());
-        AbstractEvent<ObjectHolder<Runnable>> RUNNABLE_EVENT = new CapableEvent<>(Comparator.naturalOrder());
+        AbstractEvent<MutableObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>();
+        AbstractEvent<MutableObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>();
+        AbstractEvent<MutableObjectHolder<Runnable>> RUNNABLE_EVENT = new CapableEvent<>();
         AbstractEvent<EmptyContext> EMPTY_EVENT =  new CapableEvent<>();
         AbstractEvent<ProgressListenerContext> PROGRESS_LISTENER_EVENT = new CapableEvent<>();
-        AbstractEvent<ServerContext> SERVER_EVENT = new CapableEvent<>();
+        AbstractEvent<ServerContext<Boolean>> SERVER_EVENT = new CapableEvent<>();
 
     }
     interface Locations {
@@ -34,9 +32,8 @@ public interface FLCommonEvents {
     }
 
     interface Contexts {
-        record EmptyContext() {}
-        record ServerContext(MinecraftServer server, ObjectHolder<?> returnValue) {}
+        record EmptyContext(String description) {}
+        record ServerContext<T>(MinecraftServer server, MutableObjectHolder<T> returnValue) {}
         record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {}
-
     }
 }

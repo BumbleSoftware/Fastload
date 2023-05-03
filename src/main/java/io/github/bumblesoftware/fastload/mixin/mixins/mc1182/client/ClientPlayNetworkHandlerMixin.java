@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.PlayerJoinEventContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -46,7 +46,7 @@ public class ClientPlayNetworkHandlerMixin {
     @Redirect(method = "onResourcePackSend", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     private void redirectResourcePackScreen(MinecraftClient client, Runnable runnable) {
         if (RUNNABLE_EVENT.isNotEmpty(RP_SEND_RUNNABLE))
-            RUNNABLE_EVENT.fire(List.of(RP_SEND_RUNNABLE), new ObjectHolder<>(runnable));
+            RUNNABLE_EVENT.fire(List.of(RP_SEND_RUNNABLE), new MutableObjectHolder<>(runnable));
     }
 
 }

@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.server;
 
 import io.github.bumblesoftware.fastload.common.FLCommonEvents;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.util.math.ChunkPos;
@@ -28,14 +28,14 @@ public abstract class MinecraftServerMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (BOOLEAN_EVENT.isNotEmpty(PREPARE_START_REGION))
-            BOOLEAN_EVENT.fire(List.of(SERVER_TICK), new ObjectHolder<>(shouldKeepTicking.getAsBoolean()));
+            BOOLEAN_EVENT.fire(List.of(SERVER_TICK), new MutableObjectHolder<>(shouldKeepTicking.getAsBoolean()));
     }
 
     @ModifyConstant(method = "prepareStartRegion", constant = @Constant(intValue = 441))
     private int modify_prepareStartRegion_chunkCount(int value) {
-        final var returnValue = new ObjectHolder<>(441);
+        final var returnValue = new MutableObjectHolder<>(441);
         if (INTEGER_EVENT.isNotEmpty(PREPARE_START_REGION))
-            INTEGER_EVENT.fire(List.of(PREPARE_START_REGION), returnValue);
+            INTEGER_EVENT.fire(List.of(PREPARE_START_REGION), true, returnValue);
         return returnValue.heldObj;
     }
 

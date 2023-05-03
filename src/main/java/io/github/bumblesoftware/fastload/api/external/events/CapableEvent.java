@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * A fully capable event with all the tools
+ * An event class that provides all the necessary tools to create the exact event you need.
  * @param <Context> used for custom event params. Refer to {@link FLClientEvents FLClientEvents}
  *           for examples.
  */
@@ -165,11 +165,17 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void fire(final List<String> locations, final Context eventContext) {
+    public void fire(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
         for (final var string : locations) {
             final var add = eventsToAdd.get(string);
             final var all = allEvents.get(string);
             final var remove = eventsToRemove.remove(string);
+
+            final Comparator<Long> order;
+            if (orderFlipped)
+                order = this.order.reversed();
+            else order = this.order;
+
             iterate(add, (priority, eventArgs) -> registerThreadUnsafe(priority, event -> eventArgs));
             all.priorityHolder().sort(order);
             iterate(all, (priority, eventArgs) -> eventArgs.recursive(eventContext, this, 0, eventArgs));

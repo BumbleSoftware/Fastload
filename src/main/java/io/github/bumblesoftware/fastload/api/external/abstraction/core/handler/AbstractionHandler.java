@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.api.external.abstraction.core.handler;
 
 import io.github.bumblesoftware.fastload.api.external.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,11 +21,11 @@ public class AbstractionHandler<A extends MethodAbstractionApi> {
             final String namespace,
             final List<String> abstractionModIds,
             final Environment environment,
-            final Consumer<AbstractEvent<ObjectHolder<A>>> base,
+            final Consumer<AbstractEvent<MutableObjectHolder<A>>> base,
             final Function<A, AbstractionDirectory<A>> abstractionInstanceGetter
     ) {
-        final AbstractEvent<ObjectHolder<A>> event = new CapableEvent<>();
-        final ObjectHolder<A> abstractionApiHolder = new ObjectHolder<>();
+        final AbstractEvent<MutableObjectHolder<A>> event = new CapableEvent<>();
+        final MutableObjectHolder<A> abstractionApiHolder = new MutableObjectHolder<>();
         final String entrypointName = namespace.toLowerCase() + "_" + environment.name().toLowerCase();
 
         base.accept(event);

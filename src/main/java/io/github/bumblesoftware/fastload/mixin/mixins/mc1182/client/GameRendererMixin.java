@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -15,9 +15,9 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.INT
 public class GameRendererMixin {
     @ModifyConstant(method = "updateWorldIcon(Ljava/nio/file/Path;)V", constant = @Constant(intValue = 10))
     private static int delayWorldIcon(int constant) {
-        final var returnValue = new ObjectHolder<>(constant);
+        final var returnValue = new MutableObjectHolder<>(constant);
         if (INTEGER_EVENT.isNotEmpty(WORLD_ICON))
-            INTEGER_EVENT.fire(List.of(WORLD_ICON), returnValue);
+            INTEGER_EVENT.fire(List.of(WORLD_ICON), true, returnValue);
         return returnValue.heldObj;
     }
 }

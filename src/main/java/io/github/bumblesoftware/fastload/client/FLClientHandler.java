@@ -1,10 +1,9 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.external.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.internal.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -101,7 +100,7 @@ public final class FLClientHandler {
      * Stops the BuildingTerrainScreen when called and resets relevant params
      */
     private static void stopBuilding(int chunkLoadedCount, int chunkBuildCount) {
-        if (playerJoined) {
+        if (playerJoined && playerReady) {
             System.gc();
             if (isDebugEnabled()) {
                 logBuilding(chunkBuildCount);
@@ -112,6 +111,7 @@ public final class FLClientHandler {
                 if (isDebugEnabled()) log("Delaying PauseMenu until worldRendering initiates.");
             }
             playerJoined = false;
+            playerReady = false;
             oldChunkLoadedCountStorage = 0;
             oldChunkBuildCountStorage = 0;
             ABSTRACTED_CLIENT.getCurrentScreen().close();
@@ -138,7 +138,8 @@ public final class FLClientHandler {
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
                 event -> event.stableArgs((eventContext, eventArgs) -> {
-                    if (CLIENT_TIMER.isReady() &&
+                    if (
+                            CLIENT_TIMER.isReady() &&
                             ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
                             !ABSTRACTED_CLIENT.isWindowFocused()
                     ) {
@@ -165,7 +166,7 @@ public final class FLClientHandler {
                             log("setScreen(new DownloadingTerrainScreen)");
                         if (playerReady && playerJoined && isInstantLoadEnabled()) {
                             eventContext.ci().cancel();
-                            ABSTRACTED_CLIENT.getClientInstance().setScreen(null);
+                            ABSTRACTED_CLIENT.setScreen(null);
                             playerReady = false;
                             playerJoined = false;
                             CLIENT_TIMER.setTime(20);
@@ -222,7 +223,7 @@ public final class FLClientHandler {
                 event -> event.stableArgs((eventContext, eventArgs) -> {
                     eventContext.heldObj = true;
                     if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
-                            "DownloadingTerrainScreen set to close on next render bool."
+                            "DownloadingTerrainScreen set to close on next render tick."
                     );
                 })
         );
@@ -310,10 +311,9 @@ public final class FLClientHandler {
                 })
         );
 
-        //noinspection RedundantCast,unchecked
         SERVER_EVENT.registerThreadUnsafe(1, List.of(SERVER_PSR_LOADING_REDIRECT),
                 event -> event.stableArgs((eventContext, eventArgs) ->
-                        ((ObjectHolder<Boolean>)eventContext.returnValue()).heldObj = true
+                        eventContext.returnValue().heldObj = true
                 )
         );
 

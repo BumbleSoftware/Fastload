@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.mc1193.client;
 
-import io.github.bumblesoftware.fastload.client.FLClientEvents;
+import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
 import io.github.bumblesoftware.fastload.common.FLCommonEvents;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;
@@ -19,7 +19,6 @@ import java.util.List;
 
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Events.SET_SCREEN_EVENT;
 import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.*;
-import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.RENDER_TICK;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.SERVER_EVENT;
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.SERVER_PSR_LOADING_REDIRECT;
@@ -30,13 +29,13 @@ public class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
         if (SET_SCREEN_EVENT.isNotEmpty())
-            SET_SCREEN_EVENT.fire(new FLClientEvents.Contexts.SetScreenEventContext(screen, ci));
+            SET_SCREEN_EVENT.fire(new SetScreenEventContext(screen, ci));
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void renderEvent(boolean tick, CallbackInfo ci) {
         if (BOOLEAN_EVENT.isNotEmpty(RENDER_TICK))
-            BOOLEAN_EVENT.fire(List.of(RENDER_TICK), new ObjectHolder<>(tick));
+            BOOLEAN_EVENT.fire(List.of(RENDER_TICK), new MutableObjectHolder<>(tick));
     }
 
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
@@ -44,17 +43,17 @@ public class MinecraftClientMixin {
         if (SET_SCREEN_EVENT.isNotEmpty(LLS_441_REDIRECT))
             SET_SCREEN_EVENT.fire(
                     List.of(LLS_441_REDIRECT),
-                    new FLClientEvents.Contexts.SetScreenEventContext(screen, null)
+                    new SetScreenEventContext(screen, null)
             );
     }
 
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
     private boolean handleServerWait(IntegratedServer integratedServer) {
-        final var returnValue = new ObjectHolder<>(integratedServer.isLoading());
+        final var returnValue = new MutableObjectHolder<>(integratedServer.isLoading());
         if (SERVER_EVENT.isNotEmpty(SERVER_PSR_LOADING_REDIRECT))
             SERVER_EVENT.fire(
                     List.of(SERVER_PSR_LOADING_REDIRECT),
-                    new FLCommonEvents.Contexts.ServerContext(integratedServer, returnValue)
+                    new FLCommonEvents.Contexts.ServerContext<>(integratedServer, returnValue)
             );
         return returnValue.heldObj;
     }
@@ -64,7 +63,7 @@ public class MinecraftClientMixin {
         if (SET_SCREEN_EVENT.isNotEmpty(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT))
             SET_SCREEN_EVENT.fire(
                     List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
-                    new FLClientEvents.Contexts.SetScreenEventContext(screen, null)
+                    new SetScreenEventContext(screen, null)
             );
     }
 }
