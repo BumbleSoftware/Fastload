@@ -1,5 +1,6 @@
 package io.github.bumblesoftware.fastload.api.abstraction.core.versioning;
 
+import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.init.Fastload;
 import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.Nullable;
@@ -7,8 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
 
 public class VersionUtil {
     public static class GameSpecific {
@@ -42,11 +41,12 @@ public class VersionUtil {
         ) {
             final boolean matches =
                     strategy.function.apply(providedVersion, comparedVersion) && checkForExceptions.function.apply(providedVersion);
-            if (isDebugEnabled())
+            FLMath.ifDebugEnabled(() ->
                 Fastload.LOGGER.info(
                         "VERSIONS:[" + providedVersion + ", " + comparedVersion + "], MATCHES: " + matches
                                 + ", STRATEGY: " + strategy.name()
-                );
+                )
+            );
             return matches;
         }
 

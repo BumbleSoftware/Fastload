@@ -137,7 +137,7 @@ public class FLConfig {
     }
 
     public static void storeProperty(String key, String value) {
-        if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
+        ifDebugEnabled(() -> Fastload.LOGGER.info(key + ":" + value));
         properties.setProperty(key, value);
     }
 

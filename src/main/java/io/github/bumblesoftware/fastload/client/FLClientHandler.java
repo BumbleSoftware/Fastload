@@ -3,7 +3,6 @@ package io.github.bumblesoftware.fastload.client;
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
-import io.github.bumblesoftware.fastload.init.Fastload;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -25,8 +24,7 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_AB
 public final class FLClientHandler {
 
     public static void init() {
-        if (isDebugEnabled())
-            LOGGER.info("FLClientHandler initialised");
+        ifDebugEnabled(() -> LOGGER.info("FastloadClientHandler Initialised!"));
         registerEvents();
     }
     public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
@@ -64,7 +62,7 @@ public final class FLClientHandler {
      *  Quick, easy, and lazy logging method
      */
     private static void log(String toLog) {
-        Fastload.LOGGER.info(toLog);
+        LOGGER.info(toLog);
     }
 
     /**
@@ -104,13 +102,13 @@ public final class FLClientHandler {
     private static void stopBuilding(int chunkLoadedCount, int chunkBuildCount) {
         if (playerJoined && playerReady) {
             System.gc();
-            if (isDebugEnabled()) {
+            ifDebugEnabled(() -> {
                 logBuilding(chunkBuildCount);
                 logRendering(chunkLoadedCount);
-            }
+            });
             if (!ABSTRACTED_CLIENT.isWindowFocused()) {
                 CLIENT_TIMER.setTime(20);
-                if (isDebugEnabled()) log("Delaying PauseMenu until worldRendering initiates.");
+                ifDebugEnabled(() -> log("Delaying PauseMenu until worldRendering initiates."));
             }
             playerJoined = false;
             playerReady = false;
@@ -126,14 +124,14 @@ public final class FLClientHandler {
     private static void registerEvents() {
         EMPTY_EVENT.registerThreadUnsafe(1, List.of(CLIENT_PLAYER_INIT),
                 (eventContext,event, eventArgs) -> {
-                    if (isDebugEnabled()) Fastload.LOGGER.info("shouldLoad = true");
+                    ifDebugEnabled(() -> LOGGER.info("shouldLoad = true"));
                     playerReady = true;
                 }
         );
 
         PLAYER_JOIN_EVENT.registerThreadUnsafe(1,
                 (eventContext,event, eventArgs) -> {
-                    if (isDebugEnabled()) Fastload.LOGGER.info("playerJoined = true");
+                    ifDebugEnabled(() -> LOGGER.info("playerJoined = true"));
                     playerJoined = true;
                 }
         );
@@ -145,7 +143,7 @@ public final class FLClientHandler {
                             ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
                             !ABSTRACTED_CLIENT.isWindowFocused()
                     ) {
-                        if (isDebugEnabled()) log(Integer.toString(CLIENT_TIMER.getTime()));
+                        ifDebugEnabled(() -> log(Integer.toString(CLIENT_TIMER.getTime())));
                         eventContext.ci().cancel();
                     }
                 }
@@ -154,8 +152,7 @@ public final class FLClientHandler {
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
                 (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
-                        if (isDebugEnabled())
-                            log("setScreen(new BuildingTerrainScreen)");
+                        ifDebugEnabled(() -> log("setScreen(new BuildingTerrainScreen)"));
                     }
                 }
         );
@@ -164,8 +161,7 @@ public final class FLClientHandler {
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
                 (eventContext,event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
-                        if (isDebugEnabled())
-                            log("setScreen(new DownloadingTerrainScreen)");
+                        ifDebugEnabled(() -> log("setScreen(new DownloadingTerrainScreen)"));
                         if (playerReady && playerJoined && isInstantLoadEnabled()) {
                             eventContext.ci().cancel();
                             ABSTRACTED_CLIENT.setScreen(null);
@@ -180,17 +176,17 @@ public final class FLClientHandler {
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS_441_REDIRECT),
                 (eventContext,event, eventArgs) -> {
                     final var isPreRenderEnabled = isLocalRenderEnabled();
-                    if (isDebugEnabled()) {
+                    ifDebugEnabled(() ->  {
                         LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
                         LOGGER.info("localRenderChunkRadius: " + getLocalRenderChunkRadius());
                         LOGGER.info("Fastload Perceived Render Distance: " + ABSTRACTED_CLIENT.getViewDistance());
-                    }
+                    });
                     if (isPreRenderEnabled) {
                         ABSTRACTED_CLIENT.setScreen(ABSTRACTED_CLIENT.newBuildingTerrainScreen(getLocalRenderChunkArea()));
-                        if (isDebugEnabled()) {
+                        ifDebugEnabled(() ->  {
                             LOGGER.info("LevelLoadingScreen -> BuildingTerrainScreen");
                             LOGGER.info("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
-                        }
+                        });
                     } else ABSTRACTED_CLIENT.setScreen(new DownloadingTerrainScreen());
                 }
         );
@@ -236,9 +232,9 @@ public final class FLClientHandler {
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
                 (eventContext, event, eventArgs) -> {
                     eventContext.heldObj = true;
-                    if (FLMath.isDebugEnabled()) Fastload.LOGGER.info(
+                    ifDebugEnabled(() ->  LOGGER.info(
                             "DownloadingTerrainScreen set to close on next render tick."
-                    );
+                    ));
                 }
         );
 
@@ -252,10 +248,10 @@ public final class FLClientHandler {
                             final int oldBuildingWarningCache = buildingWarnings;
                             final int loadingAreaGoal = ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).loadingAreaGoal;
 
-                            if (isDebugEnabled()) {
+                            ifDebugEnabled(() ->  {
                                 logRendering(chunkLoadedCount);
                                 logBuilding(chunkBuildCount);
-                            }
+                            });
 
                             if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null
                                     && chunkBuildCount > 0 && chunkLoadedCount > 0
@@ -280,7 +276,7 @@ public final class FLClientHandler {
                                         log("Same prepared chunk count returned " + preparationWarnings + " time(s) in a row!");
                                         log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
                                                 "stopped");
-                                        if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                                        ifDebugEnabled(() -> logRendering(chunkLoadedCount));
                                     }
                                     if (chunkLoadedCount > oldChunkLoadedCountStorage) {
                                         preparationWarnings = 0;
@@ -291,7 +287,7 @@ public final class FLClientHandler {
                                         log("Same built chunk count returned " + buildingWarnings + " time(s) in a row!");
                                         log("Had it be " + getChunkTryLimit() + " time(s) in a row, rendering would've " +
                                                 "stopped");
-                                        if (isDebugEnabled()) logRendering(chunkLoadedCount);
+                                        ifDebugEnabled(() -> logRendering(chunkLoadedCount));
                                     }
                                     if (chunkBuildCount > oldChunkBuildCountStorage) {
                                         buildingWarnings = 0;
@@ -312,17 +308,14 @@ public final class FLClientHandler {
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
-                (eventContext, event, eventArgs) -> {
-                    if (isDebugEnabled()) {
+                (eventContext, event, eventArgs) -> FLMath.ifDebugEnabled(() ->
                         ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
-                            if (oldCurrentScreen != screen) {
-                                oldCurrentScreen = screen;
-                                Fastload.LOGGER.info("Screen changed to: " + screen);
-                            }
-                            return false;
-                        });
-                    }
-                }
+                        if (oldCurrentScreen != screen) {
+                            oldCurrentScreen = screen;
+                            LOGGER.info("Screen changed to: " + screen);
+                        }
+                        return false;
+                }))
         );
 
         SERVER_EVENT.registerThreadUnsafe(1, List.of(SERVER_PSR_LOADING_REDIRECT),
@@ -351,8 +344,7 @@ public final class FLClientHandler {
         INTEGER_EVENT.registerThreadUnsafe(1, List.of(WORLD_ICON),
                 (eventContext,event, eventArgs) -> {
                     eventContext.heldObj = 100;
-                    if (FLMath.isDebugEnabled())
-                        Fastload.LOGGER.info("worldIcon time prolonged");
+                    ifDebugEnabled(() -> LOGGER.info("worldIcon time prolonged"));
                 }
         );
     }

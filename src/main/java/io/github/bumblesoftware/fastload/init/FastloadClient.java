@@ -32,8 +32,8 @@ public class FastloadClient implements ClientModInitializer {
                 event -> event.registerThreadUnsafe(0,
                         (eventContext, event1, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
-                                if (FLMath.isDebugEnabled())
-                                    LOGGER.info("Fastload 1.18.2 Base!");
+                                FLMath.ifDebugEnabled(() ->
+                                    LOGGER.info("Fastload 1.18.2 Base!"));
                                 eventContext.heldObj = new Client1182();
                             }
                         }

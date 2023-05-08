@@ -5,7 +5,7 @@ import io.github.bumblesoftware.fastload.init.Fastload;
 import java.util.List;
 
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
-import static io.github.bumblesoftware.fastload.config.FLMath.isDebugEnabled;
+import static io.github.bumblesoftware.fastload.config.FLMath.ifDebugEnabled;
 
 /**
  * Simple event-based timer with respect to minecraft ticks.
@@ -27,7 +27,7 @@ public final class TickTimer {
                 (eventContext,event, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;
-                        if (isDebugEnabled()) Fastload.LOGGER.info(String.valueOf(remainingTime));
+                        ifDebugEnabled(() -> Fastload.LOGGER.info(String.valueOf(remainingTime)));
                     }
                 }
         );

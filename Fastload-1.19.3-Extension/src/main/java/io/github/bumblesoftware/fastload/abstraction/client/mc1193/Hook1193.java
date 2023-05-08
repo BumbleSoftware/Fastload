@@ -15,8 +15,9 @@ public class Hook1193 implements AbstractionEntrypoint {
         clientAbstractionEvent.registerThreadUnsafe(2,
                 (eventContext,event, eventArgs) -> {
                     if (IS_MINECRAFT_1193) {
-                        if (FLMath.isDebugEnabled())
-                            Fastload.LOGGER.info("Fastload 1.19.3 Hook!");
+                        FLMath.isDebugEnabled().runIf(() ->
+                            Fastload.LOGGER.info("Fastload 1.19.3 Hook!")
+                        );
                         eventContext.heldObj = new Client1193().generify();
                     }
                 }

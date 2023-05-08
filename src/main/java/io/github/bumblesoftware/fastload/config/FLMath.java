@@ -1,12 +1,15 @@
 package io.github.bumblesoftware.fastload.config;
 
 import io.github.bumblesoftware.fastload.util.Bound;
+import io.github.bumblesoftware.fastload.util.lambda.LambdaIf;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
 import static io.github.bumblesoftware.fastload.config.FLConfig.*;
 import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_ABSTRACTION_HANDLER;
 
 public class FLMath {
+    private static final LambdaIf DEBUG_LAMBDA = LambdaIf.getNew(getRawDebug());
+
     public static double getCircleArea(final int radius) {
         return Math.PI * radius * radius;
     }
@@ -33,8 +36,11 @@ public class FLMath {
     public static int getChunkTryLimit() {
         return CHUNK_TRY_LIMIT_BOUND.minMax(getRawChunkTryLimit());
     }
-    public static Boolean isDebugEnabled() {
-        return getRawDebug();
+    public static LambdaIf isDebugEnabled() {
+        return DEBUG_LAMBDA;
+    }
+    public static void ifDebugEnabled(Runnable runnable) {
+        isDebugEnabled().runIf(runnable);
     }
     public static Boolean isInstantLoadEnabled() {
         return getRawInstantLoad();
