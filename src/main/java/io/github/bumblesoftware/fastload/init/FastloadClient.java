@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.init;
 
-import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler;
-import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants;
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
 import io.github.bumblesoftware.fastload.abstraction.Client1182;
+import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import io.github.bumblesoftware.fastload.client.FLClientHandler;
 import io.github.bumblesoftware.fastload.config.FLConfig;
@@ -33,11 +33,12 @@ public class FastloadClient implements ClientModInitializer {
                         (eventContext, event1, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
                                 FLMath.ifDebugEnabled(() ->
-                                    LOGGER.info("Fastload 1.18.2 Base!"));
+                                        LOGGER.info("Fastload 1.18.2 Base!"));
                                 eventContext.heldObj = new Client1182();
                             }
                         }
-                )
+                ),
+                versionUtilAbstractEvent -> {}
         );
         FLConfig.init();
         FLClientEvents.init();

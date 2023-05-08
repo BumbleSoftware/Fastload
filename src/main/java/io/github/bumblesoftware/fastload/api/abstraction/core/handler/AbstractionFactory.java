@@ -1,31 +1,70 @@
 package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
 import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionHandler.Environment;
-import io.github.bumblesoftware.fastload.api.abstraction.def.MinecraftAbstraction;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
+import io.github.bumblesoftware.fastload.api.abstraction.def.DefaultAbstraction;
+import io.github.bumblesoftware.fastload.api.abstraction.def.VersionUtils;
 import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
 import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class AbstractionFactory {
     public static <A extends MethodAbstractionApi> AbstractionHandler<A> create(
-            final String name,
+            final String namespace,
             final List<String> abstractionModIds,
-            final Environment common,
-            final Consumer<AbstractEvent<MutableObjectHolder<A>>> base,
-            final Function<A, AbstractionDirectory<A>> abstractionInstanceGetter
+            final Environment environment,
+            final Consumer<AbstractEvent<MutableObjectHolder<A>>> baseAbstraction,
+            final Consumer<AbstractEvent<VersionUtil>> baseClassLoad,
+            final VersionUtil versionUtil,
+            final BiFunction<A, VersionUtil, AbstractionDirectory<A>> abstractionInstanceGetter
     )  {
-        return new AbstractionHandler<>(name, abstractionModIds, common, base, abstractionInstanceGetter);
+        return new AbstractionHandler<>(
+                namespace,
+                abstractionModIds,
+                environment,
+                baseAbstraction,
+                baseClassLoad,
+                versionUtil,
+                abstractionInstanceGetter
+        );
     }
 
     public static <A extends MethodAbstractionApi> AbstractionHandler<A> create(
-            final String name,
+            final String namespace,
             final List<String> abstractionModIds,
-            final Environment common,
-            final Consumer<AbstractEvent<MutableObjectHolder<A>>> base
+            final Environment environment,
+            final Consumer<AbstractEvent<MutableObjectHolder<A>>> baseAbstraction,
+            final Consumer<AbstractEvent<VersionUtil>> baseClassLoad,
+            final VersionUtil versionUtil
     ) {
-        return new AbstractionHandler<>(name, abstractionModIds, common, base, MinecraftAbstraction::new);
+        return new AbstractionHandler<>(
+                namespace,
+                abstractionModIds,
+                environment,
+                baseAbstraction,
+                baseClassLoad,
+                versionUtil,
+                DefaultAbstraction::new
+        );
+    }
+
+    public static <A extends MethodAbstractionApi> AbstractionHandler<A> create(
+            final String namespace,
+            final List<String> abstractionModIds,
+            final Environment environment,
+            final Consumer<AbstractEvent<MutableObjectHolder<A>>> baseAbstraction,
+            final Consumer<AbstractEvent<VersionUtil>> baseClassLoad
+    ) {
+        return create(
+                namespace,
+                abstractionModIds,
+                environment,
+                baseAbstraction,
+                baseClassLoad,
+                VersionUtils.MINECRAFT
+        );
     }
 }

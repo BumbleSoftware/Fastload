@@ -11,7 +11,7 @@ import static io.github.bumblesoftware.fastload.api.abstraction.core.versioning.
 
 public class Hook1193 implements AbstractionEntrypoint {
     @Override
-    public <A extends MethodAbstractionApi> void register(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
+    public <A extends MethodAbstractionApi> void registerAbstraction(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
         clientAbstractionEvent.registerThreadUnsafe(2,
                 (eventContext,event, eventArgs) -> {
                     if (IS_MINECRAFT_1193) {

@@ -1,20 +1,20 @@
 package io.github.bumblesoftware.fastload.api.abstraction.def;
 
 import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionDirectory;
-import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
 import io.github.bumblesoftware.fastload.api.abstraction.core.handler.MethodAbstractionApi;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
 
-public class MinecraftAbstraction<A extends MethodAbstractionApi> implements AbstractionDirectory<A> {
-    private final VersionUtil.GameSpecific versionUtil;
+public class DefaultAbstraction<A extends MethodAbstractionApi> implements AbstractionDirectory<A> {
+    private final VersionUtil versionUtil;
     private final A abstractedClient;
 
-    public MinecraftAbstraction(A clientCalls) {
+    public DefaultAbstraction(A clientCalls, VersionUtil versionUtil) {
         abstractedClient = clientCalls;
-        versionUtil = VersionUtils.MINECRAFT;
+        this.versionUtil = versionUtil;
     }
 
     @Override
-    public VersionUtil.GameSpecific getVersionUtil() {
+    public VersionUtil getVersionUtil() {
         return versionUtil;
     }
 

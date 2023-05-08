@@ -1,13 +1,14 @@
 package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
 import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.events.CapableEvent;
 import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static net.fabricmc.loader.api.FabricLoader.getInstance;
 
@@ -21,24 +22,32 @@ public class AbstractionHandler<A extends MethodAbstractionApi> {
             final String namespace,
             final List<String> abstractionModIds,
             final Environment environment,
-            final Consumer<AbstractEvent<MutableObjectHolder<A>>> base,
-            final Function<A, AbstractionDirectory<A>> abstractionInstanceGetter
+            final Consumer<AbstractEvent<MutableObjectHolder<A>>> baseAbstraction,
+            final Consumer<AbstractEvent<VersionUtil>> baseClassLoad,
+            final VersionUtil versionUtil,
+            final BiFunction<A, VersionUtil, AbstractionDirectory<A>> abstractionInstanceGetter
     ) {
-        final AbstractEvent<MutableObjectHolder<A>> event = new CapableEvent<>();
+        final AbstractEvent<MutableObjectHolder<A>> abstractionEvent = new CapableEvent<>();
+        final AbstractEvent<VersionUtil> classLoadEvent = new CapableEvent<>();
         final MutableObjectHolder<A> abstractionApiHolder = new MutableObjectHolder<>();
         final String entrypointName = namespace.toLowerCase() + "_" + environment.name().toLowerCase();
 
-        base.accept(event);
+        baseAbstraction.accept(abstractionEvent);
+        baseClassLoad.accept(classLoadEvent);
+
         getInstance().getEntrypointContainers(entrypointName, AbstractionEntrypoint.class)
                 .forEach(container -> abstractionModIds.forEach(abstractionModId -> {
                     if (container.getProvider().getMetadata().getId().equals(abstractionModId)) {
-                        container.getEntrypoint().register(event);
+                        final var entrypoint = container.getEntrypoint();
+                        entrypoint.registerAbstraction(abstractionEvent);
+                        entrypoint.loadClasses(classLoadEvent);
                     }
                 }));
 
-        event.fire(abstractionApiHolder);
+        classLoadEvent.fire(versionUtil);
+        abstractionEvent.fire(abstractionApiHolder);
 
-        this.directory = abstractionInstanceGetter.apply(abstractionApiHolder.heldObj);
+        this.directory = abstractionInstanceGetter.apply(abstractionApiHolder.heldObj, versionUtil);
         this.abstractionModIds = abstractionModIds;
         this.environment = environment;
         this.entrypointName = entrypointName;
