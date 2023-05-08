@@ -1,9 +1,9 @@
 package io.github.bumblesoftware.fastload.api.abstraction.core.handler;
 
 import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,12 +47,12 @@ public class AbstractionHandler<A extends MethodAbstractionApi> {
         classLoadEvent.fire(versionUtil);
         abstractionEvent.fire(abstractionApiHolder);
 
-        this.directory = abstractionInstanceGetter.apply(abstractionApiHolder.heldObj, versionUtil);
+        this.directory = abstractionInstanceGetter.apply(abstractionApiHolder.getHeldObj(), versionUtil);
         this.abstractionModIds = abstractionModIds;
         this.environment = environment;
         this.entrypointName = entrypointName;
 
-        if (abstractionApiHolder.heldObj == null) {
+        if (abstractionApiHolder.getHeldObj() == null) {
             throw new NullPointerException("Abstraction failed for " + this);
         }
     }

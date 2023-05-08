@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.common;
 
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.util.math.ChunkPos;

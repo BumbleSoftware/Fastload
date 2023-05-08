@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +23,6 @@ public class DownloadingTerrainScreenMixin {
         final var returnValue = new MutableObjectHolder<>(closeOnNextTick);
         if (BOOLEAN_EVENT.isNotEmpty(DTS_TICK))
                 BOOLEAN_EVENT.fire(List.of(DTS_TICK), true, returnValue);
-        closeOnNextTick = returnValue.heldObj;
+        closeOnNextTick = returnValue.getHeldObj();
     }
 }

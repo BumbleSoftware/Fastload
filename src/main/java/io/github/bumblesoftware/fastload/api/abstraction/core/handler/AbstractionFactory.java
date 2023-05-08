@@ -4,8 +4,8 @@ import io.github.bumblesoftware.fastload.api.abstraction.core.handler.Abstractio
 import io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionUtil;
 import io.github.bumblesoftware.fastload.api.abstraction.def.DefaultAbstraction;
 import io.github.bumblesoftware.fastload.api.abstraction.def.VersionUtils;
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 
 import java.util.List;
 import java.util.function.BiFunction;

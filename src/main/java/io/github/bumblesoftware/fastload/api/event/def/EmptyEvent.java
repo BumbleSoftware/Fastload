@@ -1,5 +1,8 @@
-package io.github.bumblesoftware.fastload.api.events;
+package io.github.bumblesoftware.fastload.api.event.def;
 
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.core.EventArgs;
+import io.github.bumblesoftware.fastload.api.event.core.EventHolder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
@@ -16,8 +19,7 @@ public class EmptyEvent<T> implements AbstractEvent<T> {
     private final Object2ObjectMap<String, EventHolder<T>> storage = new Object2ObjectOpenHashMap<>();
 
     @Override
-    public void clean() {
-    }
+    public void clean() {}
 
     @Override
     public Object2ObjectMap<String, EventHolder<T>> getStorage() {
@@ -30,27 +32,17 @@ public class EmptyEvent<T> implements AbstractEvent<T> {
     }
 
     @Override
-    public void removeThreadSafe(long priority, List<String> locations, EventArgs<T> eventArgs) {
-
-    }
+    public void removeThreadSafe(long priority, List<String> locations, EventArgs<T> eventArgs) {}
 
     @Override
-    public void removeThreadUnsafe(long priority, List<String> locations, EventArgs<T> eventArgs) {
-
-    }
+    public void removeThreadUnsafe(long priority, List<String> locations, EventArgs<T> eventArgs) {}
 
     @Override
-    public void registerThreadsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {
-
-    }
+    public void registerThreadsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {}
 
     @Override
-    public void registerThreadUnsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {
-
-    }
+    public void registerThreadUnsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {}
 
     @Override
-    public void fire(List<String> locations, boolean orderFlipped, T eventContext) {
-
-    }
+    public void fire(List<String> locations, boolean orderFlipped, T eventContext) {}
 }

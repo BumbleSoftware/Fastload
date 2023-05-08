@@ -24,7 +24,7 @@ public final class TickTimer {
      */
     public TickTimer(final String location) {
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(location),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;
                         ifDebugEnabled(() -> Fastload.LOGGER.info(String.valueOf(remainingTime)));

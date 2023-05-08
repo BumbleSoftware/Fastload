@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
 import io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.ServerContext;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;
@@ -65,7 +65,7 @@ public abstract class MinecraftClientMixin {
                     List.of(SERVER_PSR_LOADING_REDIRECT),
                     new ServerContext<>(integratedServer, returnValue)
             );
-        return returnValue.heldObj;
+        return returnValue.getHeldObj();
     }
 
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))

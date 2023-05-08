@@ -1,8 +1,7 @@
-package io.github.bumblesoftware.fastload.api.events;
+package io.github.bumblesoftware.fastload.api.event.core;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public interface AbstractEvent<Context> {
             final var eventHolder = getStorage().get(location);
             if (eventHolder != null) {
                 for (final var priority : eventHolder.priorityHolder()) {
-                    if (!eventHolder.argsHolder.get(priority.longValue()).isEmpty()) {
+                    if (!eventHolder.argsHolder().get(priority.longValue()).isEmpty()) {
                         return true;
                     }
                 }
@@ -233,77 +232,5 @@ public interface AbstractEvent<Context> {
      */
     default void fire(final Context eventContext) {
         fire(GENERIC_LOCATION_LIST, false, eventContext);
-    }
-
-    /**
-     * Common storage type for {@link AbstractEvent}
-     * @param argsHolder Holds an array of {@link EventArgs} attached to a key of a given priority.
-     * @param priorityHolder Holds all the priorities that are used to access a specific arraylist of events to onElement through.
-     * @param <Ctx> used for custom event params. Refer to {@link FLClientEvents FLEvents}
-     *           for examples.
-     */
-    record EventHolder<Ctx> (
-            Long2ObjectMap<List<EventArgs<Ctx>>> argsHolder,
-            ArrayList<Long> priorityHolder
-    ) {}
-
-    /**
-     * Event args holds a specific implementation that is added to the main registry for {@link AbstractEvent}
-     * to onElement through upon firing.
-     * @param <Ctx> used for custom event params. Refer to {@link FLClientEvents FLEvents}
-     *           for examples.
-     */
-    @FunctionalInterface
-    interface EventArgs<Ctx> {
-
-        /**
-         * @param eventContext The events params.
-         * @param event The event instance for managerial purposes.
-         * @param closer The instance responsible for holding the value that will close this loop.
-         * @param eventArgs The current instance provided for return (recursion)
-         * @return The current instance.
-         */
-        @SuppressWarnings({"UnusedReturnValue", "SameReturnValue"})
-        EventArgs<Ctx> recursive(
-                final Ctx eventContext,
-                final AbstractEvent<Ctx> event,
-                final Object closer,
-                final EventArgs<Ctx> eventArgs
-        );
-    }
-
-    @FunctionalInterface
-    interface StableEventArgs<Ctx> extends EventArgs<Ctx> {
-
-        default EventArgs<Ctx> upcast() {
-            return this;
-        }
-
-        /**
-         * @param eventContext The events params.
-         * @param event The event instance for managerial purposes.
-         * @param closer The instance responsible for holding the value that will close this loop.
-         * @param eventArgs The current instance provided for return (recursion)
-         * @return The current instance.
-         */
-        @Override
-        default EventArgs<Ctx> recursive(
-                final Ctx eventContext,
-                final AbstractEvent<Ctx> event,
-                final Object closer,
-                final EventArgs<Ctx> eventArgs
-        ) {
-            stable(eventContext, event, eventArgs);
-            return null;
-        }
-        /**
-         * @param eventContext The events params.
-         * @param eventArgs The current instance provided for return (recursion)
-         */
-        void stable(
-                final Ctx eventContext,
-                final AbstractEvent<Ctx> event,
-                final EventArgs<Ctx> eventArgs
-        );
     }
 }

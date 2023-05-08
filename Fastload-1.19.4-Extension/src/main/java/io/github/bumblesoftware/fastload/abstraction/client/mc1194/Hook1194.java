@@ -2,9 +2,9 @@ package io.github.bumblesoftware.fastload.abstraction.client.mc1194;
 
 import io.github.bumblesoftware.fastload.api.abstraction.core.handler.AbstractionEntrypoint;
 import io.github.bumblesoftware.fastload.api.abstraction.core.handler.MethodAbstractionApi;
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
 import io.github.bumblesoftware.fastload.init.Fastload;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 
 import static io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants.IS_MINECRAFT_1194;
 import static io.github.bumblesoftware.fastload.api.abstraction.core.versioning.VersionConstants.IS_MINECRAFT_1200;
@@ -14,11 +14,11 @@ public class Hook1194 implements AbstractionEntrypoint {
     @Override
     public <A extends MethodAbstractionApi> void registerAbstraction(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
         clientAbstractionEvent.registerThreadUnsafe(3,
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (IS_MINECRAFT_1194 || IS_MINECRAFT_1200) {
                         ifDebugEnabled(() ->
                             Fastload.LOGGER.info("Fastload 1.19.4 Hook!"));
-                        eventContext.heldObj = new Client1194().generify();
+                        eventContext.setHeldObj(new Client1194().generify());
                     }
                 }
         );

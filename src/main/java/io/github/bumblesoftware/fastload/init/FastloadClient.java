@@ -30,11 +30,11 @@ public class FastloadClient implements ClientModInitializer {
                 List.of("fastload-119-0-1-2-compat", "fastload-1193-compat", "fastload-1194-compat"),
                 CLIENT,
                 event -> event.registerThreadUnsafe(0,
-                        (eventContext, event1, eventArgs) -> {
+                        (eventContext, eventStatus,  event1, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
                                 FLMath.ifDebugEnabled(() ->
                                         LOGGER.info("Fastload 1.18.2 Base!"));
-                                eventContext.heldObj = new Client1182();
+                                eventContext.setHeldObj(new Client1182());
                             }
                         }
                 ),

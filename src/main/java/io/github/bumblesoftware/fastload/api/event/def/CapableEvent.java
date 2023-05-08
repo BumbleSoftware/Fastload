@@ -1,11 +1,19 @@
-package io.github.bumblesoftware.fastload.api.events;
+package io.github.bumblesoftware.fastload.api.event.def;
 
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.core.EventArgs;
+import io.github.bumblesoftware.fastload.api.event.core.EventHolder;
+import io.github.bumblesoftware.fastload.api.event.core.EventStatus;
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.BiConsumer;
+
+import static io.github.bumblesoftware.fastload.api.event.core.EventStatus.*;
 
 
 /**
@@ -153,16 +161,17 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
         }
     }
 
-    private void iterate(EventHolder<Context> holder, ArgsIterator<Context> argsIterator) {
+    private void iterate(EventHolder<Context> holder, BiConsumer<Long, EventArgs<Context>> argsIterator) {
         if (holder != null)
             for (long priority : holder.priorityHolder())
                 for (EventArgs<Context> arg : holder.argsHolder().get(priority))
                     if (arg != null)
-                        argsIterator.onElement(priority, arg);
+                        argsIterator.accept(priority, arg);
     }
 
     @Override
     public void fire(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
+        MutableObjectHolder<EventStatus> statusHolder = new MutableObjectHolder<>(CONTINUE);
         for (final var string : locations) {
             final var add = eventsToAdd.get(string);
             final var all = allEvents.get(string);
@@ -175,13 +184,23 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
 
             iterate(add, this::registerThreadUnsafe);
             all.priorityHolder().sort(order);
-            iterate(all, (priority, eventArgs) -> eventArgs.recursive(eventContext, this, 0, eventArgs));
+
+            for (long priority : all.priorityHolder()) {
+                for (EventArgs<Context> arg : all.argsHolder().get(priority)) {
+                    if (arg != null)
+                        arg.recursive(eventContext,  statusHolder, this, 0, arg);
+                    if (statusHolder.equalsAny(List.of(FINISH_ALL, FINISH_LOCATION, FINISH_PRIORITY)))
+                        break;
+                }
+                if (statusHolder.equalsAny(List.of(FINISH_ALL, FINISH_LOCATION)))
+                    break;
+            }
+
+            if (statusHolder.getHeldObj().equals(FINISH_ALL))
+                break;
+
             iterate(remove, this::removeThreadUnsafe);
         }
         clean();
-    }
-
-    private interface ArgsIterator<Ctx> {
-        void onElement(final long priority, final EventArgs<Ctx> eventArgs);
     }
 }

@@ -2,7 +2,7 @@ package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.PlayerJoinEventContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

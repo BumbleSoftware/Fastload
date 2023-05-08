@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.client;
 
 import io.github.bumblesoftware.fastload.abstraction.AbstractClientCalls;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
 import io.github.bumblesoftware.fastload.config.FLMath;
 import io.github.bumblesoftware.fastload.util.TickTimer;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -22,57 +22,24 @@ import static io.github.bumblesoftware.fastload.init.FastloadClient.MINECRAFT_AB
  * CapableEvent}.
  */
 public final class FLClientHandler {
-
     public static void init() {
         ifDebugEnabled(() -> LOGGER.info("FastloadClientHandler Initialised!"));
         registerEvents();
     }
     public static final AbstractClientCalls ABSTRACTED_CLIENT = MINECRAFT_ABSTRACTION_HANDLER.directory.getAbstractedEntries();
-
     private static Screen oldCurrentScreen = null;
-
-    /**
-     * Boolean whether an object of Player has been initialised
-     */
     private static boolean playerReady = false;
-    /**
-     * Boolean whether player has joined ClientWorld
-     */
     private static boolean playerJoined = false;
-    /**
-     * Stores the old count to compare values on the next method call to see if the value
-     * of loaded chunks is same.
-     */
     private static Integer oldChunkLoadedCountStorage = null;
-    /**
-     * Stores the old count to compare values on the next method call to see if the value
-     * of built chunks is same.
-     */
     private static Integer oldChunkBuildCountStorage = null;
-    /**
-     * Stores the amount of warnings (or chunk tries) for terrain preparation
-     */
     private static int preparationWarnings = 0;
-    /**
-     * Stores the amount of warnings (or chunk tries) for terrain building
-     */
     private static int buildingWarnings = 0;
+    public static final TickTimer CLIENT_TIMER = new TickTimer(RENDER_TICK);
 
-    /**
-     *  Quick, easy, and lazy logging method
-     */
     private static void log(String toLog) {
         LOGGER.info(toLog);
     }
 
-    /**
-     * Client bool-based timer.
-     */
-    public static final TickTimer CLIENT_TIMER = new TickTimer(RENDER_TICK);
-
-    /**
-     * Logs amount of prepared chunks;
-     */
     private static void logRendering(int chunkLoadedCount) {
         if (ABSTRACTED_CLIENT.isSingleplayer()) {
             log("Goal (Loaded Chunks): " + getLocalRenderChunkArea());
@@ -83,9 +50,6 @@ public final class FLClientHandler {
         }
     }
 
-    /**
-     * Lots Chunk-building status
-     */
     private static void logBuilding(int chunkBuildCount) {
         if (ABSTRACTED_CLIENT.isSingleplayer()) {
             log("Goal (Built Chunks): " + getLocalRenderChunkArea());
@@ -96,9 +60,6 @@ public final class FLClientHandler {
         }
     }
 
-    /**
-     * Stops the BuildingTerrainScreen when called and resets relevant params
-     */
     private static void stopBuilding(int chunkLoadedCount, int chunkBuildCount) {
         if (playerJoined && playerReady) {
             System.gc();
@@ -118,26 +79,23 @@ public final class FLClientHandler {
         }
     }
 
-    /**
-     * Event Registration for fastload
-     */
     private static void registerEvents() {
         EMPTY_EVENT.registerThreadUnsafe(1, List.of(CLIENT_PLAYER_INIT),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     ifDebugEnabled(() -> LOGGER.info("shouldLoad = true"));
                     playerReady = true;
                 }
         );
 
         PLAYER_JOIN_EVENT.registerThreadUnsafe(1,
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     ifDebugEnabled(() -> LOGGER.info("playerJoined = true"));
                     playerJoined = true;
                 }
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (
                             CLIENT_TIMER.isReady() &&
                             ABSTRACTED_CLIENT.isGameMenuScreen(eventContext.screen()) &&
@@ -150,7 +108,7 @@ public final class FLClientHandler {
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isBuildingTerrainScreen(eventContext.screen())) {
                         ifDebugEnabled(() -> log("setScreen(new BuildingTerrainScreen)"));
                     }
@@ -159,7 +117,7 @@ public final class FLClientHandler {
 
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1,
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isDownloadingTerrainScreen(eventContext.screen())) {
                         ifDebugEnabled(() -> log("setScreen(new DownloadingTerrainScreen)"));
                         if (playerReady && playerJoined && isInstantLoadEnabled()) {
@@ -174,7 +132,7 @@ public final class FLClientHandler {
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(LLS_441_REDIRECT),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     final var isPreRenderEnabled = isLocalRenderEnabled();
                     ifDebugEnabled(() ->  {
                         LOGGER.info("isLocalRenderEnabled: " + isPreRenderEnabled);
@@ -192,7 +150,7 @@ public final class FLClientHandler {
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(DTS_GAME_JOIN_REDIRECT),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isSingleplayer()) {
                         if (!isLocalRenderEnabled())
                             ABSTRACTED_CLIENT.setScreen(eventContext.screen());
@@ -210,7 +168,7 @@ public final class FLClientHandler {
 
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(RESPAWN_DTS_REDIRECT),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (isInstantLoadEnabled())
                         ABSTRACTED_CLIENT.setScreen(null);
                     else ABSTRACTED_CLIENT.setScreen(eventContext.screen());
@@ -218,7 +176,7 @@ public final class FLClientHandler {
         );
 
         SET_SCREEN_EVENT.registerThreadUnsafe(1, List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
-                (eventContext, event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.isSingleplayer()) {
                         if (isLocalRenderEnabled()) {
                             ABSTRACTED_CLIENT.reset(ABSTRACTED_CLIENT.getCurrentScreen());
@@ -230,8 +188,8 @@ public final class FLClientHandler {
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(DTS_TICK),
-                (eventContext, event, eventArgs) -> {
-                    eventContext.heldObj = true;
+                (eventContext, eventStatus, event, eventArgs) -> {
+                    eventContext.setHeldObj(true);
                     ifDebugEnabled(() ->  LOGGER.info(
                             "DownloadingTerrainScreen set to close on next render tick."
                     ));
@@ -239,7 +197,7 @@ public final class FLClientHandler {
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
-               (eventContext, event, eventArgs) -> {
+               (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen)) {
                         if (ABSTRACTED_CLIENT.getClientWorld() != null) {
                             final int chunkLoadedCount = ABSTRACTED_CLIENT.getLoadedChunkCount();
@@ -313,7 +271,7 @@ public final class FLClientHandler {
         );
 
         BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(RENDER_TICK),
-                (eventContext, event, eventArgs) -> FLMath.ifDebugEnabled(() ->
+                (eventContext, eventStatus, event, eventArgs) -> FLMath.ifDebugEnabled(() ->
                         ABSTRACTED_CLIENT.forCurrentScreen(screen -> {
                         if (oldCurrentScreen != screen) {
                             oldCurrentScreen = screen;
@@ -324,21 +282,21 @@ public final class FLClientHandler {
         );
 
         SERVER_EVENT.registerThreadUnsafe(1, List.of(SERVER_PSR_LOADING_REDIRECT),
-                (eventContext,event, eventArgs) -> eventContext.returnValue().heldObj = true
+                (eventContext, eventStatus, event, eventArgs) -> eventContext.returnValue().setHeldObj(true)
         );
 
         RUNNABLE_EVENT.registerThreadUnsafe(1, List.of(RP_SEND_RUNNABLE),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     final var client = ABSTRACTED_CLIENT.getClientInstance();
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen))
                         ((BuildingTerrainScreen)ABSTRACTED_CLIENT.getCurrentScreen()).setClose(() ->
-                                client.execute(eventContext.heldObj));
-                    else client.execute(eventContext.heldObj);
+                                client.execute(eventContext.getHeldObj()));
+                    else client.execute(eventContext.getHeldObj());
                 }
         );
 
         BOX_BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(FRUSTUM_BOX_BOOL),
-                (eventContext,event, eventArgs) -> {
+                (eventContext, eventStatus, event, eventArgs) -> {
                     if (ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isBuildingTerrainScreen) ||
                             ABSTRACTED_CLIENT.forCurrentScreen(ABSTRACTED_CLIENT::isDownloadingTerrainScreen)
                     )
@@ -347,8 +305,8 @@ public final class FLClientHandler {
         );
 
         INTEGER_EVENT.registerThreadUnsafe(1, List.of(WORLD_ICON),
-                (eventContext,event, eventArgs) -> {
-                    eventContext.heldObj = 100;
+                (eventContext, eventStatus, event, eventArgs) -> {
+                    eventContext.setHeldObj(100);
                     ifDebugEnabled(() -> LOGGER.info("worldIcon time prolonged"));
                 }
         );

@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.client;
 
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.BoxBooleanContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.PlayerJoinEventContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;

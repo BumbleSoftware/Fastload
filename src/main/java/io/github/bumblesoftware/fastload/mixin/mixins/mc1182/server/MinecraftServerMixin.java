@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.mixins.mc1182.server;
 
 import io.github.bumblesoftware.fastload.common.FLCommonEvents;
-import io.github.bumblesoftware.fastload.util.MutableObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.util.math.ChunkPos;
@@ -36,7 +36,7 @@ public abstract class MinecraftServerMixin {
         final var returnValue = new MutableObjectHolder<>(441);
         if (INTEGER_EVENT.isNotEmpty(PREPARE_START_REGION))
             INTEGER_EVENT.fire(List.of(PREPARE_START_REGION), true, returnValue);
-        return returnValue.heldObj;
+        return returnValue.getHeldObj();
     }
 
     @Redirect(method = "prepareStartRegion", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/WorldGenerationProgressListener;start(Lnet/minecraft/util/math/ChunkPos;)V"))
