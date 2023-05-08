@@ -251,10 +251,15 @@ public final class FLClientHandler {
                             ifDebugEnabled(() ->  {
                                 logRendering(chunkLoadedCount);
                                 logBuilding(chunkBuildCount);
+                                LOGGER.info("chunkTryLimit: " + getChunkTryLimit());
+                                LOGGER.info("buildingWarnings: " + buildingWarnings);
+                                LOGGER.info("preparationWarnings: " + preparationWarnings);
+                                LOGGER.info("chunkLoadedCount: " + oldChunkLoadedCountStorage + ":" + chunkLoadedCount);
+                                LOGGER.info("chunkBuiltCount: " + oldChunkBuildCountStorage + ":" + chunkBuildCount);
                             });
 
                             if (oldChunkLoadedCountStorage != null && oldChunkBuildCountStorage != null
-                                    && chunkBuildCount > 0 && chunkLoadedCount > 0
+                                    && chunkBuildCount >= 0 && chunkLoadedCount >= 0
                             ) {
                                 if (oldChunkLoadedCountStorage == chunkLoadedCount)
                                     preparationWarnings++;
