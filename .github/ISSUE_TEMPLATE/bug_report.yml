@@ -32,6 +32,13 @@ body:
             description: Please provide both. They are 2 pieces of core information I need to help you. Ideally provide with debug mode on fastload on!
         validations:
             required: true
+    - type: textarea
+      attributes:
+          label: Fastload Config
+          description: If the fastload config isn't changed, just put "[Default]". Else, copy and paste the file here.
+          value: [Default]
+      validations:
+          required: true
     -   type: textarea
         attributes:
             label: Environment
