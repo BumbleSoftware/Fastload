@@ -170,7 +170,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public synchronized void execute(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
+    public void execute(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
         MutableObjectHolder<EventStatus> statusHolder = new MutableObjectHolder<>(CONTINUE);
         for (final var string : locations) {
             final var add = eventsToAdd.get(string);
