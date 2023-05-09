@@ -28,20 +28,20 @@ public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;addPlayer(ILnet/minecraft/client/network/AbstractClientPlayerEntity;)V"))
     private void onGamedJoinEvent(GameJoinS2CPacket packet, CallbackInfo ci) {
         if (PLAYER_JOIN_EVENT.isNotEmpty())
-            PLAYER_JOIN_EVENT.fire(new PlayerJoinEventContext(packet));
+            PLAYER_JOIN_EVENT.execute(new PlayerJoinEventContext(packet));
     }
 
     @Redirect(method = "onGameJoin", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void modifyDownloadingTerrainScreen(MinecraftClient client, Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(DTS_GAME_JOIN_REDIRECT))
-            SET_SCREEN_EVENT.fire(List.of(DTS_GAME_JOIN_REDIRECT), new SetScreenEventContext(screen, null));
+            SET_SCREEN_EVENT.execute(List.of(DTS_GAME_JOIN_REDIRECT), new SetScreenEventContext(screen, null));
         else client.setScreen(screen);
     }
 
     @Redirect(method = "onPlayerRespawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void instantLoad(MinecraftClient client, Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(RESPAWN_DTS_REDIRECT))
-            SET_SCREEN_EVENT.fire(List.of(RESPAWN_DTS_REDIRECT), new SetScreenEventContext(screen, null));
+            SET_SCREEN_EVENT.execute(List.of(RESPAWN_DTS_REDIRECT), new SetScreenEventContext(screen, null));
         else client.setScreen(screen);
 
     }
@@ -49,7 +49,7 @@ public class ClientPlayNetworkHandlerMixin {
     @Redirect(method = "onResourcePackSend", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;execute(Ljava/lang/Runnable;)V"))
     private void redirectResourcePackScreen(MinecraftClient client, Runnable runnable) {
         if (RUNNABLE_EVENT.isNotEmpty(RP_SEND_RUNNABLE))
-            RUNNABLE_EVENT.fire(List.of(RP_SEND_RUNNABLE), new MutableObjectHolder<>(runnable));
+            RUNNABLE_EVENT.execute(List.of(RP_SEND_RUNNABLE), new MutableObjectHolder<>(runnable));
         else client.execute(runnable);
     }
 }

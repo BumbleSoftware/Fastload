@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.api.event.core;
 
-import io.github.bumblesoftware.fastload.util.obj_holders.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 
 @FunctionalInterface
 public interface StableEventArgs<Context> extends EventArgs<Context> {
@@ -19,7 +19,7 @@ public interface StableEventArgs<Context> extends EventArgs<Context> {
     @Override
     default EventArgs<Context> recursive(
             final Context eventContext,
-            final ObjectHolder<EventStatus> eventStatus,
+            final MutableObjectHolder<EventStatus> eventStatus,
             final AbstractEvent<Context> event,
             final Object closer,
             final EventArgs<Context> eventArgs
@@ -33,7 +33,7 @@ public interface StableEventArgs<Context> extends EventArgs<Context> {
      */
     void stable(
             final Context eventContext,
-            final ObjectHolder<EventStatus> eventStatus,
+            final MutableObjectHolder<EventStatus> eventStatus,
             final AbstractEvent<Context> event,
             final EventArgs<Context> eventArgs
     );

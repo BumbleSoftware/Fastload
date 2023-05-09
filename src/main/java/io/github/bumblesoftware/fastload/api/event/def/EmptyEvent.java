@@ -32,17 +32,17 @@ public class EmptyEvent<T> implements AbstractEvent<T> {
     }
 
     @Override
-    public void removeThreadSafe(long priority, List<String> locations, EventArgs<T> eventArgs) {}
+    public void removeDynamic(long priority, List<String> locations, EventArgs<T> eventArgs) {}
 
     @Override
-    public void removeThreadUnsafe(long priority, List<String> locations, EventArgs<T> eventArgs) {}
+    public void removeStatic(long priority, List<String> locations, EventArgs<T> eventArgs) {}
 
     @Override
-    public void registerThreadsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {}
+    public void registerDynamic(long priority, List<String> locations, EventArgs<T> argsProvider) {}
 
     @Override
-    public void registerThreadUnsafe(long priority, List<String> locations, EventArgs<T> argsProvider) {}
+    public void registerStatic(long priority, List<String> locations, EventArgs<T> argsProvider) {}
 
     @Override
-    public void fire(List<String> locations, boolean orderFlipped, T eventContext) {}
+    public void execute(List<String> locations, boolean orderFlipped, T eventContext) {}
 }

@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.api.event.core;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents;
-import io.github.bumblesoftware.fastload.util.obj_holders.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 
 /**
  * Event args holds a specific implementation that is added to the main registry for {@link AbstractEvent}
@@ -22,7 +22,7 @@ public interface EventArgs<Context> {
     @SuppressWarnings({"UnusedReturnValue", "SameReturnValue"})
     EventArgs<Context> recursive(
             final Context eventContext,
-            final ObjectHolder<EventStatus> statusHolder,
+            final MutableObjectHolder<EventStatus> statusHolder,
             final AbstractEvent<Context> event,
             final Object closer,
             final EventArgs<Context> eventArgs

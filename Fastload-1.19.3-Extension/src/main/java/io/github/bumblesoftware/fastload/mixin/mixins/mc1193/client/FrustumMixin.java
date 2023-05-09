@@ -21,7 +21,7 @@ public class FrustumMixin {
     @Inject(method = "isVisible(DDDDDD)Z", at = @At("HEAD"), cancellable = true)
     private void setVisible(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, CallbackInfoReturnable<Boolean> cir) {
         if (BOX_BOOLEAN_EVENT.isNotEmpty(FRUSTUM_BOX_BOOL))
-            BOX_BOOLEAN_EVENT.fire(
+            BOX_BOOLEAN_EVENT.execute(
                     List.of(FRUSTUM_BOX_BOOL),
                     new BoxBooleanContext(
                             new Box(minX, minY, minZ, maxX, maxY, maxZ),

@@ -38,19 +38,19 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenEvent(final Screen screen, final CallbackInfo ci) {
         if (SET_SCREEN_EVENT.isNotEmpty())
-            SET_SCREEN_EVENT.fire(new SetScreenEventContext(screen, ci));
+            SET_SCREEN_EVENT.execute(new SetScreenEventContext(screen, ci));
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void renderEvent(boolean tick, CallbackInfo ci) {
         if (BOOLEAN_EVENT.isNotEmpty(RENDER_TICK))
-            BOOLEAN_EVENT.fire(List.of(RENDER_TICK), new MutableObjectHolder<>(tick));
+            BOOLEAN_EVENT.execute(List.of(RENDER_TICK), new MutableObjectHolder<>(tick));
     }
 
     @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void handle441Loading(MinecraftClient client, @Nullable Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(LLS_441_REDIRECT))
-            SET_SCREEN_EVENT.fire(
+            SET_SCREEN_EVENT.execute(
                     List.of(LLS_441_REDIRECT),
                     new SetScreenEventContext(screen, null)
             );
@@ -61,7 +61,7 @@ public abstract class MinecraftClientMixin {
     private boolean handleServerWait(IntegratedServer integratedServer) {
         final var returnValue = new MutableObjectHolder<>(integratedServer.isLoading());
         if (SERVER_EVENT.isNotEmpty(SERVER_PSR_LOADING_REDIRECT))
-            SERVER_EVENT.fire(
+            SERVER_EVENT.execute(
                     List.of(SERVER_PSR_LOADING_REDIRECT),
                     new ServerContext<>(integratedServer, returnValue)
             );
@@ -71,7 +71,7 @@ public abstract class MinecraftClientMixin {
     @Redirect(method = "joinWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;reset(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void handleProgressScreen(MinecraftClient client, Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT))
-            SET_SCREEN_EVENT.fire(
+            SET_SCREEN_EVENT.execute(
                     List.of(PROGRESS_SCREEN_JOIN_WORLD_REDIRECT),
                     new SetScreenEventContext(screen, null)
             );

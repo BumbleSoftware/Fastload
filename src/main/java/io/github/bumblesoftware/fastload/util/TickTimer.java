@@ -23,7 +23,7 @@ public final class TickTimer {
      * Registers a client event for the timer to use
      */
     public TickTimer(final String location) {
-        BOOLEAN_EVENT.registerThreadUnsafe(1, List.of(location),
+        BOOLEAN_EVENT.registerStatic(1, List.of(location),
                 (eventContext, eventStatus, event, eventArgs) -> {
                     if (remainingTime > 0) {
                         remainingTime--;

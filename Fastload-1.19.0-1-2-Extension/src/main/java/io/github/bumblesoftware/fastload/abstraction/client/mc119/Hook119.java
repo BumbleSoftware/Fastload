@@ -12,7 +12,7 @@ import static io.github.bumblesoftware.fastload.api.abstraction.core.versioning.
 public class Hook119 implements AbstractionEntrypoint {
     @Override
     public <A extends MethodAbstractionApi> void registerAbstraction(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
-        clientAbstractionEvent.registerThreadUnsafe(1,
+        clientAbstractionEvent.registerStatic(1,
                 (eventContext, eventStatus, event, eventArgs) -> {
                     if (IS_MINECRAFT_1190 || IS_MINECRAFT_1191 || IS_MINECRAFT_1192) {
                         FLMath.ifDebugEnabled(() ->

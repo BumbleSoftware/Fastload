@@ -22,7 +22,7 @@ public class DownloadingTerrainScreenMixin {
     public void tick(final CallbackInfo ci) {
         final var returnValue = new MutableObjectHolder<>(closeOnNextTick);
         if (BOOLEAN_EVENT.isNotEmpty(DTS_TICK))
-                BOOLEAN_EVENT.fire(List.of(DTS_TICK), true, returnValue);
+                BOOLEAN_EVENT.execute(List.of(DTS_TICK), true, returnValue);
         closeOnNextTick = returnValue.getHeldObj();
     }
 }

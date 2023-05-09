@@ -13,7 +13,7 @@ public class Hook1193 implements AbstractionEntrypoint {
 
     @Override
     public <A extends MethodAbstractionApi> void registerAbstraction(AbstractEvent<MutableObjectHolder<A>> clientAbstractionEvent) {
-        clientAbstractionEvent.registerThreadUnsafe(2,
+        clientAbstractionEvent.registerStatic(2,
                 (eventContext, eventStatus, event, eventArgs) -> {
                     if (IS_MINECRAFT_1193) {
                         FLMath.isDebugEnabled().runIf(() ->

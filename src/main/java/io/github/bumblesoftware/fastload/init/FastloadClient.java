@@ -29,7 +29,7 @@ public class FastloadClient implements ClientModInitializer {
                 NAMESPACE,
                 List.of("fastload-119-0-1-2-compat", "fastload-1193-compat", "fastload-1194-compat"),
                 CLIENT,
-                event -> event.registerThreadUnsafe(0,
+                event -> event.registerStatic(0,
                         (eventContext, eventStatus,  event1, eventArgs) -> {
                             if (IS_MINECRAFT_1182) {
                                 FLMath.ifDebugEnabled(() ->

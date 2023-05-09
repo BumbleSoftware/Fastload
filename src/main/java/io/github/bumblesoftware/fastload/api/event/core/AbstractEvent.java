@@ -61,7 +61,7 @@ public interface AbstractEvent<Context> {
 
     /**
      * @return The current {@link EventHolder argsHolder} for usage in
-     * {@link #removeThreadUnsafe(long, List, EventArgs)}
+     * {@link #removeStatic(long, List, EventArgs)}
      */
     Object2ObjectMap<String, EventHolder<Context>> getStorage();
 
@@ -75,162 +75,162 @@ public interface AbstractEvent<Context> {
     List<String> getLocationList();
 
     /**
-     * Thread safe method to remove events. Typically used inside of events to remove after fire.
-     * @param eventArgs The args that will be called when event fires.
+     * Thread safe method to remove events. Typically used inside of events to remove after execute.
+     * @param eventArgs The args that will be called when event executes.
      * @param locations All locations that this eventArg should be removed from.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    void removeThreadSafe(
+    void removeDynamic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
     );
 
     /**
-     * Generic location alternative to {@link AbstractEvent#removeThreadSafe(long, List, EventArgs)}
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * Generic location alternative to {@link AbstractEvent#removeDynamic(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    default void removeThreadSafe(final long priority, final EventArgs<Context> eventArgs) {
-        removeThreadSafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    default void removeDynamic(final long priority, final EventArgs<Context> eventArgs) {
+        removeDynamic(priority, GENERIC_LOCATION_LIST, eventArgs);
     }
 
     /**
      * Thread unsafe method of removing events. It's faster but will cause CME's if you aren't careful.
-     * @param eventArgs The args that will be called when event fires.
+     * @param eventArgs The args that will be called when event executes.
      * @param locations All locations that this eventArg should be removed from.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    void removeThreadUnsafe(
+    void removeStatic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
     );
 
     /**
-     * Generic location alternative to {@link AbstractEvent#removeThreadUnsafe(long, List, EventArgs)}
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * Generic location alternative to {@link AbstractEvent#removeStatic(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event executed.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
-    default void removeThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
-           removeThreadUnsafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    default void removeStatic(final long priority, final EventArgs<Context> eventArgs) {
+           removeStatic(priority, GENERIC_LOCATION_LIST, eventArgs);
     }
 
     /**
-     * Registers a lambda to a map. A thread safe alternative to {@link #registerThreadUnsafe(long, List, EventArgs)},
+     * Registers a lambda to a map. A thread safe alternative to {@link #registerStatic(long, List, EventArgs)},
      * at the expense of speed & efficiency.
-     * @param eventArgs The args that will be called when event fires.
+     * @param eventArgs The args that will be called when event executes.
      * @param locations All locations that this eventArg should be registered to.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    void registerThreadsafe(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
+    void registerDynamic(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
 
     /**
-     * StableEventArgs alternative to {@link AbstractEvent#registerThreadsafe(long, List, EventArgs)}.
-     * @param eventArgs The args that will be called when event fires.
+     * StableEventArgs alternative to {@link AbstractEvent#registerDynamic(long, List, EventArgs)}.
+     * @param eventArgs The args that will be called when event executes.
      * @param locations All locations that this eventArg should be registered to.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    default void registerThreadsafe(
+    default void registerDynamic(
             final long priority,
             final List<String> locations,
             final StableEventArgs<Context> eventArgs
     ) {
-        registerThreadsafe(priority, locations, eventArgs.upcast());
+        registerDynamic(priority, locations, eventArgs.upcast());
     }
 
     /**
-     * Generic location alternative to {@link AbstractEvent#registerThreadsafe(long, List, EventArgs)}.
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * Generic location alternative to {@link AbstractEvent#registerDynamic(long, List, EventArgs)}.
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    default void registerThreadsafe(final long priority, final EventArgs<Context> eventArgs) {
-        registerThreadsafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    default void registerDynamic(final long priority, final EventArgs<Context> eventArgs) {
+        registerDynamic(priority, GENERIC_LOCATION_LIST, eventArgs);
     }
 
     /**
-     * StableEventArgs alternative to {@link AbstractEvent#registerThreadsafe(long, EventArgs)}.
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * StableEventArgs alternative to {@link AbstractEvent#registerDynamic(long, EventArgs)}.
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    default void registerThreadsafe(final long priority, final StableEventArgs<Context> eventArgs) {
-        registerThreadsafe(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
+    default void registerDynamic(final long priority, final StableEventArgs<Context> eventArgs) {
+        registerDynamic(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
     }
 
     /**
      * Registers a lambda to a map. It's not thread safe so do it at startup to avoid CME's.
-     * @param eventArgs The args that will be called when event fires.
+     * @param eventArgs The args that will be called when event executes.
      * @param locations All locations that this eventArg should be registered to.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
-    void registerThreadUnsafe(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
+    void registerStatic(final long priority, final List<String> locations, final EventArgs<Context> eventArgs);
 
     /**
-     * StableEventArgs alternative to {@link AbstractEvent#registerThreadUnsafe(long, List, EventArgs)}
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * StableEventArgs alternative to {@link AbstractEvent#registerStatic(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
     @SuppressWarnings("unused")
-    default void registerThreadUnsafe(final long priority, final List<String> locations, final StableEventArgs<Context> eventArgs) {
-        registerThreadUnsafe(priority, locations, eventArgs.upcast());
+    default void registerStatic(final long priority, final List<String> locations, final StableEventArgs<Context> eventArgs) {
+        registerStatic(priority, locations, eventArgs.upcast());
     }
 
     /**
-     * Generic location alternative to {@link AbstractEvent#registerThreadUnsafe(long, List, EventArgs)}
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * Generic location alternative to {@link AbstractEvent#registerStatic(long, List, EventArgs)}
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
-    default void registerThreadUnsafe(final long priority, final EventArgs<Context> eventArgs) {
-        registerThreadUnsafe(priority, GENERIC_LOCATION_LIST, eventArgs);
+    default void registerStatic(final long priority, final EventArgs<Context> eventArgs) {
+        registerStatic(priority, GENERIC_LOCATION_LIST, eventArgs);
     }
 
     /**
-     * StableEventArgs alternative to {@link AbstractEvent#registerThreadUnsafe(long, EventArgs)}
-     * @param eventArgs The args that will be called when event fires.
-     * @param priority Holds the value for the priority value, which correlates with when it's fired.
+     * StableEventArgs alternative to {@link AbstractEvent#registerStatic(long, EventArgs)}
+     * @param eventArgs The args that will be called when event executes.
+     * @param priority Holds the value for the priority value, which correlates with when it's executed.
      */
-    default void registerThreadUnsafe(final long priority, final StableEventArgs<Context> eventArgs) {
-        registerThreadUnsafe(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
+    default void registerStatic(final long priority, final StableEventArgs<Context> eventArgs) {
+        registerStatic(priority, GENERIC_LOCATION_LIST, eventArgs.upcast());
     }
 
     /**
      * To set up an event listener, just mixin to your target, call this method with a new event context.
      * See {@link AbstractEvent} for what an actual implementation looks like.
-     * @param locations All locations to be fired.
+     * @param locations All locations to be executed.
      * @param orderFlipped should event order be flipped when firing?
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    void fire(final List<String> locations, final boolean orderFlipped, final Context eventContext);
+    void execute(final List<String> locations, final boolean orderFlipped, final Context eventContext);
 
     /**
-     * A default ordered alternative to {@link AbstractEvent#fire(List, boolean, Context)}
-     * @param locations All locations to be fired.
+     * A default ordered alternative to {@link AbstractEvent#execute(List, boolean, Context)}
+     * @param locations All locations to be executed.
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    default void fire(final List<String> locations, final Context eventContext) {
-        fire(locations, false, eventContext);
+    default void execute(final List<String> locations, final Context eventContext) {
+        execute(locations, false, eventContext);
     }
 
     /**
-     * Generic location alternative to {@link AbstractEvent#fire(List, boolean, Context)}
+     * Generic location alternative to {@link AbstractEvent#execute(List, boolean, Context)}
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    default void fire(final boolean orderFlipped, final Context eventContext) {
-        fire(GENERIC_LOCATION_LIST, orderFlipped, eventContext);
+    default void execute(final boolean orderFlipped, final Context eventContext) {
+        execute(GENERIC_LOCATION_LIST, orderFlipped, eventContext);
     }
 
     /**
-     * Generic location and default ordered alternative to {@link AbstractEvent#fire(List, boolean, Context)}
+     * Generic location and default ordered alternative to {@link AbstractEvent#execute(List, boolean, Context)}
      * @param eventContext The provided context (of params) through this classes generic.
      */
-    default void fire(final Context eventContext) {
-        fire(GENERIC_LOCATION_LIST, false, eventContext);
+    default void execute(final Context eventContext) {
+        execute(GENERIC_LOCATION_LIST, false, eventContext);
     }
 }

@@ -44,8 +44,8 @@ public class AbstractionHandler<A extends MethodAbstractionApi> {
                     }
                 }));
 
-        classLoadEvent.fire(versionUtil);
-        abstractionEvent.fire(abstractionApiHolder);
+        classLoadEvent.execute(versionUtil);
+        abstractionEvent.execute(abstractionApiHolder);
 
         this.directory = abstractionInstanceGetter.apply(abstractionApiHolder.getHeldObj(), versionUtil);
         this.abstractionModIds = abstractionModIds;

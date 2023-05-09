@@ -46,7 +46,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void clean() {
+    public synchronized void clean() {
         eventsToAdd.clear();
         eventsToRemove.clear();
         for (final var location : getLocationList()) {
@@ -68,17 +68,17 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public Object2ObjectOpenHashMap<String, EventHolder<Context>> getStorage() {
+    public synchronized Object2ObjectOpenHashMap<String, EventHolder<Context>> getStorage() {
         return allEvents;
     }
 
     @Override
-    public List<String> getLocationList() {
+    public synchronized List<String> getLocationList() {
         return locationList;
     }
 
     @Override
-    public void removeThreadSafe(
+    public synchronized void removeDynamic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
@@ -99,7 +99,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void removeThreadUnsafe(
+    public synchronized void removeStatic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
@@ -116,7 +116,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void registerThreadsafe(
+    public synchronized void registerDynamic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
@@ -137,7 +137,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void registerThreadUnsafe(
+    public synchronized void registerStatic(
             final long priority,
             final List<String> locations,
             final EventArgs<Context> eventArgs
@@ -170,7 +170,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
     }
 
     @Override
-    public void fire(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
+    public synchronized void execute(final List<String> locations, final boolean orderFlipped, final Context eventContext) {
         MutableObjectHolder<EventStatus> statusHolder = new MutableObjectHolder<>(CONTINUE);
         for (final var string : locations) {
             final var add = eventsToAdd.get(string);
@@ -182,7 +182,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
                 order = this.order.reversed();
             else order = this.order;
 
-            iterate(add, this::registerThreadUnsafe);
+            iterate(add, this::registerStatic);
             all.priorityHolder().sort(order);
 
             for (long priority : all.priorityHolder()) {
@@ -199,7 +199,7 @@ public class CapableEvent<Context> implements AbstractEvent<Context> {
             if (statusHolder.getHeldObj().equals(FINISH_ALL))
                 break;
 
-            iterate(remove, this::removeThreadUnsafe);
+            iterate(remove, this::removeStatic);
         }
         clean();
     }
