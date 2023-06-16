@@ -1,0 +1,28 @@
+{
+    "fastload.screen.buildingTerrain.template": "Concluído / Meta",
+    "fastload.screen.buildingTerrain.building": "Construindo chunks Visíveis",
+    "fastload.screen.buildingTerrain.preparing": "Preparando todas as chunks",
+  
+    "fastload.screen.config": "Configuração de carregamento rápido",
+  
+    "fastload.button.debug": "Modo de depuração",
+    "fastload.button.debug.tooltip": "As depurações devem ser impressas nos logs?",
+  
+    "fastload.button.close_loading_screen_unsafely": "Fechar tela de carregamento",
+    "fastload.button.close_loading_screen_unsafely.tooltip": "O carregamento rápido deve fechar a tela de download do terreno mais cedo, mesmo que seja um pouco inseguro?",
+  
+    "fastload.button.render_chunk_radius": "Raio de pré-renderização",
+    "fastload.button.render_chunk_radius.tooltip": "Muitas chunks em um raio devem ser preparados e construídos durante a pré-renderização? Limitado pela distância de renderização",
+    "fastload.button.render_chunk_radius.min": "Desativado",
+    "fastload.button.render_chunk_radius.max": "Por que?",
+  
+    "fastload.button.pregen_chunk_radius": "Raio do Pré-geração",
+    "fastload.button.pregen_chunk_radius.tooltip": "Muitas chunks em um raio devem ser gerados no servidor até serem concluídos. Deve se correlacionar inversamente com o raio pré-renderizado para um desempenho ideal",
+    "fastload.button.pregen_chunk_radius.min": "Ksyxis",
+    "fastload.button.pregen_chunk_radius.max": "Chunky",
+  
+    "fastload.button.chunk_try_limit": "Limite de tentativa de bloco",
+    "fastload.button.chunk_try_limit.tooltip": "Quantas vezes a mesma contagem de blocos poderia ser retornada seguidas antes de abandonar a pré-renderização",
+    "fastload.button.chunk_try_limit.min": "NASA PC",
+    "fastload.button.chunk_try_limit.max": "Infinidade"
+}

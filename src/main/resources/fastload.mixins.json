@@ -1,18 +1,17 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.abdelaziz.fastload.mixin",
+  "package": "io.github.bumblesoftware.fastload.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "server.MinecraftServerMixin",
-    "server.WorldGenerationProcessLoggerMixin",
-    "server.WorldGenerationProgressTrackerMixin"
+    "server.MinecraftServerMixin"
   ],
   "client": [
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayNetworkHandlerMixin",
     "client.DownloadingTerrainScreenMixin",
-    "client.LevelLoadingScreenMixin",
+    "client.FrustumMixin",
+    "client.GameRendererMixin",
     "client.MinecraftClientMixin"
   ],
   "injectors": {

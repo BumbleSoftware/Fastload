@@ -1,0 +1,28 @@
+{
+  "fastload.screen.buildingTerrain.template": "已完成 / 目标",
+  "fastload.screen.buildingTerrain.building": "构建可见区块",
+  "fastload.screen.buildingTerrain.preparing": "准备所有区块中",
+
+  "fastload.screen.config": "Fastload 设置",
+
+  "fastload.button.debug": "调试模式",
+  "fastload.button.debug.tooltip": "调试结果是否应该在日志中打印？",
+
+  "fastload.button.close_loading_screen_unsafely": "关闭加载屏幕",
+  "fastload.button.close_loading_screen_unsafely.tooltip": "Fastload 应该提前关闭加载地形界面，即使它稍微有点不安全？",
+
+  "fastload.button.render_chunk_radius": "预渲染半径",
+  "fastload.button.render_chunk_radius.tooltip": "在预渲染过程中，应该在半径范围内准备和构建多少个区块？受渲染距离的限制",
+  "fastload.button.render_chunk_radius.min": "关闭",
+  "fastload.button.render_chunk_radius.max": "为什么？",
+
+  "fastload.button.pregen_chunk_radius": "预生成半径",
+  "fastload.button.pregen_chunk_radius.tooltip": "半径中的许多区块应该在服务器上生成，直到完成。应与预渲染半径成反比，以获得最佳性能",
+  "fastload.button.pregen_chunk_radius.min": "Ksyxis",
+  "fastload.button.pregen_chunk_radius.max": "Chunky",
+
+  "fastload.button.chunk_try_limit": "区块尝试限制",
+  "fastload.button.chunk_try_limit.tooltip": "在放弃预渲染之前，允许同一区块数连续返回多少次？",
+  "fastload.button.chunk_try_limit.min": "NASA 电脑",
+  "fastload.button.chunk_try_limit.max": "无限"
+}
