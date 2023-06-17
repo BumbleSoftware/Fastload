@@ -12,7 +12,7 @@
     "client.DownloadingTerrainScreenMixin",
     "client.FrustumMixin",
     "client.GameRendererMixin",
-    "client.MinecraftClientMixin",
+    "client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
