@@ -1,4 +1,0 @@
-v1	named	intermediary
-FIELD	io/github/bumblesoftware/fastload/mixin/client/DownloadingTerrainScreenMixin	Z	closeOnNextTick	f_202372_
-METHOD	io/github/bumblesoftware/fastload/mixin/client/MinecraftClientMixin	(Lnet/minecraft/client/gui/screen/Screen;)V	setScreen	m_91152_
-METHOD	io/github/bumblesoftware/fastload/mixin/client/MinecraftClientMixin	(Lnet/minecraft/client/gui/screen/Screen;)V	reset	m_91362_
