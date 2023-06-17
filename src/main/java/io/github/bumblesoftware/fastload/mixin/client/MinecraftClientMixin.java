@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.client;
 
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
-import io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.ServerContext;
+import io.github.bumblesoftware.fastload.common.FLCommonEvents;
 import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -41,7 +41,7 @@ public abstract class MinecraftClientMixin {
             BOOLEAN_EVENT.execute(List.of(RENDER_TICK), new MutableObjectHolder<>(tick));
     }
 
-    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void handle441Loading(MinecraftClient client, @Nullable Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(LLS_441_REDIRECT))
             SET_SCREEN_EVENT.execute(
@@ -57,7 +57,7 @@ public abstract class MinecraftClientMixin {
         if (SERVER_EVENT.isNotEmpty(SERVER_PSR_LOADING_REDIRECT))
             SERVER_EVENT.execute(
                     List.of(SERVER_PSR_LOADING_REDIRECT),
-                    new ServerContext<>(integratedServer, returnValue)
+                    new FLCommonEvents.Contexts.ServerContext<>(integratedServer, returnValue)
             );
         return returnValue.getHeldObj();
     }
