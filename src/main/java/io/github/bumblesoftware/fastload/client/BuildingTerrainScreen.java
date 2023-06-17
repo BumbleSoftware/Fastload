@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.client;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.NarratorManager;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class BuildingTerrainScreen extends Screen {
     public final int loadingAreaGoal;
@@ -20,8 +20,8 @@ public class BuildingTerrainScreen extends Screen {
      * Renders screen texts
      */
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
