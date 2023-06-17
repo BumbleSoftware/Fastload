@@ -14,11 +14,31 @@ import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 import static io.github.bumblesoftware.fastload.config.DefaultConfig.*;
-import static io.github.bumblesoftware.fastload.config.FLMath.*;
+import static io.github.bumblesoftware.fastload.config.FLMath.ifDebugEnabled;
 
 public class FLConfig {
+    @SuppressWarnings("EmptyMethod")
+    public static void init() {}
+
     private static final Properties properties;
     private static final Path path;
+
+
+    protected static boolean getRawDebug() {
+        return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
+    }
+    protected static boolean getRawInstantLoad() {
+        return getBoolean(INSTANT_LOAD_KEY, DEF_INSTANT_LOAD_VALUE);
+    }
+    protected static int getRawChunkTryLimit() {
+        return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
+    }
+    protected static int getRawLocalRenderChunkRadius() {
+        return getInt(LOCAL_RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, LOCAL_CHUNK_RADIUS_BOUND);
+    }
+    protected static int getRawServerRenderChunkRadius() {
+        return getInt(SERVER_RENDER_RADIUS_KEY, DEF_SERVER_RENDER_RADIUS_VALUE, SERVER_CHUNK_RADIUS_BOUND);
+    }
 
     static {
         properties = new Properties();
@@ -41,31 +61,6 @@ public class FLConfig {
         writeToDisk();
 
     }
-
-    @SuppressWarnings("EmptyMethod")
-    public static void init() {
-    }
-
-    protected static boolean getRawDebug() {
-        return getBoolean(DEBUG_KEY, DEF_DEBUG_VALUE);
-    }
-
-    protected static boolean getRawInstantLoad() {
-        return getBoolean(INSTANT_LOAD_KEY, DEF_INSTANT_LOAD_VALUE);
-    }
-
-    protected static int getRawChunkTryLimit() {
-        return getInt(CHUNK_TRY_LIMIT_KEY, DEF_TRY_LIMIT_VALUE, CHUNK_TRY_LIMIT_BOUND);
-    }
-
-    protected static int getRawLocalRenderChunkRadius() {
-        return getInt(LOCAL_RENDER_RADIUS_KEY, DEF_RENDER_RADIUS_VALUE, LOCAL_CHUNK_RADIUS_BOUND);
-    }
-
-    protected static int getRawServerRenderChunkRadius() {
-        return getInt(SERVER_RENDER_RADIUS_KEY, DEF_SERVER_RENDER_RADIUS_VALUE, SERVER_CHUNK_RADIUS_BOUND);
-    }
-
     private static void logWarn(String key) {
         Fastload.LOGGER.warn("Failed to parse variable '" + key + "' in " + Fastload.NAMESPACE + "'s config, " +
                 "generating a new one!");
@@ -73,7 +68,7 @@ public class FLConfig {
 
     public static void writeToDisk() {
         try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
-            properties.store(out, Fastload.NAMESPACE + " Configuration File");
+            properties.store(out,  Fastload.NAMESPACE +  " Configuration File");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -105,7 +100,6 @@ public class FLConfig {
             throw new RuntimeException(e);
         }
     }
-
     private static String writable(String key) {
         return "'" + key.toLowerCase() + "'";
     }
@@ -143,7 +137,7 @@ public class FLConfig {
     }
 
     public static void storeProperty(String key, String value) {
-        if (isDebugEnabled()) Fastload.LOGGER.info(key + ":" + value);
+        ifDebugEnabled(() -> Fastload.LOGGER.info(key + ":" + value));
         properties.setProperty(key, value);
     }
 

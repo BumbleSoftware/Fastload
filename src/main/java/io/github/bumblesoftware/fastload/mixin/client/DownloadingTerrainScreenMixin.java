@@ -1,6 +1,6 @@
 package io.github.bumblesoftware.fastload.mixin.client;
 
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,14 +16,13 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOO
 
 @Mixin(DownloadingTerrainScreen.class)
 public class DownloadingTerrainScreenMixin {
-    @Shadow
-    private boolean closeOnNextTick;
+    @Shadow private boolean closeOnNextTick;
 
     @Inject(at = @At("HEAD"), method = "setReady")
     public void tick(final CallbackInfo ci) {
-        final var returnValue = new ObjectHolder<>(closeOnNextTick);
+        final var returnValue = new MutableObjectHolder<>(closeOnNextTick);
         if (BOOLEAN_EVENT.isNotEmpty(DTS_TICK))
-            BOOLEAN_EVENT.fireEvent(List.of(DTS_TICK), returnValue);
-        closeOnNextTick = returnValue.heldObj;
+                BOOLEAN_EVENT.execute(List.of(DTS_TICK), true, returnValue);
+        closeOnNextTick = returnValue.getHeldObj();
     }
 }

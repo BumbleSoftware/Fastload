@@ -7,17 +7,15 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.PRO
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Locations.PREPARE_START_REGION;
 
 public class FLCommonHandler {
+    public static void init() {}
+
     static {
-        INTEGER_EVENT.registerThreadUnsafe(1, List.of(PREPARE_START_REGION),
-                event -> event.stableArgs((eventContext, eventArgs) -> eventContext.heldObj = 1)
+        INTEGER_EVENT.registerStatic(1, List.of(PREPARE_START_REGION),
+                (eventContext, eventStatus, event, eventArgs) -> eventContext.setHeldObj(1)
         );
 
-        PROGRESS_LISTENER_EVENT.registerThreadUnsafe(1,
-                event -> event.stableArgs((eventContext, eventArgs) -> eventContext.progressListener().stop())
+        PROGRESS_LISTENER_EVENT.registerStatic(1,
+                (eventContext, eventStatus, event, eventArgs) -> eventContext.progressListener().stop()
         );
-    }
-
-    @SuppressWarnings("EmptyMethod")
-    public static void init() {
     }
 }
