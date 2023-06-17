@@ -15,7 +15,7 @@ public interface DefaultConfig {
     String SERVER_RENDER_AREA_KEY = suffix(SERVER_RENDER_KEY, true);
 
     Bound LOCAL_CHUNK_RADIUS_BOUND = new Bound(32, 0);
-    Bound SERVER_CHUNK_RADIUS_BOUND = new Bound(LOCAL_CHUNK_RADIUS_BOUND.max() / 2, LOCAL_CHUNK_RADIUS_BOUND.min());
+    Bound SERVER_CHUNK_RADIUS_BOUND = new Bound(LOCAL_CHUNK_RADIUS_BOUND.max()/2, LOCAL_CHUNK_RADIUS_BOUND.min());
     Bound CHUNK_TRY_LIMIT_BOUND = new Bound(2500, 1);
 
     boolean DEF_DEBUG_VALUE = false;

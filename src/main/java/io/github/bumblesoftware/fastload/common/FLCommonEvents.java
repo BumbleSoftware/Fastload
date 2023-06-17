@@ -1,13 +1,11 @@
 package io.github.bumblesoftware.fastload.common;
 
-import io.github.bumblesoftware.fastload.api.events.AbstractEvent;
-import io.github.bumblesoftware.fastload.api.events.CapableEvent;
-import io.github.bumblesoftware.fastload.util.ObjectHolder;
+import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
+import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
+import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.util.math.ChunkPos;
-
-import java.util.Comparator;
 
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.*;
 
@@ -16,18 +14,17 @@ import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.*
  * Common events.
  */
 public interface FLCommonEvents {
-    static void init() {
-    }
+    static void init() {}
 
     interface Events {
-        AbstractEvent<ObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>(Comparator.naturalOrder());
-        AbstractEvent<ObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>(Comparator.naturalOrder());
-        AbstractEvent<ObjectHolder<Runnable>> RUNNABLE_EVENT = new CapableEvent<>(Comparator.naturalOrder());
-        AbstractEvent<EmptyContext> EMPTY_EVENT = new CapableEvent<>();
+        AbstractEvent<MutableObjectHolder<Boolean>> BOOLEAN_EVENT = new CapableEvent<>();
+        AbstractEvent<MutableObjectHolder<Integer>> INTEGER_EVENT = new CapableEvent<>();
+        AbstractEvent<MutableObjectHolder<Runnable>> RUNNABLE_EVENT = new CapableEvent<>();
+        AbstractEvent<EmptyContext> EMPTY_EVENT =  new CapableEvent<>();
         AbstractEvent<ProgressListenerContext> PROGRESS_LISTENER_EVENT = new CapableEvent<>();
-        AbstractEvent<ServerContext> SERVER_EVENT = new CapableEvent<>();
-    }
+        AbstractEvent<ServerContext<Boolean>> SERVER_EVENT = new CapableEvent<>();
 
+    }
     interface Locations {
         String SERVER_TICK = "minecraft_server;server_tick;";
         String PREPARE_START_REGION = "minecraft_server;prepare_start_region;modify_constant_441;";
@@ -35,14 +32,8 @@ public interface FLCommonEvents {
     }
 
     interface Contexts {
-        record EmptyContext() {
-        }
-
-        record ServerContext(MinecraftServer server, ObjectHolder<?> returnValue) {
-        }
-
-        record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {
-        }
-
+        record EmptyContext() {}
+        record ServerContext<T>(MinecraftServer server, MutableObjectHolder<T> returnValue) {}
+        record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {}
     }
 }

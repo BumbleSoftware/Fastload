@@ -16,13 +16,13 @@ import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.
 @Mixin(Frustum.class)
 public class FrustumMixin {
     @Inject(method = "isVisible(DDDDDD)Z", at = @At("HEAD"), cancellable = true)
-    private void setVisible(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, CallbackInfoReturnable<Boolean> cir) {
+    private void setVisible(float x1, float y1, float z1, float x2, float y2, float z2, CallbackInfoReturnable<Boolean> cir) {
         if (BOX_BOOLEAN_EVENT.isNotEmpty(FRUSTUM_BOX_BOOL))
-            BOX_BOOLEAN_EVENT.fireEvent(
+            BOX_BOOLEAN_EVENT.execute(
                     List.of(FRUSTUM_BOX_BOOL),
                     new BoxBooleanContext(
-                            new Box(minX, minY, minZ, maxX, maxY, maxZ),
-                            cir
+                        new Box(x1, y1, z1, x2, y2, z2),
+                        cir
                     )
             );
     }
