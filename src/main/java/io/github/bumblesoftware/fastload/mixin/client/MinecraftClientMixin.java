@@ -41,8 +41,7 @@ public abstract class MinecraftClientMixin {
             BOOLEAN_EVENT.execute(List.of(RENDER_TICK), new MutableObjectHolder<>(tick));
     }
 
-    @Redirect(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet" +
-            "/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 2))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V"))
     private void handle441Loading(MinecraftClient client, @Nullable Screen screen) {
         if (SET_SCREEN_EVENT.isNotEmpty(LLS_441_REDIRECT))
             SET_SCREEN_EVENT.execute(
@@ -52,7 +51,7 @@ public abstract class MinecraftClientMixin {
         else this.setScreen(screen);
     }
 
-    @Redirect(method = "doLoadLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
+    @Redirect(method = "startIntegratedServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServer;isLoading()Z"))
     private boolean handleServerWait(IntegratedServer integratedServer) {
         final var returnValue = new MutableObjectHolder<>(integratedServer.isLoading());
         if (SERVER_EVENT.isNotEmpty(SERVER_PSR_LOADING_REDIRECT))
