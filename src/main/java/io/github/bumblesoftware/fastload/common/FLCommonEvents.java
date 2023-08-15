@@ -4,8 +4,8 @@ import io.github.bumblesoftware.fastload.api.event.core.AbstractEvent;
 import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
 import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.WorldGenerationProgressListener;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.level.ChunkPos;
 
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Contexts.*;
 
@@ -34,6 +34,6 @@ public interface FLCommonEvents {
     interface Contexts {
         record EmptyContext() {}
         record ServerContext<T>(MinecraftServer server, MutableObjectHolder<T> returnValue) {}
-        record ProgressListenerContext(WorldGenerationProgressListener progressListener, ChunkPos chunkPos) {}
+        record ProgressListenerContext(ChunkProgressListener progressListener, ChunkPos chunkPos) {}
     }
 }

@@ -1,7 +1,7 @@
 package io.github.bumblesoftware.fastload.mixin.client;
 
 import io.github.bumblesoftware.fastload.util.obj_holders.MutableObjectHolder;
-import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
+import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,15 +14,15 @@ import static io.github.bumblesoftware.fastload.client.FLClientEvents.Locations.
 import static io.github.bumblesoftware.fastload.common.FLCommonEvents.Events.BOOLEAN_EVENT;
 
 
-@Mixin(DownloadingTerrainScreen.class)
-public class DownloadingTerrainScreenMixin {
-    @Shadow private boolean closeOnNextTick;
+@Mixin(ReceivingLevelScreen.class)
+public class ReceivingLevelScreenMixin {
+    @Shadow private boolean oneTickSkipped;
 
-    @Inject(at = @At("HEAD"), method = "setReady")
+    @Inject(at = @At("HEAD"), method = "loadingPacketsReceived")
     public void tick(final CallbackInfo ci) {
-        final var returnValue = new MutableObjectHolder<>(closeOnNextTick);
+        final var returnValue = new MutableObjectHolder<>(oneTickSkipped);
         if (BOOLEAN_EVENT.isNotEmpty(DTS_TICK))
                 BOOLEAN_EVENT.execute(List.of(DTS_TICK), true, returnValue);
-        closeOnNextTick = returnValue.getHeldObj();
+        oneTickSkipped = returnValue.getHeldObj();
     }
 }

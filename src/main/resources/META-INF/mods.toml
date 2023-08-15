@@ -1,32 +1,29 @@
 modLoader = "javafml"
-loaderVersion = "[44,)"
-license = "LGPL-3.0"
-
+loaderVersion = "${loader_version_range}"
+license = "${mod_license}"
 issueTrackerURL="https://github.com/BumbleSoftware/Fastload/issues"
-
 [[mods]]
-modId = "fastload"
-version = "${version}"
-displayName = "Fastload"
-updateJSONURL = "https://github.com/BumbleSoftware/Fastload/raw/Forge-1.19.2/updates.json"
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+updateJSONURL = "https://github.com/BumbleSoftware/Fastload/raw/Forge-1.20.1/updates.json"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/fastload"
 logoFile = "logo.png"
-credits = "AbdElAziz, FluffyBumblebees, JoostMSoftware, VidTu, kennytv"
-authors = "AbdElAziz"
-description = '''
-Load your world at lightning speed!
-'''
+credits = "${credits}"
+authors = "${mod_authors}"
+displayTest="MATCH_VERSION"
+description = '''${mod_description}'''
 
-[[dependencies.fastload]]
+[[dependencies.${mod_id}]]
 modId = "forge"
 mandatory = true
-versionRange = "[44,)"
+versionRange = "${forge_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.fastload]]
+[[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.3,)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
