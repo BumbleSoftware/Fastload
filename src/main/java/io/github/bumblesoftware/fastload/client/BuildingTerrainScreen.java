@@ -1,8 +1,8 @@
 package io.github.bumblesoftware.fastload.client;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.NarratorManager;
+import net.minecraft.client.GameNarrator;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 
 public class BuildingTerrainScreen extends Screen {
     public final int loadingAreaGoal;
@@ -12,7 +12,7 @@ public class BuildingTerrainScreen extends Screen {
      * Texts to draw
      */
     public BuildingTerrainScreen(final int loadingAreaGoal) {
-        super(NarratorManager.EMPTY);
+        super(GameNarrator.NO_TITLE);
         this.loadingAreaGoal = loadingAreaGoal;
     }
 
@@ -20,14 +20,14 @@ public class BuildingTerrainScreen extends Screen {
      * Renders screen texts
      */
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         if (runnable != null) runnable.run();
-        else super.close();
+        else super.onClose();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BuildingTerrainScreen extends Screen {
     }
 
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return false;
     }
 

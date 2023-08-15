@@ -15,7 +15,6 @@ import java.util.function.BiConsumer;
 
 import static io.github.bumblesoftware.fastload.api.event.core.EventStatus.*;
 
-
 /**
  * An event class that provides all the necessary tools to create the exact event you need.
  * @param <Context> used for custom event params. Refer to {@link FLClientEvents FLClientEvents}

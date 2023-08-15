@@ -7,12 +7,12 @@
     "server.MinecraftServerMixin"
   ],
   "client": [
-    "client.ClientPlayerEntityMixin",
-    "client.ClientPlayNetworkHandlerMixin",
-    "client.DownloadingTerrainScreenMixin",
+    "client.ClientPacketListenerMixin",
     "client.FrustumMixin",
     "client.GameRendererMixin",
-    "client.MinecraftClientMixin",
+    "client.LocalPlayerMixin",
+    "client.MinecraftMixin",
+    "client.ReceivingLevelScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

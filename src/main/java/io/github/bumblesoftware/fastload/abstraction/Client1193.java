@@ -1,20 +1,19 @@
 package io.github.bumblesoftware.fastload.abstraction;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 @SuppressWarnings("unchecked")
 public class Client1193 implements AbstractClientCalls {
-
     @Override
-    public MinecraftClient getClientInstance() {
-        return MinecraftClient.getInstance();
+    public Minecraft getClientInstance() {
+        return Minecraft.getInstance();
     }
 
     @Override
-    public Text newLiteralText(final String content) {
-        return Text.literal(content);
+    public Component newLiteralText(final String content) {
+        return Component.literal(content);
     }
 
     @Override

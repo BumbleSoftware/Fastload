@@ -5,9 +5,9 @@ import io.github.bumblesoftware.fastload.api.event.def.CapableEvent;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.BoxBooleanContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.PlayerJoinEventContext;
 import io.github.bumblesoftware.fastload.client.FLClientEvents.Contexts.SetScreenEventContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
-import net.minecraft.util.math.Box;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.protocol.game.ClientboundLoginPacket;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -22,7 +22,6 @@ public interface FLClientEvents {
         AbstractEvent<SetScreenEventContext> SET_SCREEN_EVENT = new CapableEvent<>();
         AbstractEvent<PlayerJoinEventContext> PLAYER_JOIN_EVENT = new CapableEvent<>();
         AbstractEvent<BoxBooleanContext> BOX_BOOLEAN_EVENT = new CapableEvent<>();
-
     }
 
     interface Locations {
@@ -40,8 +39,8 @@ public interface FLClientEvents {
     }
 
     interface Contexts {
-        record PlayerJoinEventContext(GameJoinS2CPacket packet) {}
-        record BoxBooleanContext(Box box, CallbackInfoReturnable<Boolean> cir ) {}
+        record PlayerJoinEventContext(ClientboundLoginPacket packet) {}
+        record BoxBooleanContext(AABB box, CallbackInfoReturnable<Boolean> cir ) {}
         record SetScreenEventContext(Screen screen, CallbackInfo ci) {}
     }
 }
