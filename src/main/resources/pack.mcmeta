@@ -1,7 +1,8 @@
 {
   "pack": {
-    "description": "Resources for fastload",
-    "pack_format": 8,
-    "_comment": "pack_format 8 is the current format for Minecraft 1.18.2. Be aware may have changed by the time you use this template!"
+    "description": {
+      "text": "${mod_id} resources"
+    },
+    "pack_format": 8
   }
 }
