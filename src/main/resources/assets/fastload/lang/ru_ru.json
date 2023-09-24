@@ -1,29 +1,29 @@
 {
-  "fastload.screen.buildingTerrain.building": "Построение видимых чанков",
-  "fastload.screen.buildingTerrain.preparing": "Подготовка всех чанков",
-  "fastload.buildingTerrain.starting": "Начало сеанса",
+  "fastload.screen.buildingTerrain.building": "Построение клиентских чанков",
+  "fastload.screen.buildingTerrain.preparing": "Подготовка серверных чанков",
+  "fastload.buildingTerrain.starting": "Начало сессии",
   "fastload.screen.buildingTerrain.template": "Завершено / Цель",
 
   "fastload.screen.config": "Настройки Fastload",
 
   "fastload.button.debug": "Режим отладки",
-  "fastload.button.debug.tooltip": "Должны ли отладочные данные записываться в логи?",
+  "fastload.button.debug.tooltip": "Должны ли отладочные данные записываться в журнал?",
 
   "fastload.button.instant_load": "Мгновенная загрузка",
   "fastload.button.instant_load.tooltip": "Вы нетерпеливы? Ненавидите экраны загрузки? Просто включите это, зайдите в мир, и вы пожалеете об этом. -_-",
 
   "fastload.button.local_render_chunk_radius": "Локальный радиус",
-  "fastload.button.local_render_chunk_radius.tooltip": "Отвечает за то, сколько чанков в круге должны отрисовываться при построении территории в одиночном мире.",
+  "fastload.button.local_render_chunk_radius.tooltip": "Радиус чанков для отрисовки при сборке местности в одиночном мире.",
   "fastload.button.local_render_chunk_radius.min": "Выключено",
-  "fastload.button.local_render_chunk_radius.max": "Чзнх",
+  "fastload.button.local_render_chunk_radius.max": "Жесть!",
 
   "fastload.button.server_render_chunk_radius": "Серверный радиус",
-  "fastload.button.server_render_chunk_radius.tooltip": "Отвечает за то, сколько чанков в круге должны отрисовываться при построении территории на серверах.",
+  "fastload.button.server_render_chunk_radius.tooltip": "Радиус чанков для отрисовки при сборке местности на серверах.",
   "fastload.button.server_render_chunk_radius.min": "Выключено",
-  "fastload.button.server_render_chunk_radius.max": "Чзнх",
+  "fastload.button.server_render_chunk_radius.max": "Жесть!",
 
   "fastload.button.chunk_try_limit": "Лимит попыток чанков",
-  "fastload.button.chunk_try_limit.tooltip": "Сколько раз подряд разрешается возвращать одно и то же количество чанков, прежде чем прекратить пре-отрисовку",
+  "fastload.button.chunk_try_limit.tooltip": "Сколько раз подряд разрешается возвращать одно и то же количество чанков, прежде чем прекратить пре-рендеринг",
   "fastload.button.chunk_try_limit.min": "Компьютер NASA",
-  "fastload.button.chunk_try_limit.max": "Улитка"
+  "fastload.button.chunk_try_limit.max": "Калькулятор"
 }
