@@ -42,5 +42,14 @@
   "breaks": {
     "forcecloseloadingscreen": "*",
     "ksyxis": "*"
+  },
+  "custom": {
+    "dynamic_fps": {
+      "optimized_screens": {
+        "disabled": [
+          "io.github.bumblesoftware.fastload.client.BuildingTerrainScreen"
+        ]
+      }
+    }
   }
 }
